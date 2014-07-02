@@ -1,7 +1,8 @@
 <!-- TODO: Clean up extra scripts in scripts folder -->
 <script type="text/template" id="stu-contacts-template">
-    <a href="contacts/studentcontacts.html?frn=~(studentfrn)">Student Contacts</a>
-    <br />
+    <li>
+        <a href="contacts/studentcontacts.html?frn=~(studentfrn)">Student Contacts</a>
+    </li>
 </script>
 
 <script>
@@ -10,6 +11,6 @@
     // Select the link right before where Student Contacts will be inserted.
     // Then get the next element in the DOM, which is a <br /> tag. Insert after the br,
     // not after the link.
-    var select = $j('a:contains(Student Email)').next();
+    var select = $j('a:contains(Student Email)').parent();
     template.insertAfter(select);
 </script>
