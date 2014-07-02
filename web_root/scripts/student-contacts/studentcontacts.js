@@ -261,7 +261,12 @@ var $ = jQuery.noConflict();
         //Fetch contact listing
         $.get(m_requestURL, {"frn": psData.frn, "sid": psData.curstudid, "action": "fetchcontacts"})
             .done(function (data) {
-                var response = eval(data);
+                var removedWhitespace = data.replace(/\s/g, '');
+                if (removedWhitespace !== "") {
+                    var response = eval(data);
+                } else {
+                    loadingDialogInstance.closeDialog();
+                }
             });
 
     });//End jquery document ready function
