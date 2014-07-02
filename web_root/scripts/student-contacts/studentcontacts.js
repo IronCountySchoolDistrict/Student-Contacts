@@ -1,4 +1,4 @@
-/*global $,psData,confirm*/
+/*global $,psData,confirm, loadingDialogInstance*/
 
 String.prototype.trim = function () {
     return this.replace(/^\s+/, '').replace(/\s+$/, '');
@@ -45,7 +45,9 @@ var $ = jQuery.noConflict();
     var m_table;
     var m_keyindex = 0;
     var m_requestURL = '/admin/students/contacts/contactdata.html';
-    $(function () {
+    $(document).ready(function () {
+        loadingDialogInstance.open();
+
         $.ajaxSetup({
             url: m_requestURL
         });
@@ -305,6 +307,7 @@ var $ = jQuery.noConflict();
             data: settings
         })
             .success(function (data, status) {
+                loadingDialogInstance.closeDialog();
                 if (row == null) {
                     m_table.fnAddData(data);
                 }
