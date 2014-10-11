@@ -100,9 +100,6 @@ var $ = jQuery.noConflict();
                         else {
                             result += address;
                         }
-                        if (info.mailto == "1") {
-                            result += "*Receives mailings";
-                        }
                         return result;
                     },
                     "aTargets": [2]
@@ -150,13 +147,13 @@ var $ = jQuery.noConflict();
         });
         $('body').on('click', '.addcontact', function () {
             $('.addcontact').hide();
-            $.getJSON(m_requestURL, {"frn": psData.frn, "action": "addcontact", "sid": psData.curstudid})
+            $.getJSON(m_requestURL, {"frn": psData.frn, "action": "addcontact", "sdcid": psData.studentdcid})
                 .success(function (data) {
                     if (data.contactnumber > 0) {
                         var n = data.contactnumber;
                         var ridx = m_table.fnAddData([n, "", "", "", "", "", ""]);
                         var sourcerow = m_table.fnSettings().aoData[ridx].nTr;
-                        $.get(m_requestURL, {"frn": psData.frn, "gidx": n, "action": "geteditor"}
+                        $.get(m_requestURL, {"frn": psData.frn, "gidx": n, "action": "getcreateform"}
                         )
                             .success(function (editform) {
                                 var editrow = m_table.fnOpen(sourcerow, editform, "edit_row");
@@ -192,21 +189,29 @@ var $ = jQuery.noConflict();
             if (row) {
                 var sourcerow = row;
                 var n = m_table.fnGetData(row)[m_keyindex];
-                $.get(m_requestURL, {"frn": psData.frn, "gidx": n, "action": "geteditor"}
+                $.get(m_requestURL, {"frn": psData.frn, "gidx": n, "action": "geteditform"}
                 )
                     .success(function (editform) {
                         var editrow = m_table.fnOpen(row, editform, "edit_row");
                         $('form', editrow).submit(function () {
                             //copy mother/father to fields.txt in students table
-                            if ($("#contact" + n + "_rel").val() == "Father") {
-                                syncParent('father', n);
-                            }
-                            else if ($("#contact" + n + "_rel").val() == "Mother") {
-                                syncParent('mother', n);
-                            }
-                            $.post('/admin/changesrecorded.white.html', $(this).serialize()
-                                )
-                                .success(function (data) {
+                            // TODO: Use config object here for student contacts table name
+                            var postData = {
+                                name: 'u_student_contacts4',
+                                tables: {
+                                    'u_student_contacts4': {
+                                        last_name: $('#last_name').val()
+                                    }
+                                }
+                            };
+                            $.ajax({
+                                url: '/ws/schema/table/u_student_contacts4/5866',
+                                data: JSON.stringify(postData),
+                                dataType: 'json',
+                                contentType: 'json',
+                                type: 'PUT'
+                            })
+                                .done(function (data) {
                                     m_table.fnClose(sourcerow);
                                     refreshContact(n, sourcerow);
                                 });
@@ -259,7 +264,7 @@ var $ = jQuery.noConflict();
         });
 
         //Fetch contact listing
-        $.get(m_requestURL, {"frn": psData.frn, "sid": psData.curstudid, "action": "fetchcontacts"})
+        $.get(m_requestURL, {"sdcid": psData.studentdcid, "action": "fetchcontacts"})
             .done(function (data) {
                 var removedWhitespace = data.replace(/\s/g, '');
                 if (removedWhitespace !== "") {
@@ -295,15 +300,10 @@ var $ = jQuery.noConflict();
     }
 
     function refreshContact(num, row) {
-        var settings = {"frn": psData.studentfrn, "action": "getcontact", "gidx": num};
+        var settings = {"frn": psData.studentfrn, "action": "getcontact", "gidx": num, "sdcid": psData.studentdcid};
         $.ajax({
             type: "GET",
             async: true,
-            beforeSend: function (x) {
-                if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
-                }
-            },
             dataType: "text json",
             dataFilter: function (data) {
                 data = data.replace(/[\r\n\t]/g, '');
