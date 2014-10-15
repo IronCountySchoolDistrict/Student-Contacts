@@ -16,8 +16,13 @@ function copyEmail(email) {
     $("#auto_emails").val(data);
 }
 
-function copyGuardianEmail(n) {
-    $('#contact' + n + '_email').val($('#guardianemail' + n).text());
+/**
+ *
+ * @param target {jQuery}
+ * @param email {String}
+ */
+function copyGuardianEmail(target, email) {
+    target.val(email);
 }
 
 function copyAddress(type, n) {
@@ -27,8 +32,13 @@ function copyAddress(type, n) {
     $('#c' + n + '_zip').val($('#' + type + 'zip' + n).text());
 }
 
-function copyPhone(n) {
-    $('#contact' + n + '_homephone').val($('#studentphone' + n).text());
+/**
+ *
+ * @param target {jQuery}
+ * @param phone {String}
+ */
+function copyPhone(target, phone) {
+    target.val(phone);
 }
 
 function cleanEmailList() {
@@ -55,6 +65,8 @@ var $ = jQuery.noConflict();
             clearError();
             displayError("AJAX Error.  Page=" + settings.url + " Error=" + jqxhr.statusText);
         });
+
+
         m_table = $('#holder').addClass('display').dataTable({
             "bPaginate": false,
             "bFilter": false,
@@ -76,10 +88,13 @@ var $ = jQuery.noConflict();
                             return "";
                         }
                         result += '<p style="font-weight:bold;">' + info.firstname + ' ' + info.lastname + '</p>';
-                        if (info.priority.trim() != "") {
+                        if (info.priority.trim() !== "") {
                             result += '<span style="font-size:8pt;">(Contact Priority #' + info.priority + ')</span><br />';
                         }
                         result += '<span style="font-size:8pt;">(' + info.relation + ')</span>';
+                        if (info.legal_guardian.trim() !== "") {
+                            result += '<br /><span style="font-size:8pt;">(Legal Guardian)</span><br />';
+                        }
                         return result;
                     },
                     "aTargets": [1]
@@ -113,7 +128,7 @@ var $ = jQuery.noConflict();
                         }
                         result += '<p>';
                         if (info.email.trim() != "") {
-                            result += '<span class="infoheader">Email: </span><a href="mailto:' + info.email + '">' + info.email + '</a><br/><span class="button" onclick="copyEmail(\'' + info.email + '\');" >+Add to automated emails</span><br />';
+                            result += '<span class="infoheader">Email: </span><a href="mailto:' + info.email + '">' + info.email + '</a><br />';
                         }
                         if (info.homephone.trim() != "") {
                             result += '<span class="infoheader">Home: </span>' + info.homephone + '<br />';
@@ -145,6 +160,7 @@ var $ = jQuery.noConflict();
                 primary: 'ui-icon-plus'
             }
         });
+
         $('body').on('click', '.addcontact', function () {
             $('.addcontact').hide();
             $.getJSON(m_requestURL, {"frn": psData.frn, "action": "addcontact", "sdcid": psData.studentdcid})
@@ -157,22 +173,55 @@ var $ = jQuery.noConflict();
                         )
                             .success(function (editform) {
                                 var editrow = m_table.fnOpen(sourcerow, editform, "edit_row");
-                                $('form', editrow).submit(function () {
-                                    //copy mother/father to fields.txt in students table
-                                    if ($("#contact" + n + "_rel").val() == "Father") {
-                                        syncParent('father', n);
-                                    }
-                                    else if ($("#contact" + n + "_rel").val() == "Mother") {
-                                        syncParent('mother', n);
-                                    }
-                                    $.post('/admin/changesrecorded.white.html', $(this).serialize()
-                                        )
-                                        .success(function (data) {
-                                            m_table.fnClose(sourcerow);
-                                            refreshContact(n, sourcerow);
-                                        });
-                                    $('.addcontact').show();
-                                    return false;//prevent normal form submission
+
+                                // Set up input masks
+                                $(editrow).find('.phone').inputmask('999-999-9999');
+                                $(editrow).find('.zip').inputmask('99999');
+                                $(editrow).find('#email').inputmask({'alias': 'email'});
+                                $('form', editrow).submit(function (event) {
+                                    event.preventDefault();
+                                    var postData = {
+                                        name: 'u_student_contacts4',
+                                        tables: {
+                                            'u_student_contacts4': {
+                                                studentsdcid: psData.studentdcid,
+                                                contact_id: data.contactnumber.toString(),
+                                                last_name: $('#last-name').val(),
+                                                first_name: $('#first-name').val(),
+                                                priority: $('#priority').val(),
+                                                relationship: $('#relationship').val(),
+                                                residence_street: $('#residence-street').val(),
+                                                residence_city: $('#residence-city').val(),
+                                                residence_state: $('#residence-state').val(),
+                                                residence_zip: $('#residence-zip').val(),
+                                                mailing_street: $('#mailing-street').val(),
+                                                mailing_city: $('#mailing-city').val(),
+                                                mailing_state: $('#mailing-state').val(),
+                                                mailing_zip: $('#mailing-zip').val(),
+                                                email: $('#email').val(),
+                                                employer: $('#employer').val(),
+                                                phone1type: $('#phone1type').val(),
+                                                phone1: $('#phone1').val(),
+                                                phone2type: $('#phone2type').val(),
+                                                phone2: $('#phone2').val(),
+                                                phone3type: $('#phone3type').val(),
+                                                phone3: $('#phone3').val()
+                                            }
+                                        }
+                                    };
+
+                                    $.ajax({
+                                        url: '/ws/schema/table/u_student_contacts4',
+                                        data: JSON.stringify(postData),
+                                        dataType: 'json',
+                                        contentType: 'json',
+                                        type: 'POST'
+                                    }).done(function () {
+                                        m_table.fnClose(sourcerow);
+                                        refreshContact(n, sourcerow);
+                                        $('.addcontact').show();
+                                    });
+
                                 });
                                 $('.edit_cancel', editrow).click(function () {
                                     m_table.fnClose(sourcerow);
@@ -193,19 +242,74 @@ var $ = jQuery.noConflict();
                 )
                     .success(function (editform) {
                         var editrow = m_table.fnOpen(row, editform, "edit_row");
+
+                        // Set up input masks
+                        $(editrow).find('.phone').inputmask('999-999-9999');
+                        $(editrow).find('.zip').inputmask('99999');
+                        $(editrow).find('#email').inputmask({'alias': 'email'});
+
+                        $(editrow).find('#copy-email').on('click', function (event) {
+                            var $target = $(event.target);
+                            var $emailField = $target.parents('td').find('#email');
+                            copyGuardianEmail($emailField, $target.siblings('.data').text());
+                        });
+
+                        $(editrow).find('.copy-home-phone').on('click', function (event) {
+                            var $target = $(event.target);
+                            var $phoneField = $('#' + $target.data().fieldId);
+                            copyPhone($phoneField, $target.siblings('.data').text());
+                        });
+                        // Set the right option of the priority dropdown
+                        var prioritySelect = $('#priority');
+                        var priority = prioritySelect.data().value;
+                        var priorityOptions = prioritySelect.find('option');
+                        $.each(priorityOptions, function (index, option) {
+                            if (parseInt($(option).val()) === priority) {
+                                $(option).attr('selected', 'selected');
+                            }
+                        });
+
+                        // Set the right option of the relationship dropdown
+                        var relationshipSelect = $('#relationship');
+                        var relationship = relationshipSelect.data().value;
+                        var relationshipOptions = relationshipSelect.find('option');
+                        $.each(relationshipOptions, function (index, option) {
+                            if ($(option).val() === relationship) {
+                                $(option).attr('selected', 'selected');
+                            }
+                        });
+
                         $('form', editrow).submit(function () {
-                            //copy mother/father to fields.txt in students table
                             // TODO: Use config object here for student contacts table name
                             var postData = {
                                 name: 'u_student_contacts4',
                                 tables: {
                                     'u_student_contacts4': {
-                                        last_name: $('#last_name').val()
+                                        last_name: $('#last-name').val(),
+                                        first_name: $('#first-name').val(),
+                                        priority: $('#priority').val(),
+                                        relationship: $('#relationship').val(),
+                                        residence_street: $('#residence-street').val(),
+                                        residence_city: $('#residence-city').val(),
+                                        residence_state: $('#residence-state').val(),
+                                        residence_zip: $('#residence-zip').val(),
+                                        mailing_street: $('#mailing-street').val(),
+                                        mailing_city: $('#mailing-city').val(),
+                                        mailing_state: $('#mailing-state').val(),
+                                        mailing_zip: $('#mailing-zip').val(),
+                                        email: $('#email').val(),
+                                        employer: $('#employer').val(),
+                                        phone1type: $('#phone1type').val(),
+                                        phone1: $('#phone1').val(),
+                                        phone2type: $('#phone2type').val(),
+                                        phone2: $('#phone2').val(),
+                                        phone3type: $('#phone3type').val(),
+                                        phone3: $('#phone3').val()
                                     }
                                 }
                             };
                             $.ajax({
-                                url: '/ws/schema/table/u_student_contacts4/5866',
+                                url: '/ws/schema/table/u_student_contacts4/' + $(row).data().recordId,
                                 data: JSON.stringify(postData),
                                 dataType: 'json',
                                 contentType: 'json',
@@ -231,7 +335,7 @@ var $ = jQuery.noConflict();
                 var d = m_table.fnGetData(row);
                 var n = d[m_keyindex];
                 var contactname = $('td:first p', row).text();
-                if (confirm("Delete contact, \"" + contactname + "\"?")) {
+                if (window.confirm("Delete contact, \"" + contactname + "\"?")) {
                     //submitting blank custom fields.txt will cause PS to delete them
                     $.ajax({
                         type: "GET",
@@ -240,18 +344,8 @@ var $ = jQuery.noConflict();
                         data: {"action": "deletecontact", "gidx": n, "frn": psData.frn}
                     })
                         .success(function (deldata) {
-                            var p = {};
-                            $(deldata).find('input').each(function (idx, item) {
-                                var n = {};
-                                if ($(item).attr('name') != 'ac') {
-                                    n[$(item).attr('name')] = '';
-                                } else {
-                                    n[$(item).attr('name')] = $(item).attr('value');
-                                }
-                                $.extend(p, n);
-                            });
-                            $.post('/admin/changesrecorded.white.html', p
-                                )
+                            var serializedDelData = $(deldata).serialize();
+                            $.post('/admin/changesrecorded.white.html', serializedDelData)
                                 .success(function (data) {
                                     m_table.fnDeleteRow(sourcerow);
                                 });
@@ -306,8 +400,7 @@ var $ = jQuery.noConflict();
             async: true,
             dataType: "text json",
             dataFilter: function (data) {
-                data = data.replace(/[\r\n\t]/g, '');
-                return data;
+                return data.replace(/[\r\n\t]/g, '');
             },
             data: settings
         })
@@ -315,9 +408,12 @@ var $ = jQuery.noConflict();
                 loadingDialogInstance.closeDialog();
                 if (row == null) {
                     m_table.fnAddData(data);
+                    var newRow = $('#maincontent tr').last();
+                    newRow.data('record-id', data[1].record_id);
                 }
                 else {
                     m_table.fnUpdate(data, row);
+                    $(row).data('record-id', data[1].record_id);
                 }
                 $('.editcontact').button({
                     icons: {
