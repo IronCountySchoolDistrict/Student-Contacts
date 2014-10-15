@@ -22,8 +22,12 @@
         <field name="PHONE1TYPE" type="String" length="10"/>
         <field name="PHONE2TYPE" type="String" length="10"/>
         <field name="PHONE3TYPE" type="String" length="10"/>
+        <field name="PHONE1PRIORITY" type="Integer"/>
+        <field name="PHONE2PRIORITY" type="Integer"/>
+        <field name="PHONE3PRIORITY" type="Integer"/>
         <field name="EMPLOYER" type="String" length="40"/>
         <field name="EMAIL" type="String" length="60"/>
+        <field name="STATUS" type="Boolean" description="Determines if the contact is active(0) or inactive(-2)."/>
         <field name="CONTACT_ID" type="Integer" description="Link between Contacts and Contacts Staging tables. Only needs to be unique for among this student's contacts."/>
     </extendedTable>
 
@@ -47,8 +51,12 @@
         <field name="PHONE1TYPE" type="String" length="10"/>
         <field name="PHONE2TYPE" type="String" length="10"/>
         <field name="PHONE3TYPE" type="String" length="10"/>
+        <field name="PHONE1PRIORITY" type="Integer"/>
+        <field name="PHONE2PRIORITY" type="Integer"/>
+        <field name="PHONE3PRIORITY" type="Integer"/>
         <field name="EMPLOYER" type="String" length="40"/>
         <field name="EMAIL" type="String" length="60"/>
+        <field name="STATUS" type="Boolean" description="Determines if the contact is active(0) or inactive(-2)."/>
         <field name="CONTACT_ID" type="Integer" description="Link between Contacts and Contacts Staging tables. Only needs to be unique for among this student's contacts."/>
     </extendedTable>
 </psExtension>
