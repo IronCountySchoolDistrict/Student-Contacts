@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="REFRESH" content="0;URL=/admin/students/contacts/studentcontacts.html?frn=~(studentfrn)" />
+    <meta http-equiv="REFRESH" content="0;URL=/admin/students/contacts/studentcontacts.html?frn=~(studentfrn)"/>
 </head>
 <body>
 </body>
@@ -10,11 +10,13 @@
 [/if#req]
 ~[if#req.~[gpv:action]=getcontact]
 ~[tlist_sql;
-    SELECT
-        contact_id,
+SELECT
+id,
+priority,
 first_name,
 last_name,
 relationship,
+legal_guardian,
 residence_street,
 residence_city,
 residence_state,
@@ -24,74 +26,63 @@ phone1,
 phone2,
 phone3,
 employer,
-        id,
-        legal_guardian,
-        mailing_city,
-        mailing_state,
-        mailing_street,
-        mailing_zip,
-        phone1type,
-        phone2type,
-        phone3type,
-        priority
-    FROM u_student_contacts4
-    WHERE contact_id=~[gpv:gidx]
-    AND studentsdcid=~[gpv:sdcid]
-    ORDER BY contact_id asc]
+contact_id,
+mailing_city,
+mailing_state,
+mailing_street,
+mailing_zip,
+phone1type,
+phone2type,
+phone3type
+FROM u_student_contacts4
+WHERE contact_id=~[gpv:gidx]
+AND studentsdcid=~[gpv:sdcid]
+ORDER BY contact_id asc]
 [
-	"~[gpv:gidx]",
-	{
-		"priority":"~(priority;js)",
-		"firstname":"~(first_name;js)",
-		"lastname":"~(last_name;js)",
-		"relation":"~(relationship;js)"
-	},
-	{
-		"street":"~(residence_street;js)",
-		"city":"~(residence_city;js)",
-		"state":"~(residence_state;js)",
-		"zip":"~(residence_zip;js)"
-	},
-	{
-		"email":"~(email;js)",
-		"homephone":"~(phone1;js)",
-		"cellphone":"~(phone2;js)",
-		"workphone":"~(phone3;js)",
-		"employer":"~(employer;js)"
-	},
-	"<button class='editcontact'>Edit</button><br /><button class='deletecontact'>Delete</button>",
-	"~(priority;js)",
-	"~(last_name;js), ~(first_name;js)"
+"~[gpv:gidx]",
+{
+"record_id":"~(id;js)",
+"priority":"~(priority;js)",
+"firstname":"~(first_name;js)",
+"lastname":"~(last_name;js)",
+"relation":"~(relationship;js)",
+"legal_guardian": "~(legal_guardian;js)"
+},
+{
+"street":"~(residence_street;js)",
+"city":"~(residence_city;js)",
+"state":"~(residence_state;js)",
+"zip":"~(residence_zip;js)"
+},
+{
+"email":"~(email;js)",
+"homephone":"~(phone1;js)",
+"cellphone":"~(phone2;js)",
+"workphone":"~(phone3;js)",
+"employer":"~(employer;js)"
+},
+"
+<button class='editcontact'>Edit</button><br/>
+<button class='deletecontact'>Delete</button>",
+"~(priority;js)",
+"~(last_name;js), ~(first_name;js)"
 ]
 [/tlist_sql]
 [/if#req]
 ~[if#req.~[gpv:action]=deletecontact]
 <form action="/admin/changesrecorded.white.html" method="POST">
-<input name="~(JSFieldParam;[Students]contact~[gpv:gidx]_ecpriority)" value="" />
-<input name="~(JSFieldParam;[Students]contact~[gpv:gidx]_first)" value="" />
-<input name="~(JSFieldParam;[Students]contact~[gpv:gidx]_last)" value="" />
-<input name="~(JSFieldParam;[Students]contact~[gpv:gidx]_rel)" value="" />
-<input name="~(JSFieldParam;[Students]contact~[gpv:gidx]_street)" value="" />
-<input name="~(JSFieldParam;[Students]contact~[gpv:gidx]_city)" value="" />
-<input name="~(JSFieldParam;[Students]contact~[gpv:gidx]_state)" value="" />
-<input name="~(JSFieldParam;[Students]contact~[gpv:gidx]_zip)" value="" />
-<input name="~(JSFieldParam;[Students]contact~[gpv:gidx]_recvmail)" value="" />
-<input name="~(JSFieldParam;[Students]contact~[gpv:gidx]_email)" value="" />
-<input name="~(JSFieldParam;[Students]contact~[gpv:gidx]_homephone)" value="" />
-<input name="~(JSFieldParam;[Students]contact~[gpv:gidx]_workphone)" value="" />
-<input name="~(JSFieldParam;[Students]contact~[gpv:gidx]_cellphone)" value="" />
-<input name="~(JSFieldParam;[Students]contact~[gpv:gidx]_employer)" value="" />
-<input name="ac" value="prim" />
+    <input name="DC-STUDENTS:~(rn).U_PREVIOUSADDRESS.U_PREVIOUSADDRESSES:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]" type="hidden">
+    <input name="ac" value="prim"/>
 </form>
 [/if#req]
 ~[if#req.~[gpv:action]=addcontact]
 ~[tlist_sql;
 SELECT
-    CASE
-        WHEN MAX(contact_id) + 1 is null
-        THEN 1
-    ELSE MAX(contact_id) + 1
-    END AS newcontactid
+CASE
+WHEN MAX(contact_id) is null
+THEN 1
+ELSE MAX(contact_id) + 1
+END AS newcontactid
 
 from (
 
@@ -106,32 +97,313 @@ where studentsdcid=~[gpv:sdcid]
 [/tlist_sql]
 [/if#req]
 ~[if#req.~[gpv:action]=fetchcontacts]
-    ~[tlist_sql;
-        select contact_id
-        FROM u_student_contacts4
-        WHERE studentsdcid=~[gpv:sdcid]
-        ORDER BY contact_id asc]
-    refreshContact(~(contact_id));
-    [/tlist_sql]
+~[tlist_sql;
+select contact_id
+FROM u_student_contacts4
+WHERE studentsdcid=~[gpv:sdcid]
+ORDER BY contact_id asc]
+refreshContact(~(contact_id));
+[/tlist_sql]
 [/if#req]
 ~[if#req.~[gpv:action]=geteditform]
-<form id="ceditform~[gpv:gidx]" name="ceditform~[gpv:gidx]" method="post" action="studentcontacts.html" >
+<form id="ceditform~[gpv:gidx]" name="ceditform~[gpv:gidx]" method="post" action="studentcontacts.html">
 
-<table  class="datatable" border="1" cellpadding="4" cellspacing="0" align="center" style="width:98% !important;">
+    <table class="datatable" border="1" cellpadding="4" cellspacing="0" align="center" style="width:98% !important;">
+        <tr class="inforow">
+            <td colspan="4" class="bold">Modify Contact Information</td>
+        </tr>
+
+        <tr>
+            <td class="bold">Name (last, first):</td>
+            <td class="bold">
+                <input
+                        type="text"
+                        name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]last_name"
+                        id="last-name"
+                        value="~[tlist_sql; select last_name from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(last_name)[/tlist_sql]"
+                        size="15"/>,
+                <input
+                        type="text"
+                        name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]first_name"
+                        id="first-name"
+                        value="~[tlist_sql; select first_name from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(first_name)[/tlist_sql]"
+                        size="15"/>
+            </td>
+            <td class="bold">Emergency<br/> Contact Priority</td>
+            <td>
+                <select
+                        name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]priority"
+                        id="priority"
+                        data-value="~[tlist_sql; select priority from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(priority)[/tlist_sql]">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="bold">Relationship</td>
+            <td colspan="3">
+                <select
+                        name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]relationship"
+                        id="relationship"
+                        data-value="~[tlist_sql; select relationship from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(relationship)[/tlist_sql]">
+                    <option selected></option>
+                    <option value="Mother">Mother</option>
+                    <option value="Father">Father</option>
+                    <option value="Step Father">Step Father</option>
+                    <option value="Step Mother">Step Mother</option>
+                    <option value="Foster Father">Foster Father</option>
+                    <option value="Foster Mother">Foster Mother</option>
+                    <option value="Grandfather">Grandfather</option>
+                    <option value="Grandmother">Grandmother</option>
+                    <option value="Aunt">Aunt</option>
+                    <option value="Uncle">Uncle</option>
+                    <option value="Sibling">Sibling</option>
+                    <option value="Friend">Friend</option>
+                    <option value="Probation Officer">Probation Officer</option>
+                    <option value="Counselor">Counselor</option>
+                    <option value="Caseworker">Caseworker</option>
+                    <option value="Occupational Therapist">Occupational Therapist</option>
+                    <option value="Speech Therapist">Speech Therapist</option>
+                    <option value="Physical Therapist">Physical Therapist</option>
+                    <option value="Teacher Consultant">Teacher Consultant</option>
+                    <option value="Adult Student">Adult Student</option>
+                    <option value="Teaching Parent">Teaching Parent</option>
+                    <option value="Other">Other</option>
+                </select>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="bold">
+                Residence Address
+            </td>
+            <td>
+                Street<br/>
+                <input id="residence-street" size="26"
+                       name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]residence_street"
+                       value="~[tlist_sql; select residence_street from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(residence_street)[/tlist_sql]"
+                       type="text"/> <br/>
+                City, State, Zip<br/>
+                <input id="residence-city" size="20"
+                       name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]residence_city"
+                       value="~[tlist_sql; select residence_city from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(residence_city)[/tlist_sql]"
+                       type="text"/>,
+                <input id="residence-state" size="3"
+                       name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]residence_state"
+                       value="~[tlist_sql; select residence_state from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(residence_state)[/tlist_sql]"
+                       type="text"/>
+                <input id="residence-zip"
+                       class="zip"
+                       size="6"
+                       name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]residence_zip"
+                       value="~[tlist_sql; select residence_zip from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(residence_zip)[/tlist_sql]"
+                       type="text"/><br/>
+                <br/>
+            </td>
+
+            <td class="bold">
+                Mailing Address
+            </td>
+            <td colspan="3">
+                Street<br/>
+                <input id="mailing-street" size="26"
+                       name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]mailing_street"
+                       value="~[tlist_sql; select mailing_street from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(mailing_street)[/tlist_sql]"
+                       type="text"/> <br/>
+                City, State, Zip<br/>
+                <input id="mailing-city" size="20"
+                       name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]mailing_city"
+                       value="~[tlist_sql; select mailing_city from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(mailing_city)[/tlist_sql]"
+                       type="text"/>,
+                <input id="mailing-state" size="3"
+                       name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]mailing_state"
+                       value="~[tlist_sql; select mailing_state from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(mailing_state)[/tlist_sql]"
+                       type="text"/>
+                <input id="mailing-zip"
+                       class="zip"
+                       size="6"
+                       name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]mailing_zip"
+                       value="~[tlist_sql; select mailing_zip from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(mailing_zip)[/tlist_sql]"
+                       type="text"/><br/>
+                <br/>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="bold">
+                Email:
+            </td>
+            <td valign="top">
+                <input type="text"
+                       name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]email"
+                       value="~[tlist_sql; select email from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(email)[/tlist_sql]"
+                       id="email"/><br/>
+
+                ~[if.~([01]guardianemail)=]
+                [else]
+                <div class="mini">
+                    <span class="title">Demographics Guardian Email</span><br/>
+                    <span class="data" id="guardianemail">~([01]guardianemail)</span>
+                    <a id="copy-email">[Copy]</a>
+                </div>
+                [/if]
+            </td>
+            <td class="bold">Employer:</td>
+            <td>
+                <input type="text"
+                       name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]employer"
+                       value="" size="25"
+                       id="employer"/></td>
+        </tr>
+        <tr>
+            <td class="bold">
+                Phone 1:
+            </td>
+            <td valign="top" colspan="3" style="padding-bottom: 10px;">
+                Phone Type
+                <select
+                        name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1type"
+                        id="phone1type"
+                        data-value="~[tlist_sql; select phone1type from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(phone1type)[/tlist_sql]"
+                        style="margin-right:125px;">
+                    <option></option>
+                    <option value="Cell">Home</option>
+                    <option value="Cell">Cell</option>
+                    <option value="Work">Work</option>
+                    </select>
+                Number
+                <input size="17" type="text"
+                       name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1"
+                       value="~[tlist_sql; select phone1 from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(phone1)[/tlist_sql]"
+                       id="phone1"
+                       class="phone"/><br/>
+
+                    ~[if.~([01]home_phone)=]
+                    [else]
+                    <div class="mini" style="padding-left: 310px;">
+                        <span class="title">Student Home Phone</span><br/>
+                        <span class="data">~([01]home_phone)</span>
+                        <a class="copy-home-phone" data-field-id="phone1">[Copy]</a>
+                    </div>
+                    [/if]
+            </td>
+
+        </tr>
+        <tr>
+            <td class="bold">
+                Phone 2:
+            </td>
+            <td valign="top" colspan="3" style="padding-bottom: 10px;">
+                Phone Type
+                <select
+                        name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone2type"
+                        id="phone2type"
+                        data-value="~[tlist_sql; select phone1type from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(phone2type)[/tlist_sql]"
+                        style="margin-right:125px;">
+                    <option></option>
+                    <option value="Cell">Home</option>
+                    <option value="Cell">Cell</option>
+                    <option value="Work">Work</option>
+                </select>
+                Number
+                <input type="text" size="17"
+                       name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone2"
+                       value="~[tlist_sql; select phone2 from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(phone2)[/tlist_sql]"
+                       id="phone2"
+                       class="phone"/>
+                ~[if.~([01]home_phone)=]
+                [else]
+                <div class="mini" style="padding-left: 310px;">
+                    <span class="title">Student Home Phone</span><br/>
+                    <span class="data" id="studentphone~[gpv:gidx]">~([01]home_phone)</span>
+                    <a class="copy-home-phone" data-field-id="phone2">[Copy]</a>
+                </div>
+                [/if]
+            </td>
+        </tr>
+        <tr>
+            <td class="bold">
+                Phone 3:
+            </td>
+            <td valign="top" colspan="3" style="padding-bottom: 10px;">
+                Phone Type
+                <select
+                        name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone3type"
+                        id="phone3type"
+                        data-value="~[tlist_sql; select phone1type from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(phone3type)[/tlist_sql]"
+                        style="margin-right:125px;">
+                    <option></option>
+                    <option value="Cell">Home</option>
+                    <option value="Cell">Cell</option>
+                    <option value="Work">Work</option>
+                </select>
+                Number
+                <input type="text" size="17"
+                       name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone3"
+                       value="~[tlist_sql; select phone3 from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(phone3)[/tlist_sql]"
+                       id="phone3"
+                       class="phone"/>
+
+                ~[if.~([01]home_phone)=]
+                [else]
+                <div class="mini" style="padding-left: 310px;">
+                    <span class="title">Student Home Phone</span><br/>
+                    <span class="data" id="studentphone~[gpv:gidx]">~([01]home_phone)</span>
+                    <a class="copy-home-phone" data-field-id="phone3">[Copy]</a>
+                </div>
+                [/if]
+            </td>
+        </tr>
+
+
+
+        <tr>
+            <td colspan="4" align="right">
+                <!--end hidden sync fields.txt -->
+                <input type="hidden" name="ac" value="prim"/>
+                <button id="cancelbtn~[gpv:gidx]" class="button edit_cancel" type="button">Cancel</button>
+                <button id="submitbtn~[gpv:gidx]" type="submit">Submit</button>
+            </td>
+        </tr>
+    </table>
+</form>
+<!-- END PARENT CONTENT TABLE -->
+[/if#req]
+~[if#req.~[gpv:action]=getcreateform]
+<form id="ceditform~[gpv:gidx]" name="ceditform~[gpv:gidx]" method="post" action="studentcontacts.html">
+
+<table class="datatable" border="1" cellpadding="4" cellspacing="0" align="center" style="width:99% !important;">
 <tr class="inforow">
-<td colspan="4" class="bold">Modify Contact Information</td>
+    <td colspan="4" class="bold">Modify Contact Information</td>
 </tr>
 
 <tr>
-	<td class="bold">Name (last, first):</td>
-	<td class="bold">
-		<input type="text" name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]last_name" id="last_name" value="" size="15" />,
-        <input type="text" name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]first_name" id="first_name" value="" size="15" />,
+    <td class="bold">Name (last, first):</td>
+    <td class="bold">
+        <input
+                type="text"
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]last_name"
+                id="last-name"
+                size="15"/>,
+        <input
+                type="text"
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]first_name"
+                id="first-name"
+                size="15"/>
     </td>
-    <td class="bold">Emergency<br /> Contact Priority</td>
+    <td class="bold">Emergency<br/> Contact Priority</td>
     <td>
-        <select name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]priority" id="priority">
-            <option selected></option>
+        <select
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]priority"
+                id="priority">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -143,42 +415,213 @@ where studentsdcid=~[gpv:sdcid]
             <option value="9">9</option>
         </select>
     </td>
-    </tr>
-    <tr>
-        <td class="bold">Relationship</td>
-        <td colspan="3">
-            <select name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]relationship" id="relationship">
-                <option selected></option>
-                <option value="Mother">Mother</option>
-                <option value="Father">Father</option>
-                <option value="Step Father">Step Father</option>
-                <option value="Step Mother">Step Mother</option>
-                <option value="Foster Father">Foster Father</option>
-                <option value="Foster Mother">Foster Mother</option>
-                <option value="Grandfather">Grandfather</option>
-                <option value="Grandmother">Grandmother</option>
-                <option value="Aunt">Aunt</option>
-                <option value="Uncle">Uncle</option>
-                <option value="Sibling">Sibling</option>
-                <option value="Friend">Friend</option>
-                <option value="Probation Officer">Probation Officer</option>
-                <option value="Counselor">Counselor</option>
-                <option value="Caseworker">Caseworker</option>
-                <option value="Occupational Therapist">Occupational Therapist</option>
-                <option value="Speech Therapist">Speech Therapist</option>
-                <option value="Physical Therapist">Physical Therapist</option>
-                <option value="Teacher Consultant">Teacher Consultant</option>
-                <option value="Adult Student">Adult Student</option>
-                <option value="Teaching Parent">Teaching Parent</option>
-                <option value="Other">Other</option>
-            </select>
-        </td>
-    </tr>
+</tr>
+<tr>
+    <td class="bold">Relationship</td>
+    <td colspan="3">
+        <select
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]relationship"
+                id="relationship">
+            <option selected></option>
+            <option value="Mother">Mother</option>
+            <option value="Father">Father</option>
+            <option value="Step Father">Step Father</option>
+            <option value="Step Mother">Step Mother</option>
+            <option value="Foster Father">Foster Father</option>
+            <option value="Foster Mother">Foster Mother</option>
+            <option value="Grandfather">Grandfather</option>
+            <option value="Grandmother">Grandmother</option>
+            <option value="Aunt">Aunt</option>
+            <option value="Uncle">Uncle</option>
+            <option value="Sibling">Sibling</option>
+            <option value="Friend">Friend</option>
+            <option value="Probation Officer">Probation Officer</option>
+            <option value="Counselor">Counselor</option>
+            <option value="Caseworker">Caseworker</option>
+            <option value="Occupational Therapist">Occupational Therapist</option>
+            <option value="Speech Therapist">Speech Therapist</option>
+            <option value="Physical Therapist">Physical Therapist</option>
+            <option value="Teacher Consultant">Teacher Consultant</option>
+            <option value="Adult Student">Adult Student</option>
+            <option value="Teaching Parent">Teaching Parent</option>
+            <option value="Other">Other</option>
+        </select>
+    </td>
+</tr>
+
+<tr>
+    <td class="bold">
+        Residence Address
+    </td>
+    <td>
+        Street<br/>
+        <input id="residence-street" size="26"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]residence_street"
+               type="text"/> <br/>
+        City, State, Zip<br/>
+        <input id="residence-city" size="20"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]residence_city"
+               type="text"/>,
+        <input id="residence-state" size="3"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]residence_state"
+               type="text"/>
+        <input id="residence-zip"
+               class="zip"
+               size="6"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]residence_zip"
+               type="text"/><br/>
+        <br/>
+    </td>
+
+    <td class="bold">
+        Mailing Address
+    </td>
+    <td colspan="3">
+        Street<br/>
+        <input id="mailing-street" size="26"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]mailing_street"
+               type="text"/> <br/>
+        City, State, Zip<br/>
+        <input id="mailing-city" size="20"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]mailing_city"
+               type="text"/>,
+        <input id="mailing-state" size="3"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]mailing_state"
+               type="text"/>
+        <input id="mailing-zip"
+               class="zip"
+               size="6"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]mailing_zip"
+               type="text"/><br/>
+        <br/>
+    </td>
+</tr>
+
+<tr>
+    <td class="bold">
+        Email:
+    </td>
+    <td valign="top">
+        <input type="text"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]email"
+               id="email"/><br/>
+
+        ~[if.~([01]guardianemail)=]
+        [else]
+        <div class="mini">
+            <span class="title">Demographics Guardian Email</span><br/>
+            <span class="data" id="guardianemail">~([01]guardianemail)</span>
+            <a id="copy-email">[Copy]</a>
+        </div>
+        [/if]
+    </td>
+    <td class="bold">Employer:</td>
+    <td>
+        <input type="text"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]employer"
+               size="25"
+               id="employer"/></td>
+</tr>
+<tr>
+    <td class="bold">
+        Phone 1:
+    </td>
+    <td valign="top" colspan="3" style="padding-bottom: 10px;">
+        Phone Type
+        <select
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1type"
+                id="phone1type"
+                style="margin-right:125px;">
+            <option></option>
+            <option value="Cell">Home</option>
+            <option value="Cell">Cell</option>
+            <option value="Work">Work</option>
+        </select>
+        Number
+        <input size="17" type="text"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1"
+               id="phone1"
+               class="phone"/><br/>
+
+        ~[if.~([01]home_phone)=]
+        [else]
+        <div class="mini" style="padding-left: 310px;">
+            <span class="title">Student Home Phone</span><br/>
+            <span class="data">~([01]home_phone)</span>
+            <a class="copy-home-phone" data-field-id="phone1">[Copy]</a>
+        </div>
+        [/if]
+    </td>
+
+</tr>
+<tr>
+    <td class="bold">
+        Phone 2:
+    </td>
+    <td valign="top" colspan="3" style="padding-bottom: 10px;">
+        Phone Type
+        <select
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone2type"
+                id="phone2type"
+                style="margin-right:125px;">
+            <option></option>
+            <option value="Cell">Home</option>
+            <option value="Cell">Cell</option>
+            <option value="Work">Work</option>
+        </select>
+        Number
+        <input type="text" size="17"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone2"
+               id="phone2"
+               class="phone"/>
+        ~[if.~([01]home_phone)=]
+        [else]
+        <div class="mini" style="padding-left: 310px;">
+            <span class="title">Student Home Phone</span><br/>
+            <span class="data" id="studentphone~[gpv:gidx]">~([01]home_phone)</span>
+            <a class="copy-home-phone" data-field-id="phone2">[Copy]</a>
+        </div>
+        [/if]
+    </td>
+</tr>
+<tr>
+    <td class="bold">
+        Phone 3:
+    </td>
+    <td valign="top" colspan="3" style="padding-bottom: 10px;">
+        Phone Type
+        <select
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone3type"
+                id="phone3type"
+                style="margin-right:125px;">
+            <option></option>
+            <option value="Cell">Home</option>
+            <option value="Cell">Cell</option>
+            <option value="Work">Work</option>
+        </select>
+        Number
+        <input type="text" size="17"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone3"
+               id="phone3"
+               class="phone"/>
+
+        ~[if.~([01]home_phone)=]
+        [else]
+        <div class="mini" style="padding-left: 310px;">
+            <span class="title">Student Home Phone</span><br/>
+            <span class="data" id="studentphone~[gpv:gidx]">~([01]home_phone)</span>
+            <a class="copy-home-phone" data-field-id="phone3">[Copy]</a>
+        </div>
+        [/if]
+    </td>
+</tr>
+
+
 
 <tr>
     <td colspan="4" align="right">
         <!--end hidden sync fields.txt -->
-        <input type="hidden" name="ac" value="prim" />
+        <input type="hidden" name="ac" value="prim"/>
         <button id="cancelbtn~[gpv:gidx]" class="button edit_cancel" type="button">Cancel</button>
         <button id="submitbtn~[gpv:gidx]" type="submit">Submit</button>
     </td>
