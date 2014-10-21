@@ -279,6 +279,16 @@ var $ = jQuery.noConflict();
                             }
                         });
 
+                        // Set the right option of the legal guardian dropdown
+                        var legalGuardianSelect = $('#relationship');
+                        var legalGuardian = legalGuardianSelect.data().value;
+                        var legalGuardianOptions = legalGuardianSelect.find('option');
+                        $.each(legalGuardianOptions, function (index, option) {
+                            if ($(option).val() === legalGuardian) {
+                                $(option).attr('selected', 'selected');
+                            }
+                        });
+
                         $('form', editrow).submit(function () {
                             // TODO: Use config object here for student contacts table name
                             var postData = {

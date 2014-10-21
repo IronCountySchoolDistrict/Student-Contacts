@@ -149,7 +149,7 @@ refreshContact(~(contact_id));
         </tr>
         <tr>
             <td class="bold">Relationship</td>
-            <td colspan="3">
+            <td>
                 <select
                         name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]relationship"
                         id="relationship"
@@ -177,6 +177,16 @@ refreshContact(~(contact_id));
                     <option value="Adult Student">Adult Student</option>
                     <option value="Teaching Parent">Teaching Parent</option>
                     <option value="Other">Other</option>
+                </select>
+            </td>
+            <td class="bold">Legal Guardian</td>
+            <td colspan="3">
+                <select
+                        name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]LEGAL_GUARDIAN"
+                        id="legal-guardian"
+                        data-value="~[tlist_sql; select legal_guardian from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(legal_guardian)[/tlist_sql]">
+                    <option value="1">Yes</option>
+                    <option value="">No</option>
                 </select>
             </td>
         </tr>
@@ -421,7 +431,8 @@ refreshContact(~(contact_id));
     <td colspan="3">
         <select
                 name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]relationship"
-                id="relationship">
+                id="relationship"
+                data-value="~[tlist_sql; select relationship from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(relationship)[/tlist_sql]">
             <option selected></option>
             <option value="Mother">Mother</option>
             <option value="Father">Father</option>
@@ -445,6 +456,16 @@ refreshContact(~(contact_id));
             <option value="Adult Student">Adult Student</option>
             <option value="Teaching Parent">Teaching Parent</option>
             <option value="Other">Other</option>
+        </select>
+    </td>
+    <td class="bold">Legal Guardian</td>
+    <td colspan="3">
+        <select
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS4:~[tlist_sql; select id from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]LEGAL_GUARDIAN"
+                id="legal-guardian"
+                data-value="~[tlist_sql; select legal_guardian from u_student_contacts4 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(legal_guardian)[/tlist_sql]">
+            <option value="1">Yes</option>
+            <option value="">No</option>
         </select>
     </td>
 </tr>
