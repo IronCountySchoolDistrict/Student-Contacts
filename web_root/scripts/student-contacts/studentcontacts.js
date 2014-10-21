@@ -1,57 +1,56 @@
-/*global $,psData,confirm, loadingDialogInstance*/
-
-String.prototype.trim = function () {
-    return this.replace(/^\s+/, '').replace(/\s+$/, '');
-};
-
-function copyEmail(email) {
-    if (email.trim().length == 0) {
-        return;
-    }
-    var data = email.trim();
-    var current = $("#auto_emails").val();
-    if (current.length > 0) {
-        data = current + "," + email.trim();
-    }
-    $("#auto_emails").val(data);
-}
-
-/**
- *
- * @param target {jQuery}
- * @param email {String}
- */
-function copyGuardianEmail(target, email) {
-    target.val(email);
-}
-
-function copyAddress(type, n) {
-    $('#c' + n + '_street').val($('#' + type + 'street' + n).text());
-    $('#c' + n + '_city').val($('#' + type + 'city' + n).text());
-    $('#c' + n + '_state').val($('#' + type + 'state' + n).text());
-    $('#c' + n + '_zip').val($('#' + type + 'zip' + n).text());
-}
-
-/**
- *
- * @param target {jQuery}
- * @param phone {String}
- */
-function copyPhone(target, phone) {
-    target.val(phone);
-}
-
-function cleanEmailList() {
-    var autoEmailsSelector = $('#auto_emails');
-    var emails = autoEmailsSelector.val().replace(/\s+/g, ''); //clean all white space
-    emails = emails.replace(/;+/g, ',').replace(/,+$/, ''); //all semi-colons to commas, remove trailing comma
-    autoEmailsSelector.val(emails); //update field with clean value
-}
-
-var $ = jQuery.noConflict();
+/*global jQuery,psData,confirm,loadingDialogInstance*/
 
 (function () {
     'use strict';
+    String.prototype.trim = function () {
+        return this.replace(/^\s+/, '').replace(/\s+$/, '');
+    };
+
+    function copyEmail(email) {
+        if (email.trim().length === 0) {
+            return;
+        }
+        var data = email.trim();
+        var current = $("#auto_emails").val();
+        if (current.length > 0) {
+            data = current + "," + email.trim();
+        }
+        $("#auto_emails").val(data);
+    }
+
+    /**
+     *
+     * @param target {jQuery}
+     * @param email {String}
+     */
+    function copyGuardianEmail(target, email) {
+        target.val(email);
+    }
+
+    function copyAddress(type, n) {
+        $('#c' + n + '_street').val($('#' + type + 'street' + n).text());
+        $('#c' + n + '_city').val($('#' + type + 'city' + n).text());
+        $('#c' + n + '_state').val($('#' + type + 'state' + n).text());
+        $('#c' + n + '_zip').val($('#' + type + 'zip' + n).text());
+    }
+
+    /**
+     *
+     * @param target {jQuery}
+     * @param phone {String}
+     */
+    function copyPhone(target, phone) {
+        target.val(phone);
+    }
+
+    function cleanEmailList() {
+        var autoEmailsSelector = $('#auto_emails');
+        var emails = autoEmailsSelector.val().replace(/\s+/g, ''); //clean all white space
+        emails = emails.replace(/;+/g, ',').replace(/,+$/, ''); //all semi-colons to commas, remove trailing comma
+        autoEmailsSelector.val(emails); //update field with clean value
+    }
+
+    var $ = jQuery.noConflict();
     var m_table;
     var m_keyindex = 0;
     var m_requestURL = '/admin/students/contacts/contactdata.html';
@@ -92,7 +91,7 @@ var $ = jQuery.noConflict();
                             result += '<span style="font-size:8pt;">(Contact Priority #' + info.priority + ')</span><br />';
                         }
                         result += '<span style="font-size:8pt;">(' + info.relation + ')</span>';
-                        if (info.legal_guardian.trim() !== "") {
+                        if (info.legal_guardian.trim() === "1") {
                             result += '<br /><span style="font-size:8pt;">(Legal Guardian)</span><br />';
                         }
                         return result;
@@ -173,11 +172,30 @@ var $ = jQuery.noConflict();
                         )
                             .success(function (editform) {
                                 var editrow = m_table.fnOpen(sourcerow, editform, "edit_row");
+                                var $editRow = $(editrow);
 
                                 // Set up input masks
-                                $(editrow).find('.phone').inputmask('999-999-9999');
-                                $(editrow).find('.zip').inputmask('99999');
-                                $(editrow).find('#email').inputmask({'alias': 'email'});
+                                $editRow.find('.phone').inputmask('999-999-9999');
+                                $editRow.find('.zip').inputmask('99999');
+
+                                // Only bind input mask to email field if the guardian email doesn't have commas
+                                var guardianEmail = $editRow.find('#guardianemail').text();
+                                if (guardianEmail.indexOf(',') === -1) {
+                                    $editRow.find('#email').inputmask({'alias': 'email'});
+                                }
+
+                                $editRow.find('#copy-email').on('click', function (event) {
+                                    var $target = $(event.target);
+                                    var $emailField = $target.parents('td').find('#email');
+                                    copyGuardianEmail($emailField, $target.siblings('.data').text());
+                                });
+
+                                $editRow.find('.copy-home-phone').on('click', function (event) {
+                                    var $target = $(event.target);
+                                    var $phoneField = $('#' + $target.data().fieldId);
+                                    copyPhone($phoneField, $target.siblings('.data').text());
+                                });
+
                                 $('form', editrow).submit(function (event) {
                                     event.preventDefault();
                                     var postData = {
@@ -233,7 +251,8 @@ var $ = jQuery.noConflict();
                 });
         });
         //bind click event on all edit icons
-        $('body').on('click', '.editcontact', function () {
+        $(document).on('click', '.editcontact', function () {
+            $('.addcontact').hide();
             var row = $(this).parents('tr')[0];
             if (row) {
                 var sourcerow = row;
@@ -242,25 +261,31 @@ var $ = jQuery.noConflict();
                 )
                     .success(function (editform) {
                         var editrow = m_table.fnOpen(row, editform, "edit_row");
+                        var $editRow = $(editrow);
 
                         // Set up input masks
-                        $(editrow).find('.phone').inputmask('999-999-9999');
-                        $(editrow).find('.zip').inputmask('99999');
-                        $(editrow).find('#email').inputmask({'alias': 'email'});
+                        $editRow.find('.phone').inputmask('999-999-9999');
+                        $editRow.find('.zip').inputmask('99999');
 
-                        $(editrow).find('#copy-email').on('click', function (event) {
+                        // Only bind input mask to email field if the guardian email doesn't have commas
+                        var guardianEmail = $editRow.find('#guardianemail').text();
+                        if (guardianEmail.indexOf(',') === -1) {
+                            $editRow.find('#email').inputmask({'alias': 'email'});
+                        }
+
+                        $editRow.find('#copy-email').on('click', function (event) {
                             var $target = $(event.target);
                             var $emailField = $target.parents('td').find('#email');
                             copyGuardianEmail($emailField, $target.siblings('.data').text());
                         });
 
-                        $(editrow).find('.copy-home-phone').on('click', function (event) {
+                        $editRow.find('.copy-home-phone').on('click', function (event) {
                             var $target = $(event.target);
                             var $phoneField = $('#' + $target.data().fieldId);
                             copyPhone($phoneField, $target.siblings('.data').text());
                         });
                         // Set the right option of the priority dropdown
-                        var prioritySelect = $('#priority');
+                        var prioritySelect = $editRow.find('#priority');
                         var priority = prioritySelect.data().value;
                         var priorityOptions = prioritySelect.find('option');
                         $.each(priorityOptions, function (index, option) {
@@ -270,7 +295,7 @@ var $ = jQuery.noConflict();
                         });
 
                         // Set the right option of the relationship dropdown
-                        var relationshipSelect = $('#relationship');
+                        var relationshipSelect = $editRow.find('#relationship');
                         var relationship = relationshipSelect.data().value;
                         var relationshipOptions = relationshipSelect.find('option');
                         $.each(relationshipOptions, function (index, option) {
@@ -280,7 +305,7 @@ var $ = jQuery.noConflict();
                         });
 
                         // Set the right option of the legal guardian dropdown
-                        var legalGuardianSelect = $('#relationship');
+                        var legalGuardianSelect = $editRow.find('#legal-guardian');
                         var legalGuardian = legalGuardianSelect.data().value;
                         var legalGuardianOptions = legalGuardianSelect.find('option');
                         $.each(legalGuardianOptions, function (index, option) {
@@ -327,38 +352,44 @@ var $ = jQuery.noConflict();
                             })
                                 .done(function (data) {
                                     m_table.fnClose(sourcerow);
+                                    $('.addcontact').show();
                                     refreshContact(n, sourcerow);
                                 });
                             return false;//prevent normal form submission
                         });
                         $('.edit_cancel', editrow).click(function () {
+                            $('.addcontact').show();
                             m_table.fnClose(sourcerow);
                         });
                     });
             }
         });
         //bind click event on all delete icons
-        $('body').on('click', '.deletecontact', function () {
+        $(document).on('click', '.deletecontact', function () {
             var row = $(this).parents('tr')[0];
             if (row) {
                 var sourcerow = row;
                 var d = m_table.fnGetData(row);
                 var n = d[m_keyindex];
-                var contactname = $('td:first p', row).text();
+                var contactname = $(sourcerow).find('#first-name').text() +
+                    " " +
+                    $(sourcerow).find('#last-name').text();
                 if (window.confirm("Delete contact, \"" + contactname + "\"?")) {
                     //submitting blank custom fields.txt will cause PS to delete them
                     $.ajax({
                         type: "GET",
                         async: true,
                         dataType: "html",
-                        data: {"action": "deletecontact", "gidx": n, "frn": psData.frn}
+                        data: {
+                            "action": "deletecontact",
+                            "gidx": n,
+                            "frn": psData.frn
+                        }
                     })
-                        .success(function (deldata) {
-                            var serializedDelData = $(deldata).serialize();
-                            $.post('/admin/changesrecorded.white.html', serializedDelData)
-                                .success(function (data) {
-                                    m_table.fnDeleteRow(sourcerow);
-                                });
+                        .success(function (delForm) {
+                            var $delForm = $(delForm);
+                            $('body').append($delForm);
+                            $('#delete-form').trigger('submit');
                         })
                         .error(function (jqxhr) {
                             displayError(jqxhr.statusText);
@@ -439,10 +470,11 @@ var $ = jQuery.noConflict();
     }
 
     function displayError(msg) {
-        $('#error_container').html('<div id="alertmsg" style="padding: 0pt 0.7em;" class="ui-state-error ui-corner-all"><p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span><strong>Alert: </strong>' + msg + '</p></div>').show();
+        $('#error_container').html('<div id="alertmsg" style="padding: 0 0.7em;" class="ui-state-error ui-corner-all"><p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span><strong>Alert: </strong>' + msg + '</p></div>').show();
     }
 
     function clearError() {
         $('#error_container').empty().hide();
     }
+
 }());
