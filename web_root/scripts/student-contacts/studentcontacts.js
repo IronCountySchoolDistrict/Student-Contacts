@@ -70,10 +70,11 @@
             "bPaginate": false,
             "bFilter": false,
             "bJQueryUI": true,
-            "sDom": '<"H"lfr<"addcontact">>t<"F"ip>',
+            "sDom": '<"H"lfr<"addcontact"><"showinactive">>t<"F"ip>',
             "aaSorting": [
-                [5, 'asc'],
-                [6, 'asc']
+                [5, 'desc'],
+                [6, 'asc'],
+                [7, 'asc']
             ],
             "aoColumnDefs": [
                 {"bSortable": false, "aTargets": ['_all']},
@@ -154,9 +155,31 @@
 
         //create add contact button, and bind click event handler
         $('.addcontact').append('<button>Add Contact</button>');
+        $('.showinactive').append('<button>Show Inactive Contacts</button>');
         $('.addcontact button').button({
             icons: {
                 primary: 'ui-icon-plus'
+            }
+        });
+        $('.showinactive button').button({
+            icons: {
+                primary: 'ui-icon-plus'
+            }
+        });
+        $('.addcontact').css({'display': 'inline'});
+        $('.showinactive').css({'display': 'inline'});
+
+        $('body').on('click', '.showinactive', function (event){
+
+            var inactiveButton = $(event.target).parents('button');
+            var inactiveButtonText = inactiveButton.find('.ui-button-text');
+
+            if (inactiveButtonText.text() === 'Show Inactive Contacts') {
+                $('.inactive-contact').css({'display': 'table-row'});
+                inactiveButtonText.html('Hide Inactive Contacts');
+            } else if (inactiveButtonText.text() === 'Hide Inactive Contacts') {
+                $('.inactive-contact').css({'display': 'none'});
+                inactiveButtonText.html('Show Inactive Contacts');
             }
         });
 
@@ -199,11 +222,12 @@
                                 $('form', editrow).submit(function (event) {
                                     event.preventDefault();
                                     var postData = {
-                                        name: 'u_student_contacts4',
+                                        name: 'u_student_contacts5',
                                         tables: {
-                                            'u_student_contacts4': {
+                                            'u_student_contacts5': {
                                                 studentsdcid: psData.studentdcid,
                                                 contact_id: data.contactnumber.toString(),
+                                                status: '0',
                                                 last_name: $('#last-name').val(),
                                                 first_name: $('#first-name').val(),
                                                 priority: $('#priority').val(),
@@ -229,7 +253,7 @@
                                     };
 
                                     $.ajax({
-                                        url: '/ws/schema/table/u_student_contacts4',
+                                        url: '/ws/schema/table/u_student_contacts5',
                                         data: JSON.stringify(postData),
                                         dataType: 'json',
                                         contentType: 'json',
@@ -317,9 +341,9 @@
                         $('form', editrow).submit(function () {
                             // TODO: Use config object here for student contacts table name
                             var postData = {
-                                name: 'u_student_contacts4',
+                                name: 'u_student_contacts5',
                                 tables: {
-                                    'u_student_contacts4': {
+                                    'u_student_contacts5': {
                                         last_name: $('#last-name').val(),
                                         first_name: $('#first-name').val(),
                                         priority: $('#priority').val(),
@@ -344,7 +368,7 @@
                                 }
                             };
                             $.ajax({
-                                url: '/ws/schema/table/u_student_contacts4/' + $(row).data().recordId,
+                                url: '/ws/schema/table/u_student_contacts5/' + $(row).data().recordId,
                                 data: JSON.stringify(postData),
                                 dataType: 'json',
                                 contentType: 'json',
@@ -365,31 +389,30 @@
             }
         });
         //bind click event on all delete icons
-        $(document).on('click', '.deletecontact', function () {
+        $(document).on('click', '.deletecontact', function (event) {
             var row = $(this).parents('tr')[0];
             if (row) {
-                var sourcerow = row;
-                var d = m_table.fnGetData(row);
-                var n = d[m_keyindex];
-                var contactname = $(sourcerow).find('#first-name').text() +
-                    " " +
-                    $(sourcerow).find('#last-name').text();
-                if (window.confirm("Delete contact, \"" + contactname + "\"?")) {
-                    //submitting blank custom fields.txt will cause PS to delete them
-                    $.ajax({
-                        type: "GET",
-                        async: true,
-                        dataType: "html",
-                        data: {
-                            "action": "deletecontact",
-                            "gidx": n,
-                            "frn": psData.frn
+                var rowData = m_table.fnGetData(row);
+                var contactId = rowData[m_keyindex];
+                var contactName = $(row).find('td').eq(0).find('p').eq(0).text();
+                if (window.confirm("Delete contact, \"" + contactName + "\"?")) {
+                    var postData = {
+                        name: 'u_student_contacts5',
+                        tables: {
+                            'u_student_contacts5': {
+                                status: '-2'
+                            }
                         }
+                    };
+                    $.ajax({
+                        url: "/ws/schema/table/u_student_contacts5/" + $(row).data().recordId,
+                        data: JSON.stringify(postData),
+                        type: "PUT",
+                        dataType: "json",
+                        contentType: "json"
                     })
-                        .success(function (delForm) {
-                            var $delForm = $(delForm);
-                            $('body').append($delForm);
-                            $('#delete-form').trigger('submit');
+                        .success(function () {
+                            refreshContact(contactId, row);
                         })
                         .error(function (jqxhr) {
                             displayError(jqxhr.statusText);
@@ -411,29 +434,11 @@
 
     });//End jquery document ready function
 
-    function syncParent(syncname, n) {
-        var f_lastfirst = '#sync_' + syncname + n;
-        var f_dayphone = '#sync_' + syncname + 'dayphone' + n;
-        var f_homephone = '#sync_' + syncname + '_home_phone' + n;
-        var f_employer = '#sync_' + syncname + '_employer' + n;
-        //determine what the day phonenber should be.
-        var dayphoneval = $('#contact' + n + '_cellphone').val();
-        if ($('#contact' + n + '_cellphone').val() != '') {
-            dayphoneval = $('#contact' + n + '_cellphone').val();
-        }
-        else if ($('#contact' + n + '_workphone').val() != '') {
-            dayphoneval = $('#contact' + n + '_workphone').val();
-        }
-        else {
-            dayphoneval = $('#contact' + n + '_homephone').val();
-        }
-        //copy values for sync
-        $(f_lastfirst).val($('#contact' + n + '_last').val() + ', ' + $('#contact' + n + '_first').val());
-        $(f_homephone).val($('#contact' + n + '_homephone').val());
-        $(f_employer).val($('#contact' + n + '_employer').val());
-        $(f_dayphone).val(dayphoneval);
-    }
-
+    /**
+     *
+     * @param num {Number} - contact_id
+     * @param [row] {DOMElement|jQuery}
+     */
     function refreshContact(num, row) {
         var settings = {"frn": psData.studentfrn, "action": "getcontact", "gidx": num, "sdcid": psData.studentdcid};
         $.ajax({
@@ -451,10 +456,29 @@
                     m_table.fnAddData(data);
                     var newRow = $('#maincontent tr').last();
                     newRow.data('record-id', data[1].record_id);
+
+                    if (data[5] === "-2") {
+                        var contactNameContainer = $(newRow).find('td').eq(0).find('p').eq(0);
+                        var inactiveTag = contactNameContainer.text() + " (INACTIVE)";
+                        contactNameContainer.html(inactiveTag);
+                        $(newRow).css({'background-color': '#DEDEDE'});
+                        $(newRow).css({'display': 'none'});
+                        $(newRow).attr({'class': 'inactive-contact'});
+                    }
                 }
                 else {
                     m_table.fnUpdate(data, row);
                     $(row).data('record-id', data[1].record_id);
+
+                    if (data[5] === "-2") {
+                        var contactNameContainer = $(row).find('td').eq(0).find('p').eq(0);
+                        var inactiveTag = contactNameContainer.text() + " (INACTIVE)";
+                        if (contactNameContainer.text().indexOf(" (INACTIVE)") === -1) {
+                            contactNameContainer.html(inactiveTag);
+                        }
+                        $(row).css({'background-color': '#DEDEDE'});
+                        $(row).attr({'class': 'inactive-contact'});
+                    }
                 }
                 $('.editcontact').button({
                     icons: {
