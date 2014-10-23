@@ -9,67 +9,72 @@
 </html>
 [/if#req]
 ~[if#req.~[gpv:action]=getcontact]
-~[tlist_sql;
-SELECT
-id,
-priority,
-first_name,
-last_name,
-relationship,
-legal_guardian,
-residence_street,
-residence_city,
-residence_state,
-residence_zip,
-email,
-phone1,
-phone2,
-phone3,
-employer,
-status,
-contact_id,
-mailing_city,
-mailing_state,
-mailing_street,
-mailing_zip,
-phone1type,
-phone2type,
-phone3type
-FROM u_student_contacts5
-WHERE contact_id=~[gpv:gidx]
-AND studentsdcid=~[gpv:sdcid]
-ORDER BY contact_id asc]
-[
-"~[gpv:gidx]",
-{
-"record_id":"~(id;js)",
-"priority":"~(priority;js)",
-"firstname":"~(first_name;js)",
-"lastname":"~(last_name;js)",
-"relation":"~(relationship;js)",
-"legal_guardian": "~(legal_guardian;js)"
-},
-{
-"street":"~(residence_street;js)",
-"city":"~(residence_city;js)",
-"state":"~(residence_state;js)",
-"zip":"~(residence_zip;js)"
-},
-{
-"email":"~(email;js)",
-"homephone":"~(phone1;js)",
-"cellphone":"~(phone2;js)",
-"workphone":"~(phone3;js)",
-"employer":"~(employer;js)"
-},
-"
-<button class='editcontact'>Edit</button><br/>
-<button class='deletecontact'>Delete</button>",
-"~(status;js)",
-"~(priority;js)",
-"~(last_name;js), ~(first_name;js)"
-]
-[/tlist_sql]
+    ~[tlist_sql;
+    SELECT
+        id,
+        priority,
+        first_name,
+        last_name,
+        relationship,
+        legal_guardian,
+        residence_street,
+        residence_city,
+        residence_state,
+        residence_zip,
+        mailing_city,
+        mailing_state,
+        mailing_street,
+        mailing_zip,
+        email,
+        phone1,
+        phone2,
+        phone3,
+        phone1type,
+        phone2type,
+        phone3type,
+        employer,
+        status
+    FROM u_student_contacts5
+    WHERE contact_id=~[gpv:gidx]
+    AND studentsdcid=~[gpv:sdcid]
+    ORDER BY contact_id asc]
+        [
+            "~[gpv:gidx]",
+            {
+                "record_id":"~(id;js)",
+                "priority":"~(priority;js)",
+                "firstname":"~(first_name;js)",
+                "lastname":"~(last_name;js)",
+                "relation":"~(relationship;js)",
+                "legal_guardian": "~(legal_guardian;js)"
+            },
+            {
+                "residence_street":"~(residence_street;js)",
+                "residence_city":"~(residence_city;js)",
+                "residence_state":"~(residence_state;js)",
+                "residence_zip":"~(residence_zip;js)",
+                "mailing_street":"~(mailing_street;js)",
+                "mailing_city":"~(mailing_city;js)",
+                "mailing_state":"~(mailing_state;js)",
+                "mailing_zip":"~(mailing_zip;js)"
+            },
+            {
+                "email":"~(email;js)",
+                "phone1":"~(phone1;js)",
+                "phone2":"~(phone2;js)",
+                "phone3":"~(phone3;js)",
+                "phone1type":"~(phone1type;js)",
+                "phone2type":"~(phone2type;js)",
+                "phone3type":"~(phone3type;js)",
+                "employer":"~(employer;js)"
+            },
+            "<button class='editcontact'>Edit</button><br/>
+            <button class='deletecontact'>Delete</button>",
+            "~(status;js)",
+            "~(priority;js)",
+            "~(last_name;js), ~(first_name;js)"
+        ]
+    [/tlist_sql]
 [/if#req]
 ~[if#req.~[gpv:action]=deletecontact]
 <form action="/admin/changesrecorded.white.html" method="POST" id="delete-form">
@@ -288,10 +293,10 @@ refreshContact(~(contact_id));
         <select
                 name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS5:~[tlist_sql; select id from u_student_contacts5 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1type"
                 id="phone1type"
-                data-value="~[tlist_sql; select phone1type from u_student_contacts5 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(phone1type)[/tlist_sql]"
+                data-value="~[tlist_sql;select phone1type from u_student_contacts5 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(phone1type)[/tlist_sql]"
                 style="margin-right:125px;">
             <option></option>
-            <option value="Cell">Home</option>
+            <option value="Home">Home</option>
             <option value="Cell">Cell</option>
             <option value="Work">Work</option>
         </select>
@@ -322,10 +327,10 @@ refreshContact(~(contact_id));
         <select
                 name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS5:~[tlist_sql; select id from u_student_contacts5 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone2type"
                 id="phone2type"
-                data-value="~[tlist_sql; select phone1type from u_student_contacts5 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(phone2type)[/tlist_sql]"
+                data-value="~[tlist_sql; select phone2type from u_student_contacts5 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(phone2type)[/tlist_sql]"
                 style="margin-right:125px;">
             <option></option>
-            <option value="Cell">Home</option>
+            <option value="Home">Home</option>
             <option value="Cell">Cell</option>
             <option value="Work">Work</option>
         </select>
@@ -354,10 +359,10 @@ refreshContact(~(contact_id));
         <select
                 name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS5:~[tlist_sql; select id from u_student_contacts5 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone3type"
                 id="phone3type"
-                data-value="~[tlist_sql; select phone1type from u_student_contacts5 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(phone3type)[/tlist_sql]"
+                data-value="~[tlist_sql; select phone3type from u_student_contacts5 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(phone3type)[/tlist_sql]"
                 style="margin-right:125px;">
             <option></option>
-            <option value="Cell">Home</option>
+            <option value="Home">Home</option>
             <option value="Cell">Cell</option>
             <option value="Work">Work</option>
         </select>
@@ -561,7 +566,7 @@ refreshContact(~(contact_id));
                 id="phone1type"
                 style="margin-right:125px;">
             <option></option>
-            <option value="Cell">Home</option>
+            <option value="Home">Home</option>
             <option value="Cell">Cell</option>
             <option value="Work">Work</option>
         </select>
@@ -593,7 +598,7 @@ refreshContact(~(contact_id));
                 id="phone2type"
                 style="margin-right:125px;">
             <option></option>
-            <option value="Cell">Home</option>
+            <option value="Home">Home</option>
             <option value="Cell">Cell</option>
             <option value="Work">Work</option>
         </select>
@@ -623,7 +628,7 @@ refreshContact(~(contact_id));
                 id="phone3type"
                 style="margin-right:125px;">
             <option></option>
-            <option value="Cell">Home</option>
+            <option value="Home">Home</option>
             <option value="Cell">Cell</option>
             <option value="Work">Work</option>
         </select>
