@@ -455,12 +455,17 @@
         });
 
         //Fetch contact listing
-        $.get(m_requestURL, {"sdcid": psData.studentdcid, "action": "fetchcontacts"})
+        $.get(m_requestURL, {"sdcid": psData.studentdcid, "action": "newfetchcontacts"}, function() {}, "json")
             .done(function (data) {
-                var removedWhitespace = data.replace(/\s/g, '');
-                if (removedWhitespace !== "") {
-                    // TODO: Refactor this so on page load, the fetchcontacts action just returns JSON for all contacts.
-                    var response = eval(data);
+
+                // In order to be valid JSON, an empty element has to be added to the array after the tlist_sql.
+                // Remove that empty element here.
+                data.pop();
+
+                if (data.length > 0) {
+                    $.each(data, function(index, contactId) {
+                        refreshContact(contactId);
+                    });
                 } else {
                     loadingDialogInstance.closeDialog();
                 }
@@ -491,7 +496,7 @@
         })
             .success(function (data, status) {
                 loadingDialogInstance.closeDialog();
-                if (row === null) {
+                if (!row) {
 
                     // Contact is already inactive and is getting loaded as inactive
                     // Set the buttons element to Activate button.
