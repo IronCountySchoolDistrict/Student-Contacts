@@ -1,22 +1,14 @@
-/*global jQuery,psData,confirm,loadingDialogInstance*/
+/*global jQuery,psData,confirm,loadingDialogInstance, console*/
 
 (function () {
     'use strict';
-    String.prototype.trim = function () {
-        return this.replace(/^\s+/, '').replace(/\s+$/, '');
-    };
 
-    function copyEmail(email) {
-        if (email.trim().length === 0) {
-            return;
-        }
-        var data = email.trim();
-        var current = $("#auto_emails").val();
-        if (current.length > 0) {
-            data = current + "," + email.trim();
-        }
-        $("#auto_emails").val(data);
-    }
+    /**
+     * Contact ID to contact table record ID mapping object.
+     * @constant
+     * @type {Object}
+     */
+    var ID_MAP = {};
 
     /**
      *
@@ -43,13 +35,6 @@
         target.val(phone);
     }
 
-    function cleanEmailList() {
-        var autoEmailsSelector = $('#auto_emails');
-        var emails = autoEmailsSelector.val().replace(/\s+/g, ''); //clean all white space
-        emails = emails.replace(/;+/g, ',').replace(/,+$/, ''); //all semi-colons to commas, remove trailing comma
-        autoEmailsSelector.val(emails); //update field with clean value
-    }
-
     var $ = jQuery.noConflict();
     var m_table;
     var m_keyindex = 0;
@@ -60,7 +45,7 @@
         $.ajaxSetup({
             url: m_requestURL
         });
-        $('#error_container').ajaxError(function (e, jqxhr, settings, err) {
+        $('#error_container').ajaxError(function (event, request, settings) {
             clearError();
             displayError("AJAX Error.  Page=" + settings.url + " Error=" + jqxhr.statusText);
         });
@@ -84,15 +69,15 @@
                     "fnRender": function (oObj) {
                         var result = '';
                         var info = oObj.aData[1];
-                        if ($.isEmptyObject(info) || info == "") {
+                        if ($.isEmptyObject(info) || info === "") {
                             return "";
                         }
                         result += '<p style="font-weight:bold;">' + info.firstname + ' ' + info.lastname + '</p>';
-                        if (info.priority.trim() !== "") {
+                        if (info.priority) {
                             result += '<span style="font-size:8pt;">(Contact Priority #' + info.priority + ')</span><br />';
                         }
                         result += '<span style="font-size:8pt;">(' + info.relation + ')</span>';
-                        if (info.legal_guardian.trim() === "1") {
+                        if (info.legal_guardian === "1") {
                             result += '<br /><span style="font-size:8pt;">(Legal Guardian)</span><br />';
                         }
                         return result;
@@ -103,17 +88,22 @@
                     "fnRender": function (oObj) {
                         var result = '';
                         var info = oObj.aData[2];
-                        if ($.isEmptyObject(info) || info == "") {
+                        if ($.isEmptyObject(info) || info === "") {
                             return '';
                         }
-                        var address = info.street.trim() == '' ? '' : info.street + '<br />';
-                        address += info.city.trim() == '' ? '' : info.city + ',';
-                        address += info.state + ' ' + info.zip;
-                        if (info.street.trim() != '') {
-                            result += '<a href="http://maps.google.com/?z=14&q=' + info.street + ', ' + info.city + ', ' + info.state + ', ' + info.zip + ' (' + oObj.aData[1].firstname + ' ' + oObj.aData[1].lastname + ')&output" target="_blank">' + address + '</a><br />';
+                        var residenceAddress = info.residence_street === '' ? '' : info.residence_street;
+                        residenceAddress += info.residence_city === '' ? '' : info.residence_city + ',';
+                        residenceAddress += info.residence_state + ' ' + info.residence_zip;
+                        var mailingAddress = info.mailing_street === '' ? '' : info.mailing_street;
+                        mailingAddress += info.mailing_city === '' ? '' : info.mailing_city + ',';
+                        mailingAddress += info.mailing_state + ' ' + info.mailing_zip;
+                        if (info.residence_street) {
+                            result += '<p style="font-weight: bold; margin-bottom: 0; margin-left: 0;">Residence Address:</p>';
+                            result += '<a href="http://maps.google.com/?z=14&q=' + info.residence_street + ', ' + info.residence_city + ', ' + info.residence_state + ', ' + info.residence_zip + ' (' + oObj.aData[1].firstname + ' ' + oObj.aData[1].lastname + ')&output" target="_blank">' + residenceAddress + '</a><br />';
                         }
-                        else {
-                            result += address;
+                        if (info.mailing_street) {
+                            result += '<p style="font-weight: bold; margin-bottom: 0; margin-left: 0;">Mailing Address:</p>';
+                            result += '<a href="http://maps.google.com/?z=14&q=' + info.mailing_street + ', ' + info.mailing_city + ', ' + info.mailing_state + ', ' + info.mailing_zip + ' (' + oObj.aData[1].firstname + ' ' + oObj.aData[1].lastname + ')&output" target="_blank">' + mailingAddress + '</a><br />';
                         }
                         return result;
                     },
@@ -123,23 +113,23 @@
                     "fnRender": function (oObj) {
                         var result = '';
                         var info = oObj.aData[3];
-                        if ($.isEmptyObject(info) || info == "") {
+                        if ($.isEmptyObject(info) || info === "") {
                             return "";
                         }
                         result += '<p>';
-                        if (info.email.trim() != "") {
+                        if (info.email) {
                             result += '<span class="infoheader">Email: </span><a href="mailto:' + info.email + '">' + info.email + '</a><br />';
                         }
-                        if (info.homephone.trim() != "") {
-                            result += '<span class="infoheader">Home: </span>' + info.homephone + '<br />';
+                        if (info.phone1) {
+                            result += '<span class="infoheader">' + info.phone1type + ': </span>' + info.phone1 + '<br />';
                         }
-                        if (info.cellphone.trim() != "") {
-                            result += '<span class="infoheader">Cell: </span>' + info.cellphone + '<br />';
+                        if (info.phone2) {
+                            result += '<span class="infoheader">' + info.phone2type + ': </span>' + info.phone2 + '<br />';
                         }
-                        if (info.workphone.trim() != "") {
-                            result += '<span class="infoheader">Work: </span>' + info.workphone + '<br />';
+                        if (info.phone3) {
+                            result += '<span class="infoheader">' + info.phone3type + ': </span>' + info.phone3 + '<br />';
                         }
-                        if (info.employer.trim() != "") {
+                        if (info.employer) {
                             result += '<span class="infoheader">Employer: </span>' + info.employer + '<br />';
                         }
                         result += '</p>';
@@ -169,7 +159,7 @@
         $('.addcontact').css({'display': 'inline'});
         $('.showinactive').css({'display': 'inline'});
 
-        $('body').on('click', '.showinactive', function (event){
+        $('body').on('click', '.showinactive', function (event) {
 
             var inactiveButton = $(event.target).parents('button');
             var inactiveButtonText = inactiveButton.find('.ui-button-text');
@@ -221,6 +211,7 @@
 
                                 $('form', editrow).submit(function (event) {
                                     event.preventDefault();
+                                    //TODO: Include legal_guardian in the POST (how did I miss that?)
                                     var postData = {
                                         name: 'u_student_contacts5',
                                         tables: {
@@ -274,14 +265,15 @@
                     }
                 });
         });
-        //bind click event on all edit icons
+
+
         $(document).on('click', '.editcontact', function () {
             $('.addcontact').hide();
             var row = $(this).parents('tr')[0];
             if (row) {
                 var sourcerow = row;
-                var n = m_table.fnGetData(row)[m_keyindex];
-                $.get(m_requestURL, {"frn": psData.frn, "gidx": n, "action": "geteditform"}
+                var contactId = m_table.fnGetData(row)[m_keyindex];
+                $.get(m_requestURL, {"frn": psData.frn, "gidx": contactId, "action": "geteditform"}
                 )
                     .success(function (editform) {
                         var editrow = m_table.fnOpen(row, editform, "edit_row");
@@ -338,6 +330,15 @@
                             }
                         });
 
+                        var phone1TypeSelect = $editRow.find('#phone1type');
+                        phone1TypeSelect.find('option[value="' + phone1TypeSelect.data().value + '"]').attr({'selected': 'selected'});
+
+                        var phone2TypeSelect = $editRow.find('#phone2type');
+                        phone2TypeSelect.find('option[value="' + phone2TypeSelect.data().value + '"]').attr({'selected': 'selected'});
+
+                        var phone3TypeSelect = $editRow.find('#phone3type');
+                        phone3TypeSelect.find('option[value="' + phone3TypeSelect.data().value + '"]').attr({'selected': 'selected'});
+
                         $('form', editrow).submit(function () {
                             // TODO: Use config object here for student contacts table name
                             var postData = {
@@ -368,7 +369,7 @@
                                 }
                             };
                             $.ajax({
-                                url: '/ws/schema/table/u_student_contacts5/' + $(row).data().recordId,
+                                url: '/ws/schema/table/u_student_contacts5/' + ID_MAP[contactId],
                                 data: JSON.stringify(postData),
                                 dataType: 'json',
                                 contentType: 'json',
@@ -377,7 +378,7 @@
                                 .done(function (data) {
                                     m_table.fnClose(sourcerow);
                                     $('.addcontact').show();
-                                    refreshContact(n, sourcerow);
+                                    refreshContact(contactId, sourcerow);
                                 });
                             return false;//prevent normal form submission
                         });
@@ -388,7 +389,7 @@
                     });
             }
         });
-        //bind click event on all delete icons
+
         $(document).on('click', '.deletecontact', function (event) {
             var row = $(this).parents('tr')[0];
             if (row) {
@@ -405,7 +406,39 @@
                         }
                     };
                     $.ajax({
-                        url: "/ws/schema/table/u_student_contacts5/" + $(row).data().recordId,
+                        url: "/ws/schema/table/u_student_contacts5/" + ID_MAP[contactId],
+                        data: JSON.stringify(postData),
+                        type: "PUT",
+                        dataType: "json",
+                        contentType: "json"
+                    })
+                        .success(function () {
+                            refreshContact(contactId, row);
+                        })
+                        .error(function (jqxhr) {
+                            displayError(jqxhr.statusText);
+                        });
+                }
+            }
+        });
+
+        $(document).on('click', '.activatecontact', function (event) {
+            var row = $(this).parents('tr')[0];
+            if (row) {
+                var rowData = m_table.fnGetData(row);
+                var contactId = rowData[m_keyindex];
+                var contactName = $(row).find('td').eq(0).find('p').eq(0).text();
+                if (window.confirm("Activate contact, \"" + contactName + "\"?")) {
+                    var postData = {
+                        name: 'u_student_contacts5',
+                        tables: {
+                            'u_student_contacts5': {
+                                status: '0'
+                            }
+                        }
+                    };
+                    $.ajax({
+                        url: "/ws/schema/table/u_student_contacts5/" + ID_MAP[contactId],
                         data: JSON.stringify(postData),
                         type: "PUT",
                         dataType: "json",
@@ -426,21 +459,27 @@
             .done(function (data) {
                 var removedWhitespace = data.replace(/\s/g, '');
                 if (removedWhitespace !== "") {
+                    // TODO: Refactor this so on page load, the fetchcontacts action just returns JSON for all contacts.
                     var response = eval(data);
                 } else {
                     loadingDialogInstance.closeDialog();
                 }
             });
 
-    });//End jquery document ready function
+    });
 
     /**
      *
      * @param num {Number} - contact_id
-     * @param [row] {DOMElement|jQuery}
+     * @param [row] {Element|jQuery}
      */
     function refreshContact(num, row) {
-        var settings = {"frn": psData.studentfrn, "action": "getcontact", "gidx": num, "sdcid": psData.studentdcid};
+        var settings = {
+            frn: psData.studentfrn,
+            action: "getcontact",
+            gidx: num,
+            sdcid: psData.studentdcid
+        };
         $.ajax({
             type: "GET",
             async: true,
@@ -452,11 +491,19 @@
         })
             .success(function (data, status) {
                 loadingDialogInstance.closeDialog();
-                if (row == null) {
+                if (row === null) {
+
+                    // Contact is already inactive and is getting loaded as inactive
+                    // Set the buttons element to Activate button.
+                    if (data[5] === "-2") {
+                        data[4] = "<button class='activatecontact'>Activate</button>";
+                    }
+
                     m_table.fnAddData(data);
                     var newRow = $('#maincontent tr').last();
-                    newRow.data('record-id', data[1].record_id);
+                    ID_MAP[data[0]] = data[1].record_id;
 
+                    // An inactive contact was loaded as inactive
                     if (data[5] === "-2") {
                         var contactNameContainer = $(newRow).find('td').eq(0).find('p').eq(0);
                         var inactiveTag = contactNameContainer.text() + " (INACTIVE)";
@@ -467,9 +514,15 @@
                     }
                 }
                 else {
-                    m_table.fnUpdate(data, row);
-                    $(row).data('record-id', data[1].record_id);
+                    // Contact was set to inactive and contact is getting refreshed
+                    // Set the buttons element to Activate button.
+                    if (data[5] === "-2") {
+                        data[4] = "<button class='activatecontact'>Activate</button>";
+                    }
 
+                    m_table.fnUpdate(data, row);
+
+                    // A contact was set to inactive
                     if (data[5] === "-2") {
                         var contactNameContainer = $(row).find('td').eq(0).find('p').eq(0);
                         var inactiveTag = contactNameContainer.text() + " (INACTIVE)";
@@ -478,6 +531,14 @@
                         }
                         $(row).css({'background-color': '#DEDEDE'});
                         $(row).attr({'class': 'inactive-contact'});
+
+                        // Contact was previously set to inactive and is getting set back to active
+                    } else if (data[5] === "0") {
+                        $(row).removeClass('inactive-contact');
+                        $(row).css({'background-color': ''});
+                        var contactBody = $(row).parents('tbody');
+                        contactBody.find('tr:even').addClass('odd');
+                        contactBody.find('tr:odd').addClass('even');
                     }
                 }
                 $('.editcontact').button({
