@@ -106,13 +106,13 @@ where studentsdcid=~[gpv:sdcid]
 [/if#req]
 
 ~[if#req.~[gpv:action]=fetchcontacts]
-~[tlist_sql;
-select contact_id
-FROM u_student_contacts5
-WHERE studentsdcid=~[gpv:sdcid]
-ORDER BY contact_id asc]
-refreshContact(~(contact_id));
-[/tlist_sql]
+    ~[tlist_sql;
+        SELECT contact_id
+        FROM u_student_contacts5
+        WHERE studentsdcid=~[gpv:sdcid]
+        ORDER BY contact_id asc]
+            refreshContact(~(contact_id));
+    [/tlist_sql]
 [/if#req]
 
 ~[if#req.~[gpv:action]=newfetchcontacts]
@@ -160,15 +160,7 @@ refreshContact(~(contact_id));
                 name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS5:~[tlist_sql; select id from u_student_contacts5 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]priority"
                 id="priority"
                 data-value="~[tlist_sql; select priority from u_student_contacts5 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(priority)[/tlist_sql]">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
+
         </select>
     </td>
 </tr>
@@ -440,15 +432,6 @@ refreshContact(~(contact_id));
         <select
                 name="CF-[STUDENTS:~(rn;t).U_STUDENT_INFO.U_STUDENT_CONTACTS5:~[tlist_sql; select id from u_student_contacts5 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]priority"
                 id="priority">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
         </select>
     </td>
 </tr>

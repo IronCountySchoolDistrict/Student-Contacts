@@ -1,14 +1,17 @@
-/*global jQuery,psData,confirm,loadingDialogInstance, console*/
+/*global jQuery,psData,confirm,loadingDialogInstance, console, require*/
 
 (function () {
     'use strict';
 
     /**
-     * Contact ID to contact table record ID mapping object.
+     *
+     * NOTE: Reading the length of this object also represents the number of contacts this student has.
+     * Neither the contact ID nor the contact table record ID should ever change, so consider this object
+     * a constant.
      * @constant
-     * @type {Object}
+     * @type {Object} Contact ID (key) => to contact data Object (value) from contactdata.html?action=getcontact
      */
-    var ID_MAP = {};
+    var contactsCollection = {};
 
     /**
      *
@@ -91,10 +94,10 @@
                         if ($.isEmptyObject(info) || info === "") {
                             return '';
                         }
-                        var residenceAddress = info.residence_street === '' ? '' : info.residence_street;
+                        var residenceAddress = info.residence_street === '' ? '' : info.residence_street + '<br />';
                         residenceAddress += info.residence_city === '' ? '' : info.residence_city + ',';
                         residenceAddress += info.residence_state + ' ' + info.residence_zip;
-                        var mailingAddress = info.mailing_street === '' ? '' : info.mailing_street;
+                        var mailingAddress = info.mailing_street === '' ? '' : info.mailing_street + '<br />';
                         mailingAddress += info.mailing_city === '' ? '' : info.mailing_city + ',';
                         mailingAddress += info.mailing_state + ' ' + info.mailing_zip;
                         if (info.residence_street) {
@@ -120,14 +123,23 @@
                         if (info.email) {
                             result += '<span class="infoheader">Email: </span><a href="mailto:' + info.email + '">' + info.email + '</a><br />';
                         }
+                        if (info.phone1type) {
+                            result += '<span class="infoheader">' + info.phone1type + ': </span>';
+                        }
                         if (info.phone1) {
-                            result += '<span class="infoheader">' + info.phone1type + ': </span>' + info.phone1 + '<br />';
+                            result += info.phone1 + '<br />';
+                        }
+                        if (info.phone2type) {
+                            result += '<span class="infoheader">' + info.phone2type + ': </span>';
                         }
                         if (info.phone2) {
-                            result += '<span class="infoheader">' + info.phone2type + ': </span>' + info.phone2 + '<br />';
+                            result += info.phone2 + '<br />';
+                        }
+                        if (info.phone3type) {
+                            result += '<span class="infoheader">' + info.phone3type + ': </span>';
                         }
                         if (info.phone3) {
-                            result += '<span class="infoheader">' + info.phone3type + ': </span>' + info.phone3 + '<br />';
+                            result += info.phone3 + '<br />';
                         }
                         if (info.employer) {
                             result += '<span class="infoheader">Employer: </span>' + info.employer + '<br />';
@@ -159,7 +171,7 @@
         $('.addcontact').css({'display': 'inline'});
         $('.showinactive').css({'display': 'inline'});
 
-        $('body').on('click', '.showinactive', function (event) {
+        $(document).on('click', '.showinactive', function (event) {
 
             var inactiveButton = $(event.target).parents('button');
             var inactiveButtonText = inactiveButton.find('.ui-button-text');
@@ -173,7 +185,33 @@
             }
         });
 
-        $('body').on('click', '.addcontact', function () {
+
+        /**
+         *
+         * @param contactData {Object}
+         * @param recordId {Number|String} ID of database record
+         */
+        function saveContact(contactData, recordId) {
+            var url;
+            var type;
+            if (recordId) {
+                type = 'PUT';
+                url = '/ws/schema/table/u_student_contacts5/' + recordId;
+            } else {
+                type = 'POST';
+                url = '/ws/schema/table/u_student_contacts5';
+            }
+
+            return $.ajax({
+                url: url,
+                data: JSON.stringify(contactData),
+                dataType: 'json',
+                contentType: 'json',
+                type: type
+            });
+        }
+
+        $(document).on('click', '.addcontact', function () {
             $('.addcontact').hide();
             $.getJSON(m_requestURL, {"frn": psData.frn, "action": "addcontact", "sdcid": psData.studentdcid})
                 .success(function (data) {
@@ -181,8 +219,7 @@
                         var n = data.contactnumber;
                         var ridx = m_table.fnAddData([n, "", "", "", "", "", ""]);
                         var sourcerow = m_table.fnSettings().aoData[ridx].nTr;
-                        $.get(m_requestURL, {"frn": psData.frn, "gidx": n, "action": "getcreateform"}
-                        )
+                        $.get(m_requestURL, {"frn": psData.frn, "gidx": n, "action": "getcreateform"})
                             .success(function (editform) {
                                 var editrow = m_table.fnOpen(sourcerow, editform, "edit_row");
                                 var $editRow = $(editrow);
@@ -209,9 +246,42 @@
                                     copyPhone($phoneField, $target.siblings('.data').text());
                                 });
 
+                                // Add options to the priority select dropdown menu
+                                var prioritySelect = $editRow.find('#priority');
+                                var optionTemplate = $('#option-template').html();
+                                var numberOfContacts = Object.keys(contactsCollection).length;
+
+                                require(['underscore'], function (_) {
+                                    $.each(_.range(1, numberOfContacts + 2), function (index, priority) {
+                                        var renderedOptTemplate = _.template(optionTemplate, {
+                                            value: priority,
+                                            label: priority
+                                        });
+                                        prioritySelect.append(renderedOptTemplate);
+                                    });
+                                });
+
                                 $('form', editrow).submit(function (event) {
                                     event.preventDefault();
-                                    //TODO: Include legal_guardian in the POST (how did I miss that?)
+                                    var newPriority = $('#priority').val();
+                                    if (newPriority !== $('#priority').find('option').last().val()) {
+                                        // Get all contacts with greater than or equal to priority
+                                        // of the new contact
+                                        $.each(contactsCollection, function (index, contact) {
+                                            if (parseInt(contact[1].priority) >= parseInt(newPriority)) {
+                                                var postData = {
+                                                    name: 'u_student_contacts5',
+                                                    tables: {
+                                                        'u_student_contacts5': {
+                                                            priority: (parseInt(contact[1].priority) + 1).toString()
+                                                        }
+                                                    }
+                                                };
+                                                saveContact(postData, contact[1].record_id);
+                                            }
+                                        });
+                                    }
+
                                     var postData = {
                                         name: 'u_student_contacts5',
                                         tables: {
@@ -219,6 +289,7 @@
                                                 studentsdcid: psData.studentdcid,
                                                 contact_id: data.contactnumber.toString(),
                                                 status: '0',
+                                                legal_guardian: $('#legal_guardian').val(),
                                                 last_name: $('#last-name').val(),
                                                 first_name: $('#first-name').val(),
                                                 priority: $('#priority').val(),
@@ -243,17 +314,12 @@
                                         }
                                     };
 
-                                    $.ajax({
-                                        url: '/ws/schema/table/u_student_contacts5',
-                                        data: JSON.stringify(postData),
-                                        dataType: 'json',
-                                        contentType: 'json',
-                                        type: 'POST'
-                                    }).done(function () {
+                                    saveContact(postData).done(function () {
                                         m_table.fnClose(sourcerow);
                                         refreshContact(n, sourcerow);
                                         $('.addcontact').show();
                                     });
+
 
                                 });
                                 $('.edit_cancel', editrow).click(function () {
@@ -273,8 +339,7 @@
             if (row) {
                 var sourcerow = row;
                 var contactId = m_table.fnGetData(row)[m_keyindex];
-                $.get(m_requestURL, {"frn": psData.frn, "gidx": contactId, "action": "geteditform"}
-                )
+                $.get(m_requestURL, {"frn": psData.frn, "gidx": contactId, "action": "geteditform"})
                     .success(function (editform) {
                         var editrow = m_table.fnOpen(row, editform, "edit_row");
                         var $editRow = $(editrow);
@@ -300,14 +365,26 @@
                             var $phoneField = $('#' + $target.data().fieldId);
                             copyPhone($phoneField, $target.siblings('.data').text());
                         });
-                        // Set the right option of the priority dropdown
-                        var prioritySelect = $editRow.find('#priority');
-                        var priority = prioritySelect.data().value;
-                        var priorityOptions = prioritySelect.find('option');
-                        $.each(priorityOptions, function (index, option) {
-                            if (parseInt($(option).val()) === priority) {
-                                $(option).attr('selected', 'selected');
-                            }
+
+                        require(['underscore'], function (_) {
+                            var prioritySelect = $editRow.find('#priority');
+
+                            $.each(_.range(1, numberOfContacts + 1), function (index, priority) {
+                                var renderedOptTemplate = _.template(optionTemplate, {
+                                    value: priority,
+                                    label: priority
+                                });
+                                prioritySelect.append(renderedOptTemplate);
+                            });
+
+                            // Set the right option of the priority dropdown
+                            var priority = prioritySelect.data().value;
+                            var priorityOptions = prioritySelect.find('option');
+                            $.each(priorityOptions, function (index, option) {
+                                if (parseInt($(option).val()) === priority) {
+                                    $(option).attr('selected', 'selected');
+                                }
+                            });
                         });
 
                         // Set the right option of the relationship dropdown
@@ -323,12 +400,11 @@
                         // Set the right option of the legal guardian dropdown
                         var legalGuardianSelect = $editRow.find('#legal-guardian');
                         var legalGuardian = legalGuardianSelect.data().value;
-                        var legalGuardianOptions = legalGuardianSelect.find('option');
-                        $.each(legalGuardianOptions, function (index, option) {
-                            if ($(option).val() === legalGuardian) {
-                                $(option).attr('selected', 'selected');
-                            }
-                        });
+                        if (legalGuardian === "1") {
+                            legalGuardianSelect.find('option[value="1"]').attr('selected', 'selected');
+                        } else {
+                            legalGuardianSelect.find('option[value=""]').attr('selected', 'selected');
+                        }
 
                         var phone1TypeSelect = $editRow.find('#phone1type');
                         phone1TypeSelect.find('option[value="' + phone1TypeSelect.data().value + '"]').attr({'selected': 'selected'});
@@ -339,8 +415,80 @@
                         var phone3TypeSelect = $editRow.find('#phone3type');
                         phone3TypeSelect.find('option[value="' + phone3TypeSelect.data().value + '"]').attr({'selected': 'selected'});
 
-                        $('form', editrow).submit(function () {
-                            // TODO: Use config object here for student contacts table name
+                        // Add options to the priority select dropdown menu
+                        var optionTemplate = $('#option-template').html();
+                        var numberOfContacts = Object.keys(contactsCollection).length;
+
+                        $('form', editrow).submit(function (event) {
+                            event.preventDefault();
+                            var newPriority = parseInt($('#priority').val());
+                            var oldPriority = parseInt(contactsCollection[contactId][1].priority);
+                            if (newPriority !== oldPriority) {
+                                // First priority contact is getting changed.
+                                if (newPriority > oldPriority) {
+                                    $.each(contactsCollection, function (index, contact) {
+                                        if (parseInt(contact[1].priority) > parseInt(oldPriority) && parseInt(contact[1].priority) <= parseInt(newPriority)) {
+                                            var postData = {
+                                                name: 'u_student_contacts5',
+                                                tables: {
+                                                    'u_student_contacts5': {
+                                                        priority: (parseInt(contact[1].priority) - 1).toString()
+                                                    }
+                                                }
+                                            };
+                                            saveContact(postData, contact[1].record_id);
+
+                                            // Find the rows that were updated and refresh them
+                                            // Get all rows that contain a td with a p element (only contact rows have this)
+                                            var tableRows = $('tr:has("td p")');
+                                            var updatedRow;
+                                            $.each(tableRows, function(index, tableRow) {
+                                                var rowContactId = m_table.fnGetData(tableRow)[m_keyindex];
+                                                if (rowContactId === contactId) {
+                                                    updatedRow = tableRow;
+                                                }
+                                                if (updatedRow) {
+                                                    refreshContact(contactId, updatedRow);
+                                                }
+                                            });
+
+                                        }
+
+
+                                    });
+                                } else if (newPriority < oldPriority) {
+                                    $.each(contactsCollection, function (index, contact) {
+                                        if (parseInt(contact[1].priority) < parseInt(oldPriority) && parseInt(contact[1].priority) >= parseInt(newPriority)) {
+                                            var postData = {
+                                                name: 'u_student_contacts5',
+                                                tables: {
+                                                    'u_student_contacts5': {
+                                                        priority: (parseInt(contact[1].priority) + 1).toString()
+                                                    }
+                                                }
+                                            };
+                                            saveContact(postData, contact[1].record_id);
+
+                                            // Find the rows that were updated and refresh them
+                                            // Get all rows that contain a td with a p element (only contact rows have this)
+                                            var tableRows = $('tr:has("td p")');
+                                            var updatedRow;
+                                            $.each(tableRows, function(index, tableRow) {
+                                                var rowContactId = m_table.fnGetData(tableRow)[m_keyindex];
+                                                if (rowContactId === contact[1].record_id) {
+                                                    updatedRow = tableRow;
+                                                }
+                                                if (updatedRow) {
+                                                    refreshContact(contactId, updatedRow);
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            }
+
+
+
                             var postData = {
                                 name: 'u_student_contacts5',
                                 tables: {
@@ -348,6 +496,7 @@
                                         last_name: $('#last-name').val(),
                                         first_name: $('#first-name').val(),
                                         priority: $('#priority').val(),
+                                        legal_guardian: $('#legal_guardian').val(),
                                         relationship: $('#relationship').val(),
                                         residence_street: $('#residence-street').val(),
                                         residence_city: $('#residence-city').val(),
@@ -368,19 +517,12 @@
                                     }
                                 }
                             };
-                            $.ajax({
-                                url: '/ws/schema/table/u_student_contacts5/' + ID_MAP[contactId],
-                                data: JSON.stringify(postData),
-                                dataType: 'json',
-                                contentType: 'json',
-                                type: 'PUT'
-                            })
-                                .done(function (data) {
-                                    m_table.fnClose(sourcerow);
-                                    $('.addcontact').show();
-                                    refreshContact(contactId, sourcerow);
-                                });
-                            return false;//prevent normal form submission
+                            saveContact(postData, contactsCollection[contactId][1].record_id).done(function (data) {
+                                m_table.fnClose(sourcerow);
+                                $('.addcontact').show();
+                                refreshContact(contactId, sourcerow);
+                            });
+
                         });
                         $('.edit_cancel', editrow).click(function () {
                             $('.addcontact').show();
@@ -406,7 +548,7 @@
                         }
                     };
                     $.ajax({
-                        url: "/ws/schema/table/u_student_contacts5/" + ID_MAP[contactId],
+                        url: "/ws/schema/table/u_student_contacts5/" + contactsCollection[contactId][1].record_id,
                         data: JSON.stringify(postData),
                         type: "PUT",
                         dataType: "json",
@@ -438,7 +580,7 @@
                         }
                     };
                     $.ajax({
-                        url: "/ws/schema/table/u_student_contacts5/" + ID_MAP[contactId],
+                        url: "/ws/schema/table/u_student_contacts5/" + contactsCollection[contactId][1].record_id,
                         data: JSON.stringify(postData),
                         type: "PUT",
                         dataType: "json",
@@ -455,7 +597,8 @@
         });
 
         //Fetch contact listing
-        $.get(m_requestURL, {"sdcid": psData.studentdcid, "action": "newfetchcontacts"}, function() {}, "json")
+        $.get(m_requestURL, {"sdcid": psData.studentdcid, "action": "newfetchcontacts"}, function () {
+        }, "json")
             .done(function (data) {
 
                 // In order to be valid JSON, an empty element has to be added to the array after the tlist_sql.
@@ -463,7 +606,7 @@
                 data.pop();
 
                 if (data.length > 0) {
-                    $.each(data, function(index, contactId) {
+                    $.each(data, function (index, contactId) {
                         refreshContact(contactId);
                     });
                 } else {
@@ -475,14 +618,14 @@
 
     /**
      *
-     * @param num {Number} - contact_id
+     * @param contactId {Number} - contact_id
      * @param [row] {Element|jQuery}
      */
-    function refreshContact(num, row) {
+    function refreshContact(contactId, row) {
         var settings = {
             frn: psData.studentfrn,
             action: "getcontact",
-            gidx: num,
+            gidx: contactId,
             sdcid: psData.studentdcid
         };
         $.ajax({
@@ -506,7 +649,7 @@
 
                     m_table.fnAddData(data);
                     var newRow = $('#maincontent tr').last();
-                    ID_MAP[data[0]] = data[1].record_id;
+                    contactsCollection[data[0]] = data;
 
                     // An inactive contact was loaded as inactive
                     if (data[5] === "-2") {
@@ -527,8 +670,14 @@
 
                     m_table.fnUpdate(data, row);
 
-                    // A contact was set to inactive
+                    // If the contact does not have an entry in the contactsCollection, add it
+                    var contactId = data[0];
+                    if (!contactsCollection[contactId]) {
+                        contactsCollection[contactId] = data;
+                    }
+
                     if (data[5] === "-2") {
+                        // A contact was set to inactive
                         var contactNameContainer = $(row).find('td').eq(0).find('p').eq(0);
                         var inactiveTag = contactNameContainer.text() + " (INACTIVE)";
                         if (contactNameContainer.text().indexOf(" (INACTIVE)") === -1) {
@@ -536,9 +685,8 @@
                         }
                         $(row).css({'background-color': '#DEDEDE'});
                         $(row).attr({'class': 'inactive-contact'});
-
-                        // Contact was previously set to inactive and is getting set back to active
                     } else if (data[5] === "0") {
+                        // Contact was previously set to inactive and is getting set back to active
                         $(row).removeClass('inactive-contact');
                         $(row).css({'background-color': ''});
                         var contactBody = $(row).parents('tbody');
