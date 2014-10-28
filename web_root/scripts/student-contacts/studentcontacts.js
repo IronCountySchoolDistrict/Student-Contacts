@@ -1,5 +1,8 @@
 /*global jQuery,psData,confirm,loadingDialogInstance, console, require*/
 
+
+var contactsCollection = {};
+
 (function () {
     'use strict';
 
@@ -11,7 +14,7 @@
      * @constant
      * @type {Object} Contact ID (key) => to contact data Object (value) from contactdata.html?action=getcontact
      */
-    var contactsCollection = {};
+
 
     /**
      *
@@ -436,22 +439,22 @@
                                                     }
                                                 }
                                             };
-                                            saveContact(postData, contact[1].record_id);
-
-                                            // Find the rows that were updated and refresh them
-                                            // Get all rows that contain a td with a p element (only contact rows have this)
-                                            var tableRows = $('tr:has("td p")');
-                                            var updatedRow;
-                                            $.each(tableRows, function(index, tableRow) {
-                                                var rowContactId = m_table.fnGetData(tableRow)[m_keyindex];
-                                                if (rowContactId === contactId) {
-                                                    updatedRow = tableRow;
-                                                }
-                                                if (updatedRow) {
-                                                    refreshContact(contactId, updatedRow);
-                                                }
+                                            saveContact(postData, contact[1].record_id).done(function() {
+                                                // Find the rows that were updated and refresh them
+                                                // Get all rows that contain a td with a p element (only contact rows have this)
+                                                var tableRows = $('tr:has("td p")');
+                                                var updatedRow;
+                                                $.each(tableRows, function(index, tableRow) {
+                                                    var rowContactId = m_table.fnGetData(tableRow)[m_keyindex];
+                                                    if (rowContactId === contact[0]) {
+                                                        updatedRow = tableRow;
+                                                    }
+                                                    if (updatedRow) {
+                                                        refreshContact(rowContactId, updatedRow);
+                                                    }
+                                                    updatedRow = null;
+                                                });
                                             });
-
                                         }
 
 
@@ -467,20 +470,21 @@
                                                     }
                                                 }
                                             };
-                                            saveContact(postData, contact[1].record_id);
-
-                                            // Find the rows that were updated and refresh them
-                                            // Get all rows that contain a td with a p element (only contact rows have this)
-                                            var tableRows = $('tr:has("td p")');
-                                            var updatedRow;
-                                            $.each(tableRows, function(index, tableRow) {
-                                                var rowContactId = m_table.fnGetData(tableRow)[m_keyindex];
-                                                if (rowContactId === contact[1].record_id) {
-                                                    updatedRow = tableRow;
-                                                }
-                                                if (updatedRow) {
-                                                    refreshContact(contactId, updatedRow);
-                                                }
+                                            saveContact(postData, contact[1].record_id).done(function() {
+                                                // Find the rows that were updated and refresh them
+                                                // Get all rows that contain a td with a p element (only contact rows have this)
+                                                var tableRows = $('tr:has("td p")');
+                                                var updatedRow;
+                                                $.each(tableRows, function(index, tableRow) {
+                                                    var rowContactId = m_table.fnGetData(tableRow)[m_keyindex];
+                                                    if (rowContactId === contact[0]) {
+                                                        updatedRow = tableRow;
+                                                    }
+                                                    if (updatedRow) {
+                                                        refreshContact(rowContactId, updatedRow);
+                                                    }
+                                                    updatedRow = null;
+                                                });
                                             });
                                         }
                                     });
@@ -670,11 +674,8 @@
 
                     m_table.fnUpdate(data, row);
 
-                    // If the contact does not have an entry in the contactsCollection, add it
                     var contactId = data[0];
-                    if (!contactsCollection[contactId]) {
-                        contactsCollection[contactId] = data;
-                    }
+                    contactsCollection[contactId] = data;
 
                     if (data[5] === "-2") {
                         // A contact was set to inactive
