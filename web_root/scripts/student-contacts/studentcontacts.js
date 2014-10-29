@@ -1,8 +1,5 @@
 /*global jQuery,psData,confirm,loadingDialogInstance, console, require*/
 
-
-var contactsCollection = {};
-
 (function () {
     'use strict';
 
@@ -14,6 +11,7 @@ var contactsCollection = {};
      * @constant
      * @type {Object} Contact ID (key) => to contact data Object (value) from contactdata.html?action=getcontact
      */
+    var contactsCollection = {};
 
 
     /**
@@ -214,6 +212,24 @@ var contactsCollection = {};
             });
         }
 
+        /**
+         *
+         * @param contactId {Number|String}
+         */
+        function setupParsley(contactId) {
+            window.ParsleyValidator
+                .addValidator('address', function (value) {
+                    console.log('in address validator');
+                }, 100)
+                .addMessage('en', 'address', 'This field must be filled in');
+            $('[id^=ceditform]').parsley({
+                // bootstrap form classes
+                errorsWrapper: '<span class=\"help-block\" style="display: block;white-space: normal;word-wrap: break-word;"></span>',
+                errorTemplate: '<span class="error-message"></span>',
+                excluded: ':hidden'
+            });
+        }
+
         $(document).on('click', '.addcontact', function () {
             $('.addcontact').hide();
             $.getJSON(m_requestURL, {"frn": psData.frn, "action": "addcontact", "sdcid": psData.studentdcid})
@@ -227,15 +243,12 @@ var contactsCollection = {};
                                 var editrow = m_table.fnOpen(sourcerow, editform, "edit_row");
                                 var $editRow = $(editrow);
 
+                                setupParsley();
+
                                 // Set up input masks
                                 $editRow.find('.phone').inputmask('999-999-9999');
                                 $editRow.find('.zip').inputmask('99999');
-
-                                // Only bind input mask to email field if the guardian email doesn't have commas
-                                var guardianEmail = $editRow.find('#guardianemail').text();
-                                if (guardianEmail.indexOf(',') === -1) {
-                                    $editRow.find('#email').inputmask({'alias': 'email'});
-                                }
+                                $editRow.find('#email').inputmask({'alias': 'email'});
 
                                 $editRow.find('#copy-email').on('click', function (event) {
                                     var $target = $(event.target);
@@ -439,12 +452,12 @@ var contactsCollection = {};
                                                     }
                                                 }
                                             };
-                                            saveContact(postData, contact[1].record_id).done(function() {
+                                            saveContact(postData, contact[1].record_id).done(function () {
                                                 // Find the rows that were updated and refresh them
                                                 // Get all rows that contain a td with a p element (only contact rows have this)
                                                 var tableRows = $('tr:has("td p")');
                                                 var updatedRow;
-                                                $.each(tableRows, function(index, tableRow) {
+                                                $.each(tableRows, function (index, tableRow) {
                                                     var rowContactId = m_table.fnGetData(tableRow)[m_keyindex];
                                                     if (rowContactId === contact[0]) {
                                                         updatedRow = tableRow;
@@ -470,12 +483,12 @@ var contactsCollection = {};
                                                     }
                                                 }
                                             };
-                                            saveContact(postData, contact[1].record_id).done(function() {
+                                            saveContact(postData, contact[1].record_id).done(function () {
                                                 // Find the rows that were updated and refresh them
                                                 // Get all rows that contain a td with a p element (only contact rows have this)
                                                 var tableRows = $('tr:has("td p")');
                                                 var updatedRow;
-                                                $.each(tableRows, function(index, tableRow) {
+                                                $.each(tableRows, function (index, tableRow) {
                                                     var rowContactId = m_table.fnGetData(tableRow)[m_keyindex];
                                                     if (rowContactId === contact[0]) {
                                                         updatedRow = tableRow;
@@ -490,7 +503,6 @@ var contactsCollection = {};
                                     });
                                 }
                             }
-
 
 
                             var postData = {
