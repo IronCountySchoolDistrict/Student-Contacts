@@ -216,12 +216,146 @@
          *
          * @param contactId {Number|String}
          */
-        function setupParsley(contactId) {
+        function setupParsley() {
             window.ParsleyValidator
-                .addValidator('address', function (value) {
-                    console.log('in address validator');
+                .addValidator('resaddress', function (value) {
+                    /**
+                     *
+                     * @type {boolean}
+                     */
+                    var resFieldsEmpty = $('#residence-street').val() === "" &&
+                        $('#residence-city').val() === "" &&
+                        $('#residence-state').val() === "" &&
+                        $('#residence-zip').val() === "";
+                    if (resFieldsEmpty) {
+                        return true;
+                    } else {
+                        return !!value;
+                    }
+
                 }, 100)
-                .addMessage('en', 'address', 'This field must be filled in');
+                .addMessage('en', 'resaddress', 'All address fields must be filled in');
+
+            window.ParsleyValidator
+                .addValidator('mailaddress', function (value) {
+                    /**
+                     *
+                     * @type {boolean}
+                     */
+                    var mailFieldsEmpty = $('#mailing-street').val() === "" &&
+                        $('#mailing-city').val() === "" &&
+                        $('#mailing-state').val() === "" &&
+                        $('#mailing-zip').val() === "";
+                    if (mailFieldsEmpty) {
+                        return true;
+                    } else {
+                        return !!value;
+                    }
+
+                }, 100)
+                .addMessage('en', 'mailaddress', 'All address fields must be filled in');
+
+            window.ParsleyValidator
+                .addValidator('onephonereq', function (value) {
+                    /**
+                     *
+                     * @type {boolean}
+                     */
+                    var allPhonesEmpty = $('#phone1type').val() === "" &&
+                        $('#phone1').val() === "" &&
+                        $('#phone2type').val() === "" &&
+                        $('#phone2').val() === "" &&
+                        $('#phone3type').val() === "" &&
+                        $('#phone3').val() === "";
+
+                    if (allPhonesEmpty) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+
+                }, 100)
+                .addMessage('en', 'onephonereq', 'At least one phone number is required.');
+
+            window.ParsleyValidator
+                .addValidator('phone1num', function (value) {
+                    if ($('#phone1type').val() === "" && $('#phone1').val() === "") {
+                        return true;
+                    } else if ($('#phone1type').val() !== "" && $('#phone1').val() === "") {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }, 100)
+                .addMessage('en', 'phone1num', 'Phone type was given, number is required.');
+
+            window.ParsleyValidator
+                .addValidator('phone1type', function (value) {
+                    if ($('#phone1type').val() === "" && $('#phone1').val() === "") {
+                        return true;
+                    } else if ($('#phone1').val() !== "" && $('#phone1type').val() === "") {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }, 100)
+                .addMessage('en', 'phone1type', 'Phone number was given, type is required.');
+
+            window.ParsleyValidator
+                .addValidator('phone2num', function (value) {
+                    if ($('#phone2type').val() === "" && $('#phone2').val() === "") {
+                        return true;
+                    } else if ($('#phone2type').val() !== "" && $('#phone2').val() === "") {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }, 100)
+                .addMessage('en', 'phone2num', 'Phone type was given, number is required.');
+
+            window.ParsleyValidator
+                .addValidator('phone2type', function (value) {
+                    if ($('#phone2type').val() === "" && $('#phone2').val() === "") {
+                        return true;
+                    } else if ($('#phone2').val() !== "" && $('#phone2type').val() === "") {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }, 100)
+                .addMessage('en', 'phone2type', 'Phone number was given, type is required.');
+
+            window.ParsleyValidator
+                .addValidator('phone3num', function (value) {
+                    if ($('#phone3type').val() === "" && $('#phone3').val() === "") {
+                        return true;
+                    } else if ($('#phone3type').val() !== "" && $('#phone3').val() === "") {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }, 100)
+                .addMessage('en', 'phone3num', 'Phone type was given, number is required.');
+
+            window.ParsleyValidator
+                .addValidator('phone3type', function (value) {
+                    if ($('#phone3type').val() === "" && $('#phone3').val() === "") {
+                        return true;
+                    } else if ($('#phone3').val() !== "" && $('#phone3type').val() === "") {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }, 100)
+                .addMessage('en', 'phone3type', 'Phone number was given, type is required.');
+
+            window.ParsleyValidator
+                .addValidator('phonelength', function (value) {
+                    var valLength = value.split("_").join("").length;
+                    return valLength === 12 || valLength === 0;
+                }, 100)
+                .addMessage('en', 'phonelength', 'Please completely fill in this phone number.');
+
             $('[id^=ceditform]').parsley({
                 // bootstrap form classes
                 errorsWrapper: '<span class=\"help-block\" style="display: block;white-space: normal;word-wrap: break-word;"></span>',
@@ -357,8 +491,11 @@
                 var contactId = m_table.fnGetData(row)[m_keyindex];
                 $.get(m_requestURL, {"frn": psData.frn, "gidx": contactId, "action": "geteditform"})
                     .success(function (editform) {
+
                         var editrow = m_table.fnOpen(row, editform, "edit_row");
                         var $editRow = $(editrow);
+
+                        setupParsley();
 
                         // Set up input masks
                         $editRow.find('.phone').inputmask('999-999-9999');
@@ -419,8 +556,16 @@
                         if (legalGuardian === "1") {
                             legalGuardianSelect.find('option[value="1"]').attr('selected', 'selected');
                         } else {
-                            legalGuardianSelect.find('option[value=""]').attr('selected', 'selected');
+                            legalGuardianSelect.find('option[value="0"]').attr('selected', 'selected');
                         }
+
+                        // Set the right option for the residence state dropdown
+                        var residenceStateSelect = $('#residence-state');
+                        residenceStateSelect.find('option[value="' + residenceStateSelect.data().value + '"]').attr('selected', 'selected');
+
+                        // Set the right option for the mailing state dropdown
+                        var mailingStateSelect = $('#mailing-state');
+                        mailingStateSelect.find('option[value="' + mailingStateSelect.data().value + '"]').attr('selected', 'selected');
 
                         var phone1TypeSelect = $editRow.find('#phone1type');
                         phone1TypeSelect.find('option[value="' + phone1TypeSelect.data().value + '"]').attr({'selected': 'selected'});
@@ -503,7 +648,6 @@
                                     });
                                 }
                             }
-
 
                             var postData = {
                                 name: 'u_student_contacts5',
