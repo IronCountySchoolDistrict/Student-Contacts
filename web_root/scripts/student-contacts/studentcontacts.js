@@ -212,10 +212,6 @@
             });
         }
 
-        /**
-         *
-         * @param contactId {Number|String}
-         */
         function setupParsley() {
             window.ParsleyValidator
                 .addValidator('resaddress', function (value) {
