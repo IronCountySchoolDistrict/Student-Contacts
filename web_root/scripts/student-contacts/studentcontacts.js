@@ -197,10 +197,10 @@
             var type;
             if (recordId) {
                 type = 'PUT';
-                url = '/ws/schema/table/u_student_contacts5/' + recordId;
+                url = '/ws/schema/table/u_student_contacts/' + recordId;
             } else {
                 type = 'POST';
-                url = '/ws/schema/table/u_student_contacts5';
+                url = '/ws/schema/table/u_student_contacts';
             }
 
             return $.ajax({
@@ -416,9 +416,9 @@
                                         $.each(contactsCollection, function (index, contact) {
                                             if (parseInt(contact[1].priority) >= parseInt(newPriority)) {
                                                 var postData = {
-                                                    name: 'u_student_contacts5',
+                                                    name: 'u_student_contacts',
                                                     tables: {
-                                                        'u_student_contacts5': {
+                                                        'u_student_contacts': {
                                                             priority: (parseInt(contact[1].priority) + 1).toString()
                                                         }
                                                     }
@@ -429,9 +429,9 @@
                                     }
 
                                     var postData = {
-                                        name: 'u_student_contacts5',
+                                        name: 'u_student_contacts',
                                         tables: {
-                                            'u_student_contacts5': {
+                                            'u_student_contacts': {
                                                 studentsdcid: psData.studentdcid,
                                                 contact_id: data.contactnumber.toString(),
                                                 status: '0',
@@ -586,9 +586,9 @@
                                     $.each(contactsCollection, function (index, contact) {
                                         if (parseInt(contact[1].priority) > parseInt(oldPriority) && parseInt(contact[1].priority) <= parseInt(newPriority)) {
                                             var postData = {
-                                                name: 'u_student_contacts5',
+                                                name: 'u_student_contacts',
                                                 tables: {
-                                                    'u_student_contacts5': {
+                                                    'u_student_contacts': {
                                                         priority: (parseInt(contact[1].priority) - 1).toString()
                                                     }
                                                 }
@@ -617,9 +617,9 @@
                                     $.each(contactsCollection, function (index, contact) {
                                         if (parseInt(contact[1].priority) < parseInt(oldPriority) && parseInt(contact[1].priority) >= parseInt(newPriority)) {
                                             var postData = {
-                                                name: 'u_student_contacts5',
+                                                name: 'u_student_contacts',
                                                 tables: {
-                                                    'u_student_contacts5': {
+                                                    'u_student_contacts': {
                                                         priority: (parseInt(contact[1].priority) + 1).toString()
                                                     }
                                                 }
@@ -646,9 +646,9 @@
                             }
 
                             var postData = {
-                                name: 'u_student_contacts5',
+                                name: 'u_student_contacts',
                                 tables: {
-                                    'u_student_contacts5': {
+                                    'u_student_contacts': {
                                         last_name: $('#last-name').val(),
                                         first_name: $('#first-name').val(),
                                         priority: $('#priority').val(),
@@ -696,15 +696,15 @@
                 var contactName = $(row).find('td').eq(0).find('p').eq(0).text();
                 if (window.confirm("Delete contact, \"" + contactName + "\"?")) {
                     var postData = {
-                        name: 'u_student_contacts5',
+                        name: 'u_student_contacts',
                         tables: {
-                            'u_student_contacts5': {
+                            'u_student_contacts': {
                                 status: '-2'
                             }
                         }
                     };
                     $.ajax({
-                        url: "/ws/schema/table/u_student_contacts5/" + contactsCollection[contactId][1].record_id,
+                        url: "/ws/schema/table/u_student_contacts/" + contactsCollection[contactId][1].record_id,
                         data: JSON.stringify(postData),
                         type: "PUT",
                         dataType: "json",
@@ -728,15 +728,15 @@
                 var contactName = $(row).find('td').eq(0).find('p').eq(0).text();
                 if (window.confirm("Activate contact, \"" + contactName + "\"?")) {
                     var postData = {
-                        name: 'u_student_contacts5',
+                        name: 'u_student_contacts',
                         tables: {
-                            'u_student_contacts5': {
+                            'u_student_contacts': {
                                 status: '0'
                             }
                         }
                     };
                     $.ajax({
-                        url: "/ws/schema/table/u_student_contacts5/" + contactsCollection[contactId][1].record_id,
+                        url: "/ws/schema/table/u_student_contacts/" + contactsCollection[contactId][1].record_id,
                         data: JSON.stringify(postData),
                         type: "PUT",
                         dataType: "json",
