@@ -5,6 +5,14 @@
 
     /**
      *
+     * @type {Object}
+     */
+    var config = {
+        contactsTable: 'u_student_contacts6'
+    };
+
+    /**
+     *
      * NOTE: Reading the length of this object also represents the number of contacts this student has.
      * Neither the contact ID nor the contact table record ID should ever change, so consider this object
      * a constant.
@@ -197,10 +205,10 @@
             var type;
             if (recordId) {
                 type = 'PUT';
-                url = '/ws/schema/table/u_student_contacts6/' + recordId;
+                url = '/ws/schema/table/' + config.contactsTable + recordId;
             } else {
                 type = 'POST';
-                url = '/ws/schema/table/u_student_contacts6';
+                url = '/ws/schema/table/' + config.contactsTable;
             }
 
             return $.ajax({
@@ -361,6 +369,7 @@
         }
 
         $(document).on('click', '.addcontact', function () {
+            var _this = this;
             $('.addcontact').hide();
             $.getJSON(m_requestURL, {"frn": psData.frn, "action": "addcontact", "sdcid": psData.studentdcid})
                 .success(function (data) {
@@ -409,19 +418,21 @@
 
                                 $('form', editrow).submit(function (event) {
                                     event.preventDefault();
+                                    var contactsTable = config.contactsTable;
                                     var newPriority = $('#priority').val();
                                     if (newPriority !== $('#priority').find('option').last().val()) {
                                         // Get all contacts with greater than or equal to priority
                                         // of the new contact
                                         $.each(contactsCollection, function (index, contact) {
                                             if (parseInt(contact[1].priority) >= parseInt(newPriority)) {
+
                                                 var postData = {
-                                                    name: 'u_student_contacts6',
-                                                    tables: {
-                                                        'u_student_contacts6': {
-                                                            priority: (parseInt(contact[1].priority) + 1).toString()
-                                                        }
-                                                    }
+                                                    name: config.contactsTable,
+                                                    tables: {}
+                                                };
+
+                                                postData.tables[contactsTable] = {
+                                                    priority: (parseInt(contact[1].priority) + 1).toString()
                                                 };
                                                 saveContact(postData, contact[1].record_id);
                                             }
@@ -429,35 +440,35 @@
                                     }
 
                                     var postData = {
-                                        name: 'u_student_contacts6',
-                                        tables: {
-                                            'u_student_contacts6': {
-                                                studentsdcid: psData.studentdcid,
-                                                contact_id: data.contactnumber.toString(),
-                                                status: '0',
-                                                legal_guardian: $('#legal_guardian').val(),
-                                                last_name: $('#last-name').val(),
-                                                first_name: $('#first-name').val(),
-                                                priority: $('#priority').val(),
-                                                relationship: $('#relationship').val(),
-                                                residence_street: $('#residence-street').val(),
-                                                residence_city: $('#residence-city').val(),
-                                                residence_state: $('#residence-state').val(),
-                                                residence_zip: $('#residence-zip').val(),
-                                                mailing_street: $('#mailing-street').val(),
-                                                mailing_city: $('#mailing-city').val(),
-                                                mailing_state: $('#mailing-state').val(),
-                                                mailing_zip: $('#mailing-zip').val(),
-                                                email: $('#email').val(),
-                                                employer: $('#employer').val(),
-                                                phone1type: $('#phone1type').val(),
-                                                phone1: $('#phone1').val(),
-                                                phone2type: $('#phone2type').val(),
-                                                phone2: $('#phone2').val(),
-                                                phone3type: $('#phone3type').val(),
-                                                phone3: $('#phone3').val()
-                                            }
-                                        }
+                                        name: config.contactsTable,
+                                        tables: {}
+                                    };
+
+                                    postData.tables[contactsTable] = {
+                                        studentsdcid: psData.studentdcid,
+                                            contact_id: data.contactnumber.toString(),
+                                            status: '0',
+                                            legal_guardian: $('#legal_guardian').val(),
+                                            last_name: $('#last-name').val(),
+                                            first_name: $('#first-name').val(),
+                                            priority: $('#priority').val(),
+                                            relationship: $('#relationship').val(),
+                                            residence_street: $('#residence-street').val(),
+                                            residence_city: $('#residence-city').val(),
+                                            residence_state: $('#residence-state').val(),
+                                            residence_zip: $('#residence-zip').val(),
+                                            mailing_street: $('#mailing-street').val(),
+                                            mailing_city: $('#mailing-city').val(),
+                                            mailing_state: $('#mailing-state').val(),
+                                            mailing_zip: $('#mailing-zip').val(),
+                                            email: $('#email').val(),
+                                            employer: $('#employer').val(),
+                                            phone1type: $('#phone1type').val(),
+                                            phone1: $('#phone1').val(),
+                                            phone2type: $('#phone2type').val(),
+                                            phone2: $('#phone2').val(),
+                                            phone3type: $('#phone3type').val(),
+                                            phone3: $('#phone3').val()
                                     };
 
                                     saveContact(postData).done(function () {
@@ -480,6 +491,7 @@
 
 
         $(document).on('click', '.editcontact', function () {
+            var _this = this;
             $('.addcontact').hide();
             var row = $(this).parents('tr')[0];
             if (row) {
@@ -586,12 +598,11 @@
                                     $.each(contactsCollection, function (index, contact) {
                                         if (parseInt(contact[1].priority) > parseInt(oldPriority) && parseInt(contact[1].priority) <= parseInt(newPriority)) {
                                             var postData = {
-                                                name: 'u_student_contacts6',
-                                                tables: {
-                                                    'u_student_contacts6': {
-                                                        priority: (parseInt(contact[1].priority) - 1).toString()
-                                                    }
-                                                }
+                                                name: config.contactsTable,
+                                                tables: {}
+                                            };
+                                            postData.tables[config.contactsTable] = {
+                                                priority: (parseInt(contact[1].priority) - 1).toString()
                                             };
                                             saveContact(postData, contact[1].record_id).done(function () {
                                                 // Find the rows that were updated and refresh them
@@ -617,12 +628,11 @@
                                     $.each(contactsCollection, function (index, contact) {
                                         if (parseInt(contact[1].priority) < parseInt(oldPriority) && parseInt(contact[1].priority) >= parseInt(newPriority)) {
                                             var postData = {
-                                                name: 'u_student_contacts6',
-                                                tables: {
-                                                    'u_student_contacts6': {
-                                                        priority: (parseInt(contact[1].priority) + 1).toString()
-                                                    }
-                                                }
+                                                name: config.contactsTable,
+                                                tables: {}
+                                            };
+                                            postData.tables[config.contactsTable] = {
+                                                priority: (parseInt(contact[1].priority) + 1).toString()
                                             };
                                             saveContact(postData, contact[1].record_id).done(function () {
                                                 // Find the rows that were updated and refresh them
@@ -753,8 +763,7 @@
         });
 
         //Fetch contact listing
-        $.get(m_requestURL, {"sdcid": psData.studentdcid, "action": "newfetchcontacts"}, function () {
-        }, "json")
+        $.get(m_requestURL, {"sdcid": psData.studentdcid, "action": "newfetchcontacts"}, function () {}, "json")
             .done(function (data) {
 
                 // In order to be valid JSON, an empty element has to be added to the array after the tlist_sql.
