@@ -409,6 +409,8 @@
 
                                 $('form', editrow).submit(function (event) {
                                     event.preventDefault();
+
+                                    // Rearrange priorities for existing contacts
                                     var newPriority = $('#priority').val();
                                     if (newPriority !== $('#priority').find('option').last().val()) {
                                         // Get all contacts with greater than or equal to priority
@@ -428,14 +430,14 @@
                                         });
                                     }
 
+                                    // Create the new contact
                                     var postData = {
-                                        name: 'u_student_contacts',
                                         tables: {
                                             'u_student_contacts': {
                                                 studentsdcid: psData.studentdcid,
                                                 contact_id: data.contactnumber.toString(),
                                                 status: '0',
-                                                legal_guardian: $('#legal_guardian').val(),
+                                                legal_guardian: $('#legal-guardian').val(),
                                                 last_name: $('#last-name').val(),
                                                 first_name: $('#first-name').val(),
                                                 priority: $('#priority').val(),
