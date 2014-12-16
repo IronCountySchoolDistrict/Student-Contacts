@@ -418,7 +418,10 @@
 
                                 $('form', editrow).submit(function (event) {
                                     event.preventDefault();
-                                    var contactsTable = config.contactsTable;
+
+
+                                    // Rearrange priorities for existing contacts
+
                                     var newPriority = $('#priority').val();
                                     if (newPriority !== $('#priority').find('option').last().val()) {
                                         // Get all contacts with greater than or equal to priority
@@ -439,6 +442,7 @@
                                         });
                                     }
 
+                                    // Create the new contact
                                     var postData = {
                                         name: config.contactsTable,
                                         tables: {}
@@ -469,6 +473,7 @@
                                             phone2: $('#phone2').val(),
                                             phone3type: $('#phone3type').val(),
                                             phone3: $('#phone3').val()
+
                                     };
 
                                     saveContact(postData).done(function () {

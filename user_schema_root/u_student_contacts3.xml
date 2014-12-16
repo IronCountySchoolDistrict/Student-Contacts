@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<psExtension xmlns="http://www.powerschool.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://www.powerschool.com psextension.xsd">
+    <extensionname>U_STUDENT_contacts3</extensionname>
+    <extendedTable coreTable="Students" dbTableName="U_Student_Contacts_staging3" childName="U_Student_Contacts_staging3" comment="">
+        <field name="PRIORITY" type="Integer"/>
+        <field name="LEGAL_GUARDIAN" type="Boolean"/>
+        <field name="LAST_NAME" type="String" length="40"/>
+        <field name="FIRST_NAME" type="String" length="40"/>
+        <field name="RELATIONSHIP" type="String" length="40"/>
+        <field name="MAILING_STREET" type="String" length="60"/>
+        <field name="MAILING_CITY" type="String" length="40"/>
+        <field name="MAILING_STATE" type="String" length="40"/>
+        <field name="MAILING_ZIP" type="String" length="10"/>
+        <field name="RESIDENCE_STREET" type="String" length="60"/>
+        <field name="RESIDENCE_CITY" type="String" length="40"/>
+        <field name="RESIDENCE_STATE" type="String" length="40"/>
+        <field name="RESIDENCE_ZIP" type="String" length="10"/>
+        <field name="EMPLOYER" type="String" length="40"/>
+        <field name="STATUS" type="Integer" description="Determines if the contact is active(0) or inactive(-2)."/>
+        <field name="CONTACT_ID" type="Integer" description="Link between Contacts and Contacts Staging tables. Only needs to be unique for among this student's contacts."/>
+    </extendedTable>
+
+    <extendedTable type="standalone" dbTableName="U_SC_Phone_staging3" childName="U_SC_Phone_staging3" comment="">
+        <field name="CONTACT_REC_ID" type="String" length="40" description="Staging Contact's ID field that is used as the foreign key, not to be confused with CONTACT_ID."/>
+        <field name="PHONE_NUMBER" type="String" length="40"/>
+        <field name="PHONE_TYPE" type="String" length="10"/>
+        <field name="PHONE_PRIORITY" type="Integer"/>
+        <field name="OPTS_VOICE_HIGH_PRIORITY" type="Boolean"/>
+        <field name="OPTS_VOICE_SURVEY" type="Boolean"/>
+        <field name="OPTS_VOICE_ATTENDANCE" type="Boolean"/>
+        <field name="OPTS_VOICE_GENERAL" type="Boolean"/>
+        <field name="OPTS_TEXT_HIGH_PRIORITY" type="Boolean"/>
+        <field name="OPTS_TEXT_SURVEY" type="Boolean"/>
+        <field name="OPTS_TEXT_ATTENDANCE" type="Boolean"/>
+        <field name="OPTS_TEXT_GENERAL" type="Boolean"/>
+    </extendedTable>
+
+    <extendedTable type="standalone" dbTableName="U_SC_Email_staging3" childName="U_SC_Email_staging3" comment="">
+        <field name="CONTACT_REC_ID" type="String" length="40" description="Staging Contact's ID field that is used as the foreign key, not to be confused with CONTACT_ID."/>
+        <field name="EMAIL_ADDRESS" type="String" length="60"/>
+        <field name="OPTS_HIGH_PRIORITY" type="Boolean"/>
+        <field name="OPTS_SURVEY" type="Boolean"/>
+        <field name="OPTS_ATTENDANCE" type="Boolean"/>
+        <field name="OPTS_GENERAL" type="Boolean"/>
+    </extendedTable>
+
+    <extendedTable coreTable="Students" dbTableName="U_Student_contacts3" childName="U_Student_contacts3" comment="">
+        <field name="PRIORITY" type="Integer"/>
+        <field name="LEGAL_GUARDIAN" type="Boolean"/>
+        <field name="LAST_NAME" type="String" length="40"/>
+        <field name="FIRST_NAME" type="String" length="40"/>
+        <field name="RELATIONSHIP" type="String" length="40"/>
+        <field name="MAILING_STREET" type="String" length="60"/>
+        <field name="MAILING_CITY" type="String" length="40"/>
+        <field name="MAILING_STATE" type="String" length="40"/>
+        <field name="MAILING_ZIP" type="String" length="10"/>
+        <field name="RESIDENCE_STREET" type="String" length="60"/>
+        <field name="RESIDENCE_CITY" type="String" length="40"/>
+        <field name="RESIDENCE_STATE" type="String" length="40"/>
+        <field name="RESIDENCE_ZIP" type="String" length="10"/>
+        <field name="EMPLOYER" type="String" length="40"/>
+        <field name="STATUS" type="Integer" description="Determines if the contact is active(0) or inactive(-2)."/>
+        <field name="CONTACT_ID" type="Integer" description="Link between Contacts and Contacts Staging tables. Only needs to be unique for among this student's contacts."/>
+    </extendedTable>
+
+    <extendedTable type="standalone" dbTableName="U_SC_Phone2" childName="U_SC_Phone2" comment="">
+        <field name="CONTACT_REC_ID" type="String" length="40" description="Contact's ID field that is used as the foreign key, not to be confused with CONTACT_ID."/>
+        <field name="PHONE_NUMBER" type="String" length="40"/>
+        <field name="PHONE_TYPE" type="String" length="10"/>
+        <field name="PHONE_PRIORITY" type="Integer"/>
+        <field name="OPTS_VOICE_HIGH_PRIORITY" type="Boolean"/>
+        <field name="OPTS_VOICE_SURVEY" type="Boolean"/>
+        <field name="OPTS_VOICE_ATTENDANCE" type="Boolean"/>
+        <field name="OPTS_VOICE_GENERAL" type="Boolean"/>
+        <field name="OPTS_TEXT_HIGH_PRIORITY" type="Boolean"/>
+        <field name="OPTS_TEXT_SURVEY" type="Boolean"/>
+        <field name="OPTS_TEXT_ATTENDANCE" type="Boolean"/>
+        <field name="OPTS_TEXT_GENERAL" type="Boolean"/>
+    </extendedTable>
+
+    <extendedTable type="standalone" dbTableName="U_SC_Email2" childName="U_SC_Email2" comment="">
+        <field name="CONTACT_REC_ID" type="String" length="40" description="Contact's ID field that is used as the foreign key, not to be confused with CONTACT_ID."/>
+        <field name="EMAIL_ADDRESS" type="String" length="60"/>
+        <field name="OPTS_HIGH_PRIORITY" type="Boolean"/>
+        <field name="OPTS_SURVEY" type="Boolean"/>
+        <field name="OPTS_ATTENDANCE" type="Boolean"/>
+        <field name="OPTS_GENERAL" type="Boolean"/>
+    </extendedTable>
+</psExtension>
