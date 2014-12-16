@@ -663,15 +663,8 @@
                                         mailing_street: $('#mailing-street').val(),
                                         mailing_city: $('#mailing-city').val(),
                                         mailing_state: $('#mailing-state').val(),
-                                        mailing_zip: $('#mailing-zip').val(),
-                                        email: $('#email').val(),
-                                        employer: $('#employer').val(),
-                                        phone1type: $('#phone1type').val(),
-                                        phone1: $('#phone1').val(),
-                                        phone2type: $('#phone2type').val(),
-                                        phone2: $('#phone2').val(),
-                                        phone3type: $('#phone3type').val(),
-                                        phone3: $('#phone3').val()
+                                        mailing_zip: $('#mailing-zip').val()
+                                        employer: $('#employer').val()
                                     }
                                 }
                             };
