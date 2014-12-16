@@ -8,7 +8,7 @@
      * @type {Object}
      */
     var config = {
-        contactsTable: 'u_student_contacts6'
+        contactsTable: 'u_student_contacts3'
     };
 
     /**
@@ -205,7 +205,7 @@
             var type;
             if (recordId) {
                 type = 'PUT';
-                url = '/ws/schema/table/' + config.contactsTable + recordId;
+                url = '/ws/schema/table/' + config.contactsTable + '/' + recordId;
             } else {
                 type = 'POST';
                 url = '/ws/schema/table/' + config.contactsTable;
@@ -431,7 +431,7 @@
                                                     tables: {}
                                                 };
 
-                                                postData.tables[contactsTable] = {
+                                                postData.tables[config.contactsTable] = {
                                                     priority: (parseInt(contact[1].priority) + 1).toString()
                                                 };
                                                 saveContact(postData, contact[1].record_id);
@@ -444,7 +444,7 @@
                                         tables: {}
                                     };
 
-                                    postData.tables[contactsTable] = {
+                                    postData.tables[config.contactsTable] = {
                                         studentsdcid: psData.studentdcid,
                                             contact_id: data.contactnumber.toString(),
                                             status: '0',
@@ -656,33 +656,27 @@
                             }
 
                             var postData = {
-                                name: 'u_student_contacts6',
-                                tables: {
-                                    'u_student_contacts6': {
-                                        last_name: $('#last-name').val(),
-                                        first_name: $('#first-name').val(),
-                                        priority: $('#priority').val(),
-                                        legal_guardian: $('#legal_guardian').val(),
-                                        relationship: $('#relationship').val(),
-                                        residence_street: $('#residence-street').val(),
-                                        residence_city: $('#residence-city').val(),
-                                        residence_state: $('#residence-state').val(),
-                                        residence_zip: $('#residence-zip').val(),
-                                        mailing_street: $('#mailing-street').val(),
-                                        mailing_city: $('#mailing-city').val(),
-                                        mailing_state: $('#mailing-state').val(),
-                                        mailing_zip: $('#mailing-zip').val(),
-                                        email: $('#email').val(),
-                                        employer: $('#employer').val(),
-                                        phone1type: $('#phone1type').val(),
-                                        phone1: $('#phone1').val(),
-                                        phone2type: $('#phone2type').val(),
-                                        phone2: $('#phone2').val(),
-                                        phone3type: $('#phone3type').val(),
-                                        phone3: $('#phone3').val()
-                                    }
-                                }
+                                name: config.contactsTable,
+                                tables: {}
                             };
+
+                            postData.tables[config.contactsTable] = {
+                                first_name: $('#first-name').val(),
+                                last_name: $('#last-name').val(),
+                                priority: $('#priority').val(),
+                                legal_guardian: $('#legal_guardian').val(),
+                                relationship: $('#relationship').val(),
+                                residence_street: $('#residence-street').val(),
+                                residence_city: $('#residence-city').val(),
+                                residence_state: $('#residence-state').val(),
+                                residence_zip: $('#residence-zip').val(),
+                                mailing_street: $('#mailing-street').val(),
+                                mailing_city: $('#mailing-city').val(),
+                                mailing_state: $('#mailing-state').val(),
+                                mailing_zip: $('#mailing-zip').val(),
+                                employer: $('#employer').val()
+                            };
+
                             saveContact(postData, contactsCollection[contactId][1].record_id).done(function (data) {
                                 m_table.fnClose(sourcerow);
                                 $('.addcontact').show();
