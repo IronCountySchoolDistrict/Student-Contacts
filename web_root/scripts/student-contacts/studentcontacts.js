@@ -60,11 +60,11 @@
             url: m_requestURL
         });
         /*
-        $('#error_container').ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
-            clearError();
-            displayError("AJAX Error.  Page=" + settings.url + " Error=" + jqxhr.statusText);
-        });
-        */
+         $('#error_container').ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
+         clearError();
+         displayError("AJAX Error.  Page=" + settings.url + " Error=" + jqxhr.statusText);
+         });
+         */
 
 
         m_table = $('#holder').addClass('display').dataTable({
@@ -133,8 +133,8 @@
                             return "";
                         }
                         result += '<p>';
-                        if (info.phone.email_address) {
-                            result += '<span class="infoheader">Email: </span><a href="mailto:' + info.phone.email_address + '">' + info.email.email_address + '</a><br />';
+                        if (info.email.email_address) {
+                            result += '<span class="infoheader">Email: </span><a href="mailto:' + info.email.email_address + '">' + info.email.email_address + '</a><br />';
                         }
                         if (info.phone.phone1type) {
                             result += '<span class="infoheader">' + info.phone.phone1type + ': </span>';
@@ -684,29 +684,32 @@
                                 tables: {}
                             };
 
-                            contactEmailData.tables[config.contactsTable] = {
+                            contactEmailData.tables[config.contactsEmailTable] = {
                                 email_address: $('#email').val(),
-                                contactdcid: contactsCollection[contactId][3].email.contactdcid
+                                opts_high_priority: "1",
+                                opts_general: "1",
+                                opts_attendance: "1",
+                                opts_survey: "1",
+                                contactdcid: contactsCollection[contactId][1].contactdcid
                             };
 
                             saveContact(contactCoreData, config.contactsTable, contactsCollection[contactId][1].record_id).done(function (data) {
 
                                 var contCollEmail = contactsCollection[contactId][3].email;
                                 // If contact had email when page was loaded
-                                if (contCollEmail.hasOwnProperty(email_address)) {
-                                    // If contact still has a non-blank email, save it
-                                    contactEmailData.tables[config.contactsTable]
-                                    saveContact(contactEmailData, config.contactsEmailTable, contCollEmail.id).done(function() {
+                                if (contCollEmail.hasOwnProperty('email_address')) {
+                                    saveContact(contactEmailData, config.contactsEmailTable, contCollEmail.id).done(function () {
                                         m_table.fnClose(sourcerow);
                                         $('.addcontact').show();
                                         refreshContact(contactId, sourcerow);
                                     });
 
-                                // User didn't have email when page was loaded
+                                    // User didn't have email when page was loaded
                                 } else {
                                     // If contact is creating new email
                                     if ($j('#email').val() !== "") {
-                                        saveContact(contactEmailData, config.contactsEmailTable).done(function() {
+                                        contactEmailData.studentsdcid = psData.studentdcid;
+                                        saveContact(contactEmailData, config.contactsEmailTable).done(function () {
                                             m_table.fnClose(sourcerow);
                                             $('.addcontact').show();
                                             refreshContact(contactId, sourcerow);
@@ -790,7 +793,8 @@
         });
 
         //Fetch contact listing
-        $.get(m_requestURL, {"sdcid": psData.studentdcid, "action": "newfetchcontacts"}, function () {}, "json")
+        $.get(m_requestURL, {"sdcid": psData.studentdcid, "action": "newfetchcontacts"}, function () {
+        }, "json")
             .done(function (data) {
 
                 // In order to be valid JSON, an empty element has to be added to the array after the tlist_sql.
@@ -798,8 +802,8 @@
                 data.pop();
 
                 if (data.length > 0) {
-                    $.each(data, function (index, contactData) {
-                        refreshContact(contactData.contactdcid, contactData.contact_id);
+                    $.each(data, function (index, contactId) {
+                        refreshContact(contactId);
                     });
                 } else {
                     loadingDialogInstance.closeDialog();
@@ -808,21 +812,25 @@
 
     });
 
-    function loadContactData(contactDcid, contactId) {
-        var deferredAjax = [];
+    function loadContactData(contactId) {
 
-        deferredAjax.push($j.ajax({
+        var contactAjax = $j.ajax({
             url: m_requestURL,
             type: 'GET',
             data: {
                 action: "getcontact",
                 gidx: contactId,
-                cdcid: contactDcid,
                 sdcid: psData.studentdcid
             },
-            dataType: "text json"
-        }));
-        deferredAjax.push($j.ajax({
+            dataType: "json"
+        });
+
+        return contactAjax;
+    }
+
+    function loadEmailPhoneData(contactDcid) {
+        var emailPhoneAjax = [];
+        emailPhoneAjax.push($j.ajax({
             url: m_requestURL,
             type: 'GET',
             data: {
@@ -830,9 +838,10 @@
                 cdcid: contactDcid,
                 sdcid: psData.studentdcid
             },
-            dataType: "text json"
+            dataType: "json"
         }));
-        deferredAjax.push($j.ajax({
+
+        emailPhoneAjax.push($j.ajax({
             url: m_requestURL,
             type: 'GET',
             data: {
@@ -840,88 +849,93 @@
                 sdcid: psData.studentdcid,
                 cdcid: contactDcid
             },
-            dataType: "text json"
+            dataType: "json"
         }));
+        return emailPhoneAjax;
 
-        return $j.when.apply($j, deferredAjax);
     }
+
 
     /**
      *
-     * @param contactDcid {Number} - u_student_contacts.contactdcid
-     * @param contact_id {Number} - u_student_contacts.contact_id
+     * @param contactId {Number} - u_student_contacts.contact_id
      * @param [row] {Element|jQuery}
      */
-    function refreshContact(contactDcid, contactId, row) {
-        loadContactData(contactDcid).done(function(contactCoreData, contactEmailData, contactPhoneData) {
-            var contactData = contactCoreData[0];
-            contactData[3]['email'] = contactEmailData[0];
-            contactData[3]['phone'] = contactPhoneData[0];
+    function refreshContact(contactId, row) {
 
-            loadingDialogInstance.closeDialog();
-            if (!row) {
+        loadContactData(contactId).done(function (contactsData) {
+            contactsCollection[contactId] = contactsData;
+            var emailPhoneAjax = loadEmailPhoneData(contactsData[1].contactdcid);
+            $j.when.apply($j, emailPhoneAjax)
+                .done(function (contactEmailData, contactPhoneData) {
+                    contactsCollection[contactId][3]['email'] = contactEmailData[0];
+                    contactsCollection[contactId][3]['phone'] = contactPhoneData[0];
 
-                // Contact is already inactive and is getting loaded as inactive
-                // Set the buttons element to Activate button.
-                if (contactData[5] === "-2") {
-                    contactData[4] = "<button class='activatecontact'>Activate</button>";
-                }
+                    var contactData = contactsCollection[contactId];
 
-                m_table.fnAddData(contactData);
-                var newRow = $('#maincontent tr').last();
-                contactsCollection[contactData[1].contact_id] = contactData;
 
-                // An inactive contact was loaded as inactive
-                if (contactData === "-2") {
-                    var contactNameContainer = $(newRow).find('td').eq(0).find('p').eq(0);
-                    var inactiveTag = contactNameContainer.text() + " (INACTIVE)";
-                    contactNameContainer.html(inactiveTag);
-                    $(newRow).css({'background-color': '#DEDEDE'});
-                    $(newRow).css({'display': 'none'});
-                    $(newRow).attr({'class': 'inactive-contact'});
-                }
-            } else {
-                // Contact was set to inactive and contact is getting refreshed
-                // Set the buttons element to Activate button.
-                if (contactData[5] === "-2") {
-                    contactData[4] = "<button class='activatecontact'>Activate</button>";
-                }
+                    loadingDialogInstance.closeDialog();
+                    if (!row) {
 
-                m_table.fnUpdate(data, row);
+                        // Contact is already inactive and is getting loaded as inactive
+                        // Set the buttons element to Activate button.
+                        if (contactData[5] === "-2") {
+                            contactData[4] = "<button class='activatecontact'>Activate</button>";
+                        }
 
-                var contactId = contactData[0];
-                contactsCollection[contactId[1].contact_id] = contactData;
+                        m_table.fnAddData(contactData);
+                        var newRow = $('#maincontent tr').last();
 
-                if (contactData === "-2") {
-                    // A contact was set to inactive
-                    var contactNameContainer = $(row).find('td').eq(0).find('p').eq(0);
-                    var inactiveTag = contactNameContainer.text() + " (INACTIVE)";
-                    if (contactNameContainer.text().indexOf(" (INACTIVE)") === -1) {
-                        contactNameContainer.html(inactiveTag);
+
+                        // An inactive contact was loaded as inactive
+                        if (contactData === "-2") {
+                            var contactNameContainer = $(newRow).find('td').eq(0).find('p').eq(0);
+                            var inactiveTag = contactNameContainer.text() + " (INACTIVE)";
+                            contactNameContainer.html(inactiveTag);
+                            $(newRow).css({'background-color': '#DEDEDE'});
+                            $(newRow).css({'display': 'none'});
+                            $(newRow).attr({'class': 'inactive-contact'});
+                        }
+                    } else {
+                        // Contact was set to inactive and contact is getting refreshed
+                        // Set the buttons element to Activate button.
+                        if (contactData[5] === "-2") {
+                            contactData[4] = "<button class='activatecontact'>Activate</button>";
+                        }
+
+                        m_table.fnUpdate(contactData, row);
+
+                        if (contactData === "-2") {
+                            // A contact was set to inactive
+                            var contactNameContainer = $(row).find('td').eq(0).find('p').eq(0);
+                            var inactiveTag = contactNameContainer.text() + " (INACTIVE)";
+                            if (contactNameContainer.text().indexOf(" (INACTIVE)") === -1) {
+                                contactNameContainer.html(inactiveTag);
+                            }
+                            $(row).css({'background-color': '#DEDEDE'});
+                            $(row).attr({'class': 'inactive-contact'});
+                        } else if (contactData[5] === "0") {
+                            // Contact was previously set to inactive and is getting set back to active
+                            $(row).removeClass('inactive-contact');
+                            $(row).css({'background-color': ''});
+                            var contactBody = $(row).parents('tbody');
+                            contactBody.find('tr:even').addClass('odd');
+                            contactBody.find('tr:odd').addClass('even');
+                        }
                     }
-                    $(row).css({'background-color': '#DEDEDE'});
-                    $(row).attr({'class': 'inactive-contact'});
-                } else if (contactData[5] === "0") {
-                    // Contact was previously set to inactive and is getting set back to active
-                    $(row).removeClass('inactive-contact');
-                    $(row).css({'background-color': ''});
-                    var contactBody = $(row).parents('tbody');
-                    contactBody.find('tr:even').addClass('odd');
-                    contactBody.find('tr:odd').addClass('even');
-                }
-            }
-            $('.editcontact').button({
-                icons: {
-                    primary: "ui-icon-pencil"
-                }
-            });
-            $('.deletecontact').button({
-                icons: {
-                    primary: "ui-icon-trash"
-                }
-            });
-        }).fail(function(jqXHR, textStatus,errorThrown) {
-            debugger;
+                    $('.editcontact').button({
+                        icons: {
+                            primary: "ui-icon-pencil"
+                        }
+                    });
+                    $('.deletecontact').button({
+                        icons: {
+                            primary: "ui-icon-trash"
+                        }
+                    });
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    debugger;
+                });
         });
     }
 

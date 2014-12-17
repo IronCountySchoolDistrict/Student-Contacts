@@ -92,7 +92,7 @@
         employer,
         status
     FROM u_student_contacts5
-    WHERE contactdcid=~[gpv:cdcid]
+    WHERE contact_id=~[gpv:gidx]
     AND studentsdcid=~[gpv:sdcid]]
         [
             "~[gpv:gidx]",
@@ -171,16 +171,12 @@ where studentsdcid=~[gpv:sdcid]
 [
     ~[tlist_sql;
         SELECT
-        contactdcid,
-        contact_id
+            contact_id
     FROM u_student_contacts5
     WHERE studentsdcid=~[gpv:sdcid]
     ]
-        {
-            "contactdcid": "~(contactdcid)",
-            "contact_id": "~(contact_id)"
-        },
-    [/tlist_sql]{}
+        "~(contact_id)",
+    [/tlist_sql]""
 ]
 [/if#req]
 
@@ -480,7 +476,8 @@ where studentsdcid=~[gpv:sdcid]
     <td>
         <input type="text"
                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts5:~[tlist_sql; select id from u_student_contacts5 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]employer"
-               value="" size="25"
+               value="~[tlist_sql; select employer from u_student_contacts5 where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(employer)[/tlist_sql]"
+               size="25"
                id="employer"/>
     </td>
     <td></td>
