@@ -8,9 +8,9 @@
      * @type {Object}
      */
     var config = {
-        contactsTable: 'u_student_contacts5',
-        contactsEmailTable: 'u_sc_email5',
-        contactsPhoneTable: 'u_sc_phone5'
+        contactsTable: 'u_student_contacts6',
+        contactsEmailTable: 'u_sc_email6',
+        contactsPhoneTable: 'u_sc_phone6'
     };
 
     /**
@@ -189,7 +189,6 @@
                 inactiveButtonText.html('Show Inactive Contacts');
             }
         });
-
 
         /**
          *
@@ -454,7 +453,7 @@
                                         first_name: $('#first-name').val(),
                                         last_name: $('#last-name').val(),
                                         priority: $('#priority').val(),
-                                        legal_guardian: $('#legal_guardian').val(),
+                                        legal_guardian: $('#legal-guardian').val(),
                                         relationship: $('#relationship').val(),
                                         residence_street: $('#residence-street').val(),
                                         residence_city: $('#residence-city').val(),
@@ -465,7 +464,8 @@
                                         mailing_state: $('#mailing-state').val(),
                                         mailing_zip: $('#mailing-zip').val(),
                                         employer: $('#employer').val(),
-                                        studentsdcid: psData.studentdcid
+                                        studentsdcid: psData.studentdcid,
+                                        status: "0"
                                     };
 
                                     var contactEmailData = {
@@ -482,6 +482,18 @@
                                     };
 
                                     saveContact(contactCoreData, config.contactsTable).done(function (contactCoreResp) {
+                                        var contactDcidData = {
+                                            name: config.contactsTable,
+                                            tables: {}
+                                        };
+
+                                        contactDcidData.tables[config.contactsTable] = {
+                                            contactdcid: contactCoreResp.result[0].success_message.id.toString()
+                                        };
+
+                                        saveContact(contactDcidData, config.contactsTable, contactCoreResp.result[0].success_message.id).done(function() {
+                                            $.noop();
+                                        });
                                         function savePhones() {
 
                                             $.each([1,2,3], function(index, i) {
@@ -498,6 +510,7 @@
 
                                                 contactPhoneData.tables[config.contactsPhoneTable] = {
                                                     "studentsdcid": psData.studentdcid,
+                                                    "contactdcid": contactCoreResp.result[0].success_message.id.toString(),
                                                     "phone_number": phoneNumberElem.val(),
                                                     "phone_type": phoneTypeElem.val(),
                                                     "phone_priority": i.toString(),
@@ -798,7 +811,7 @@
                                 first_name: $('#first-name').val(),
                                 last_name: $('#last-name').val(),
                                 priority: $('#priority').val(),
-                                legal_guardian: $('#legal_guardian').val(),
+                                legal_guardian: $('#legal-guardian').val(),
                                 relationship: $('#relationship').val(),
                                 residence_street: $('#residence-street').val(),
                                 residence_city: $('#residence-city').val(),
@@ -847,7 +860,7 @@
                                         };
 
                                         contactPhoneData.tables[config.contactsPhoneTable] = {
-                                            "contactdcid": contactsCollection[contactId][1].contactdcid,
+                                            "contactdcid": contactsCollection[contactId][1].contactdcid.toString(),
                                             "phone_number": phoneNumberElem.val(),
                                             "phone_type": phoneTypeElem.val(),
                                             "phone_priority": i.toString(),
