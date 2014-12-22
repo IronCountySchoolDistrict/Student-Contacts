@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <psExtension xmlns="http://www.powerschool.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://www.powerschool.com psextension.xsd">
-    <extensionname>u_student_contacts6</extensionname>
-    <extendedTable coreTable="Students" dbTableName="u_student_contacts_staging6" childName="u_student_contacts_staging6" comment="">
+    <extensionname>u_student_contacts</extensionname>
+    <extendedTable coreTable="Students" dbTableName="u_student_contacts_staging" childName="u_student_contacts_staging" comment="">
         <field name="PRIORITY" type="Integer"/>
         <field name="LEGAL_GUARDIAN" type="Boolean"/>
         <field name="LAST_NAME" type="String" length="40"/>
@@ -22,8 +22,8 @@
         <field name="CONTACTDCID" type="Integer"/>
     </extendedTable>
 
-    <extendedTable type="standalone" dbTableName="u_sc_phone_staging6" childName="u_sc_phone_staging6" comment="">
-        <field name="CONTACTDCID" type="Integer"/>
+    <extendedTable coreTable="Students" dbTableName="u_sc_phone_staging" childName="u_sc_phone_staging" comment="">
+        <field name="CONTACTDCID" type="Integer" description="Contact_staging's ID field that is used as the foreign key, not to be confused with CONTACT_ID."/>
         <field name="PHONE_NUMBER" type="String" length="40"/>
         <field name="PHONE_TYPE" type="String" length="10"/>
         <field name="PHONE_PRIORITY" type="Integer"/>
@@ -37,8 +37,8 @@
         <field name="OPTS_TEXT_GENERAL" type="Boolean"/>
     </extendedTable>
 
-    <extendedTable type="standalone" dbTableName="u_sc_email_staging6" childName="u_sc_email_staging6" comment="">
-        <field name="CONTACTDCID" type="String" length="40" description="Contact's ID field that is used as the foreign key, not to be confused with CONTACT_ID."/>
+    <extendedTable coreTable="Students" dbTableName="u_sc_email_staging" childName="u_sc_email_staging" comment="">
+        <field name="CONTACTDCID" type="String" length="40" description="Contact_staging's ID field that is used as the foreign key, not to be confused with CONTACT_ID."/>
         <field name="EMAIL_ADDRESS" type="String" length="60"/>
         <field name="OPTS_HIGH_PRIORITY" type="Boolean"/>
         <field name="OPTS_SURVEY" type="Boolean"/>
@@ -46,7 +46,7 @@
         <field name="OPTS_GENERAL" type="Boolean"/>
     </extendedTable>
 
-    <extendedTable coreTable="Students" dbTableName="u_student_contacts6" childName="u_student_contacts6" comment="">
+    <extendedTable coreTable="Students" dbTableName="u_student_contacts" childName="u_student_contacts" comment="">
         <field name="PRIORITY" type="Integer"/>
         <field name="LEGAL_GUARDIAN" type="Boolean"/>
         <field name="LAST_NAME" type="String" length="40"/>
@@ -66,7 +66,7 @@
         <field name="CONTACTDCID" type="Integer"/>
     </extendedTable>
 
-    <extendedTable coreTable="Students" dbTableName="u_sc_phone6" childName="u_sc_phone6" comment="">
+    <extendedTable coreTable="Students" dbTableName="u_sc_phone" childName="u_sc_phone" comment="">
         <field name="CONTACTDCID" type="Integer"/>
         <field name="PHONE_NUMBER" type="String" length="40"/>
         <field name="PHONE_TYPE" type="String" length="10"/>
@@ -81,7 +81,7 @@
         <field name="OPTS_TEXT_GENERAL" type="Boolean"/>
     </extendedTable>
 
-    <extendedTable coreTable="Students" dbTableName="u_sc_email6" childName="u_sc_email6" comment="">
+    <extendedTable coreTable="Students" dbTableName="u_sc_email" childName="u_sc_email" comment="">
         <field name="CONTACTDCID" type="String" length="40" description="Contact's ID field that is used as the foreign key, not to be confused with CONTACT_ID."/>
         <field name="EMAIL_ADDRESS" type="String" length="60"/>
         <field name="OPTS_HIGH_PRIORITY" type="Boolean"/>
