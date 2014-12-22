@@ -8,9 +8,9 @@
      * @type {Object}
      */
     var config = {
-        contactsTable: 'u_student_contacts6',
-        contactsEmailTable: 'u_sc_email6',
-        contactsPhoneTable: 'u_sc_phone6'
+        contactsTable: 'u_student_contacts',
+        contactsEmailTable: 'u_sc_email',
+        contactsPhoneTable: 'u_sc_phone'
     };
 
     /**
@@ -975,15 +975,15 @@
                 var contactName = $(row).find('td').eq(0).find('p').eq(0).text();
                 if (window.confirm("Delete contact, \"" + contactName + "\"?")) {
                     var postData = {
-                        name: 'u_student_contacts6',
+                        name: 'u_student_contacts',
                         tables: {
-                            'u_student_contacts6': {
+                            'u_student_contacts': {
                                 status: '-2'
                             }
                         }
                     };
                     $.ajax({
-                        url: "/ws/schema/table/u_student_contacts6/" + contactsCollection[contactId][1].record_id,
+                        url: "/ws/schema/table/u_student_contacts/" + contactsCollection[contactId][1].record_id,
                         data: JSON.stringify(postData),
                         type: "PUT",
                         dataType: "json",
@@ -1007,15 +1007,15 @@
                 var contactName = $(row).find('td').eq(0).find('p').eq(0).text();
                 if (window.confirm("Activate contact, \"" + contactName + "\"?")) {
                     var postData = {
-                        name: 'u_student_contacts6',
+                        name: 'u_student_contacts',
                         tables: {
-                            'u_student_contacts6': {
+                            'u_student_contacts': {
                                 status: '0'
                             }
                         }
                     };
                     $.ajax({
-                        url: "/ws/schema/table/u_student_contacts6/" + contactsCollection[contactId][1].record_id,
+                        url: "/ws/schema/table/u_student_contacts/" + contactsCollection[contactId][1].record_id,
                         data: JSON.stringify(postData),
                         type: "PUT",
                         dataType: "json",
