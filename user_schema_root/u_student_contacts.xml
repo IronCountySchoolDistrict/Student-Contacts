@@ -17,8 +17,9 @@
         <field name="RESIDENCE_STATE" type="String" length="40"/>
         <field name="RESIDENCE_ZIP" type="String" length="10"/>
         <field name="EMPLOYER" type="String" length="40"/>
+        <field name="NOTES" type="String" length="400"/>
         <field name="STATUS" type="Integer" description="Determines if the contact is active(0) or inactive(-2)."/>
-        <field name="CONTACT_ID" type="Integer" description="Link between Contacts and Contacts Staging tables. Only needs to be unique for among this student's contacts."/>
+        <field name="CONTACT_ID" type="Integer" description="Link between Contacts and Contacts Staging tables. Only needs to be unique among a single student's contacts."/>
         <field name="CONTACTDCID" type="Integer"/>
     </extendedTable>
 
@@ -27,6 +28,7 @@
         <field name="PHONE_NUMBER" type="String" length="40"/>
         <field name="PHONE_TYPE" type="String" length="10"/>
         <field name="PHONE_PRIORITY" type="Integer"/>
+        <field name="PHONE_EXTENSION" type="Integer"/>
         <field name="OPTS_VOICE_HIGH_PRIORITY" type="Boolean"/>
         <field name="OPTS_VOICE_SURVEY" type="Boolean"/>
         <field name="OPTS_VOICE_ATTENDANCE" type="Boolean"/>
@@ -61,8 +63,9 @@
         <field name="RESIDENCE_STATE" type="String" length="40"/>
         <field name="RESIDENCE_ZIP" type="String" length="10"/>
         <field name="EMPLOYER" type="String" length="40"/>
+        <field name="NOTES" type="String" length="400"/>
         <field name="STATUS" type="Integer" description="Determines if the contact is active(0) or inactive(-2)."/>
-        <field name="CONTACT_ID" type="Integer" description="Link between Contacts and Contacts Staging tables. Only needs to be unique for among this student's contacts."/>
+        <field name="CONTACT_ID" type="Integer" description="Link between Contacts and Contacts Staging tables. Only needs to be unique among a single student's contacts."/>
         <field name="CONTACTDCID" type="Integer"/>
     </extendedTable>
 
@@ -71,6 +74,7 @@
         <field name="PHONE_NUMBER" type="String" length="40"/>
         <field name="PHONE_TYPE" type="String" length="10"/>
         <field name="PHONE_PRIORITY" type="Integer"/>
+        <field name="PHONE_EXTENSION" type="Integer"/>
         <field name="OPTS_VOICE_HIGH_PRIORITY" type="Boolean"/>
         <field name="OPTS_VOICE_SURVEY" type="Boolean"/>
         <field name="OPTS_VOICE_ATTENDANCE" type="Boolean"/>

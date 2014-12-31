@@ -198,7 +198,7 @@ where studentsdcid=~[gpv:sdcid]
                     name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]first_name"
                     id="first-name"
                     value="~[tlist_sql; select first_name from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(first_name)[/tlist_sql]"
-                    size="15"
+                    style="width: 90px;"
                     required/>
         </span>
         <span style="width: 112px; float: left;">
@@ -550,12 +550,16 @@ where studentsdcid=~[gpv:sdcid]
 </tr>
 <tr>
     <td class="bold">
-        <span style="display: inline-block; margin-bottom: 40px;">
+        <span style="display: inline-block; margin-bottom: 20px;">
             Phone 1 Type:
         </span>
-        <span style="display: inline-block;">
+        <span style="display: inline-block; margin-bottom: 20px;">
             Phone 1 Number:
         </span>
+        <span style="display: inline-block;">
+            Phone 1 Extension:
+        </span>
+
     </td>
     <td valign="top" style="padding-bottom: 10px;">
         <select
@@ -575,13 +579,25 @@ where studentsdcid=~[gpv:sdcid]
         <input size="17" type="text"
                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1"
                value="~[tlist_sql; select phone_number from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]~(phone_number)[/tlist_sql]"
+               style="margin-right:125px;margin-bottom: 20px;"
                id="phone1"
                class="phone"
                data-parsley-onephonereq
                data-parsley-phone1num
                data-parsley-phonelength
                data-parsley-trigger="change"
-               data-parsley-validate-if-empty/><br/>
+               data-parsley-validate-if-empty/>
+        <br/>
+        <input type="text"
+               size="6"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1"
+               value="~[tlist_sql; select phone_extension from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]~(phone_number)[/tlist_sql]"
+               id="phone1ext"
+               data-parsley-onephonereq
+               data-parsley-phone1ext
+               data-parsley-phonelength
+               data-parsley-trigger="change"
+               data-parsley-validate-if-empty/>
 
         ~[if.~([01]home_phone)=]
         [else]
@@ -700,11 +716,14 @@ where studentsdcid=~[gpv:sdcid]
 </tr>
 <tr>
     <td class="bold">
-        <span style="display: inline-block; margin-bottom: 40px;">
+        <span style="display: inline-block; margin-bottom: 20px;">
             Phone 2 Type:
         </span>
-        <span style="display: inline-block;">
+        <span style="display: inline-block; margin-bottom: 20px;">
             Phone 2 Number:
+        </span>
+        <span style="display: inline-block;">
+            Phone 2 Extension:
         </span>
     </td>
     <td valign="top" style="padding-bottom: 10px;">
@@ -721,15 +740,25 @@ where studentsdcid=~[gpv:sdcid]
             <option value="Cell">Cell</option>
             <option value="Work">Work</option>
         </select>
-        <input type="text" size="17"
-               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone2"
+        <input type="text"
+               size="17"
                value="~[tlist_sql; select phone_number from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]~(phone_number)[/tlist_sql]"
                id="phone2"
                class="phone"
+               style="margin-right:125px;margin-bottom: 20px;"
                data-parsley-trigger="change"
                data-parsley-validate-if-empty
                data-parsley-phone2num
                data-parsley-phonelength/>
+        <br/>
+        <input type="text"
+               size="6"
+               value="~[tlist_sql; select phone_extension from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]~(phone_extension)[/tlist_sql]"
+               id="phone2ext"
+               data-parsley-onephonereq
+               data-parsley-phone2ext
+               data-parsley-trigger="change"
+               data-parsley-validate-if-empty/>
         ~[if.~([01]home_phone)=]
         [else]
         <span class="mini">
@@ -842,11 +871,14 @@ where studentsdcid=~[gpv:sdcid]
 </tr>
 <tr>
     <td class="bold">
-        <span style="display: inline-block; margin-bottom: 40px;">
+        <span style="display: inline-block; margin-bottom: 20px;">
             Phone 3 Type:
         </span>
-        <span style="display: inline-block;">
+        <span style="display: inline-block; margin-bottom: 20px;">
             Phone 3 Number:
+        </span>
+        <span style="display: inline-block;">
+            Phone 3 Extension:
         </span>
     </td>
     <td valign="top" style="padding-bottom: 10px;">
@@ -868,7 +900,18 @@ where studentsdcid=~[gpv:sdcid]
                value="~[tlist_sql; select phone_number from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]~(phone_number)[/tlist_sql]"
                id="phone3"
                class="phone"
+               style="margin-right:125px;margin-bottom: 20px;"
                data-parsley-phone3num
+               data-parsley-phonelength
+               data-parsley-trigger="change"
+               data-parsley-validate-if-empty/>
+        <br/>
+        <input type="text"
+               size="6"
+               value="~[tlist_sql; select phone_extension from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]~(phone_extension)[/tlist_sql]"
+               id="phone3ext"
+               data-parsley-onephonereq
+               data-parsley-phone3ext
                data-parsley-phonelength
                data-parsley-trigger="change"
                data-parsley-validate-if-empty/>
