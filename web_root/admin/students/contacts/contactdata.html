@@ -40,6 +40,7 @@
                 contactdcid,
                 phone_number,
                 phone_type,
+                phone_extension,
                 phone_priority,
                 opts_voice_high_priority,
                 opts_voice_general,
@@ -57,6 +58,7 @@
                 "contactdcid": "~(contactdcid)",
                 "phone_number": "~(phone_number)",
                 "phone_type": "~(phone_type)",
+                "phone_extension": "~(phone_extension)",
                 "phone_priority": "~(phone_priority)",
                 "opts_voice_high_priority": "~(opts_voice_high_priority)",
                 "opts_voice_general": "~(opts_voice_general)",
@@ -85,11 +87,12 @@
         residence_city,
         residence_state,
         residence_zip,
+        mailing_street,
         mailing_city,
         mailing_state,
-        mailing_street,
         mailing_zip,
         employer,
+        notes,
         status
     FROM u_student_contacts
     WHERE contact_id=~[gpv:gidx]
@@ -118,6 +121,7 @@
             },
             {
                 "employer":"~(employer;js)",
+                "notes":"~(notes;js)",
                 "status":"~(status;js)"
             },
             "<button class='editcontact'>Edit</button><br/><button class='deletecontact'>Inactivate</button>",
@@ -475,13 +479,17 @@ where studentsdcid=~[gpv:sdcid]
     <td class="bold">Employer:</td>
     <td>
         <input type="text"
-               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]employer"
                value="~[tlist_sql; select employer from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(employer)[/tlist_sql]"
                size="25"
                id="employer"/>
     </td>
-    <td></td>
-    <td></td>
+    <td class="bold">Notes:</td>
+    <td><textarea type="text"
+                 style="width: 205px; height: 50px;"
+                 size="25"
+                 id="notes">~[tlist_sql; select notes from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(notes;js)[/tlist_sql]</textarea>
+        <span id="notes-rem-chars" style="display: block;"></span>
+    </td>
 </tr>
 
 <tr>
@@ -590,12 +598,12 @@ where studentsdcid=~[gpv:sdcid]
         <br/>
         <input type="text"
                size="6"
+               maxlength="6"
                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1"
                value="~[tlist_sql; select phone_extension from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]~(phone_number)[/tlist_sql]"
                id="phone1ext"
                data-parsley-onephonereq
                data-parsley-phone1ext
-               data-parsley-phonelength
                data-parsley-trigger="change"
                data-parsley-validate-if-empty/>
 
@@ -753,6 +761,7 @@ where studentsdcid=~[gpv:sdcid]
         <br/>
         <input type="text"
                size="6"
+               maxlength="6"
                value="~[tlist_sql; select phone_extension from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]~(phone_extension)[/tlist_sql]"
                id="phone2ext"
                data-parsley-onephonereq
@@ -908,11 +917,11 @@ where studentsdcid=~[gpv:sdcid]
         <br/>
         <input type="text"
                size="6"
+               maxlength="6"
                value="~[tlist_sql; select phone_extension from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]~(phone_extension)[/tlist_sql]"
                id="phone3ext"
                data-parsley-onephonereq
                data-parsley-phone3ext
-               data-parsley-phonelength
                data-parsley-trigger="change"
                data-parsley-validate-if-empty/>
 
@@ -1328,8 +1337,13 @@ where studentsdcid=~[gpv:sdcid]
                size="25"
                id="employer"/>
     </td>
-    <td></td>
-    <td></td>
+    <td class="bold">Notes:</td>
+    <td><textbox type="text"
+                 name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]notes"
+                 size="25"
+                 id="notes">
+        </textbox>
+    </td>
 </tr>
 
 <tr>
