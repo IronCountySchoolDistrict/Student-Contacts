@@ -37,6 +37,7 @@
         <field name="OPTS_TEXT_SURVEY" type="Boolean"/>
         <field name="OPTS_TEXT_ATTENDANCE" type="Boolean"/>
         <field name="OPTS_TEXT_GENERAL" type="Boolean"/>
+        <field name="STATUS" type="Integer" description="Determines if this contact's has been migrated to the live side (-99 if migration has occured)."/>
     </extendedTable>
 
     <extendedTable coreTable="Students" dbTableName="u_sc_email_staging" childName="u_sc_email_staging" comment="">
@@ -46,6 +47,7 @@
         <field name="OPTS_SURVEY" type="Boolean"/>
         <field name="OPTS_ATTENDANCE" type="Boolean"/>
         <field name="OPTS_GENERAL" type="Boolean"/>
+        <field name="STATUS" type="Integer" description="Determines if this contact's has been migrated to the live side (-99 if migration has occured)."/>
     </extendedTable>
 
     <extendedTable coreTable="Students" dbTableName="u_student_contacts" childName="u_student_contacts" comment="">
