@@ -470,170 +470,211 @@
                                             });
                                         }
 
-                                        var contactCoreData = {
-                                            name: config.contactsTable,
-                                            tables: {}
-                                        };
 
-                                        contactCoreData.tables[config.contactsTable] = {
-                                            contact_id: addContactResp.contactnumber.toString(),
-                                            first_name: $('#first-name').val(),
-                                            last_name: $('#last-name').val(),
-                                            priority: $('#priority').val(),
-                                            legal_guardian: $('#legal-guardian').val(),
-                                            relationship: $('#relationship').val(),
-                                            residence_street: $('#residence-street').val(),
-                                            residence_city: $('#residence-city').val(),
-                                            residence_state: $('#residence-state').val(),
-                                            residence_zip: $('#residence-zip').val(),
-                                            mailing_street: $('#mailing-street').val(),
-                                            mailing_city: $('#mailing-city').val(),
-                                            mailing_state: $('#mailing-state').val(),
-                                            mailing_zip: $('#mailing-zip').val(),
-                                            employer: $('#employer').val(),
-                                            studentsdcid: psData.studentdcid,
-                                            status: "0"
-                                        };
+                                        /**
+                                         * Gathers core contact data from the HTML form, and returns the field names in tlist child format
+                                         * @returns {{}}
+                                         */
+                                        function getDomCoreDataTlc() {
 
-                                        var contactEmailData = {
-                                            name: config.contactsEmailTable,
-                                            tables: {}
-                                        };
+                                            var contactCoreData = {};
+                                            var keyName = toTlcFieldName('contact_id', -1, psData.studentdcid, true);
+                                            contactCoreData[keyName] = addContactResp.contactnumber.toString();
+                                            keyName = toTlcFieldName('first_name', -1, psData.studentdcid);
+                                            contactCoreData[keyName] = $('#first-name').val();
+                                            keyName = toTlcFieldName('last_name', -1, psData.studentdcid);
+                                            contactCoreData[keyName] = $('#last-name').val();
+                                            keyName = toTlcFieldName('priority', -1, psData.studentdcid, true);
+                                            contactCoreData[keyName] = $('#priority').val();
+                                            keyName = toTlcFieldName('legal_guardian', -1, psData.studentdcid);
+                                            contactCoreData[keyName] = $('#legal-guardian').val();
+                                            keyName = toTlcFieldName('relationship', -1, psData.studentdcid);
+                                            contactCoreData[keyName] = $('#relationship').val();
+                                            keyName = toTlcFieldName('residence_street', -1, psData.studentdcid);
+                                            contactCoreData[keyName] = $('#residence-street').val();
+                                            keyName = toTlcFieldName('residence_city', -1, psData.studentdcid);
+                                            contactCoreData[keyName] = $('#residence-city').val();
+                                            keyName = toTlcFieldName('residence_state', -1, psData.studentdcid);
+                                            contactCoreData[keyName] = $('#residence-state').val();
+                                            keyName = toTlcFieldName('residence_zip', -1, psData.studentdcid);
+                                            contactCoreData[keyName] = $('#residence-zip').val();
+                                            keyName = toTlcFieldName('mailing_street', -1, psData.studentdcid);
+                                            contactCoreData[keyName] = $('#mailing-street').val();
+                                            keyName = toTlcFieldName('mailing_city', -1, psData.studentdcid);
+                                            contactCoreData[keyName] = $('#mailing-city').val();
+                                            keyName = toTlcFieldName('mailing_state', -1, psData.studentdcid);
+                                            contactCoreData[keyName] = $('#mailing-state').val();
+                                            keyName = toTlcFieldName('mailing_zip', -1, psData.studentdcid);
+                                            contactCoreData[keyName] = $('#mailing-zip').val();
+                                            keyName = toTlcFieldName('employer', -1, psData.studentdcid);
+                                            contactCoreData[keyName] = $('#employer').val();
+                                            keyName = toTlcFieldName('notes', -1, psData.studentdcid);
+                                            contactCoreData[keyName] = $('#notes').val();
+                                            keyName = toTlcFieldName('status', -1, psData.studentdcid, true);
+                                            contactCoreData[keyName] = "0";
+                                            return contactCoreData;
+                                        }
 
-                                        contactEmailData.tables[config.contactsEmailTable] = {
-                                            email_address: $('#email').val(),
-                                            opts_high_priority: $('#email-opts-high-priority').val() ? "1" : "",
-                                            opts_general: $('#email-opts-general').val() ? "1" : "",
-                                            opts_attendance: $('#email-opts-attendance').val() ? "1" : "",
-                                            opts_survey: $('#email-opts-survey').val() ? "1" : ""
-                                        };
+                                        /**
+                                         * Takes a field name and converts it to tlist child (tlc) formatting
+                                         * If creating a new record, pass in recordId=-1
+                                         * @param fieldName
+                                         * @param recordId
+                                         * @param foreignKey
+                                         * @param [isInteger] {Boolean} - if field is an INTEGER
+                                         * @returns {string}
+                                         */
+                                        function toTlcFieldName(fieldName, recordId, foreignKey, isInteger) {
+                                            var tlcFieldName = 'CF-[STUDENTS:' + foreignKey + '.U_STUDENT_CONTACTS.U_STUDENT_CONTACTS:' + recordId + ']' + fieldName;
+                                            if (isInteger) {
+                                                tlcFieldName += '$format=numeric'
+                                            }
+                                            return tlcFieldName;
+                                        }
 
-                                        saveContact(contactCoreData, config.contactsTable).done(function (contactCoreResp) {
+                                        /**
+                                         * Saves a contact using the same method that a tlist child tag uses:
+                                         * By sending a POST to changesrecorded.white.html with the form fields formatted
+                                         * using the CF-... format.
+                                         * This function will add the ac=prim key value pair
+                                         * @param contactCoreData {Object} all form fields that will saved, in tlist child form.
+                                         */
+                                        function saveCoreContactDataUsingTlC(contactCoreData) {
+                                            contactCoreData.ac = 'prim';
+                                            return $.ajax({
+                                                type: 'POST',
+                                                url: '/admin/changesrecorded.white.html',
+                                                data: contactCoreData
+                                            });
+                                        }
+
+                                        /**
+                                         * Assignes the row's record id to the CONTACTDCID field
+                                         * @param contactRecordId a contact's record id (from the record in the db)
+                                         */
+                                        function setContactDcid(contactRecordId) {
                                             var contactDcidData = {
                                                 name: config.contactsTable,
                                                 tables: {}
                                             };
 
                                             contactDcidData.tables[config.contactsTable] = {
-                                                contactdcid: contactCoreResp.result[0].success_message.id.toString()
+                                                contactdcid: contactRecordId
                                             };
 
-                                            saveContact(contactDcidData, config.contactsTable, contactCoreResp.result[0].success_message.id).done(function () {
-                                                $.noop();
+                                            return $.ajax({
+                                                url: '/ws/schema/table/' + config.contactsTable + '/' + contactRecordId,
+                                                data: JSON.stringify(contactDcidData),
+                                                dataType: 'json',
+                                                contentType: 'json',
+                                                type: 'PUT'
                                             });
-                                            function savePhones() {
 
-                                                $.each([1, 2, 3], function (index, i) {
-                                                    var phoneTypeNameId = 'phone' + i + 'type';
-                                                    var phoneNumberId = 'phone' + i;
+                                        }
 
-                                                    var phoneTypeElem = $('#' + phoneTypeNameId);
-                                                    var phoneNumberElem = $('#' + phoneNumberId);
+                                        function savePhones(contactdcid) {
 
-                                                    var contactPhoneData = {
-                                                        name: config.contactsPhoneTable,
-                                                        tables: {}
-                                                    };
+                                            $.each([1, 2, 3], function (index, i) {
+                                                var phoneTypeNameId = 'phone' + i + 'type';
+                                                var phoneNumberId = 'phone' + i;
 
-                                                    contactPhoneData.tables[config.contactsPhoneTable] = {
-                                                        "studentsdcid": psData.studentdcid,
-                                                        "contactdcid": contactCoreResp.result[0].success_message.id.toString(),
-                                                        "phone_number": phoneNumberElem.val(),
-                                                        "phone_type": phoneTypeElem.val(),
-                                                        "phone_priority": i.toString(),
-                                                        "opts_voice_high_priority": $('#phone' + i + '-opts-voice-high-priority').is(':checked') ? "1" : "",
-                                                        "opts_voice_general": $('#phone' + i + '-opts-voice-general').is(':checked') ? "1" : "",
-                                                        "opts_voice_attendance": $('#phone' + i + '-opts-voice-attendance').is(':checked') ? "1" : "",
-                                                        "opts_voice_survey": $('#phone' + i + '-opts-voice-survey').is(':checked') ? "1" : "",
-                                                        "opts_text_high_priority": $('#phone' + i + '-opts-text-high-priority').is(':checked') ? "1" : "",
-                                                        "opts_text_general": $('#phone' + i + '-opts-text-general').is(':checked') ? "1" : "",
-                                                        "opts_text_attendance": $('#phone' + i + '-opts-text-attendance').is(':checked') ? "1" : "",
-                                                        "opts_text_survey": $('#phone' + i + '-opts-text-survey').is(':checked') ? "1" : ""
-                                                    };
+                                                var phoneTypeElem = $('#' + phoneTypeNameId);
+                                                var phoneNumberElem = $('#' + phoneNumberId);
 
-                                                    var saveContactPhoneArgs = [];
+                                                var contactPhoneData = {
+                                                    name: config.contactsPhoneTable,
+                                                    tables: {}
+                                                };
 
-                                                    if (phoneTypeElem.val() && phoneNumberElem.val()) {
-                                                        // A new record must have the foreign key (studentsdcid) passed in.
-                                                        contactPhoneData.tables[config.contactsPhoneTable].studentsdcid = psData.studentdcid;
-                                                        saveContactPhoneArgs.push(contactPhoneData);
-                                                        saveContactPhoneArgs.push(config.contactsPhoneTable);
-                                                        // Record ID is not needed here since it's a new record
-                                                        saveContactPhoneArgs.push(null);
-                                                        // Force the ajax call to be synchronous
-                                                        saveContactPhoneArgs.push(true);
-                                                    }
+                                                contactPhoneData.tables[config.contactsPhoneTable] = {
+                                                    "studentsdcid": psData.studentdcid,
+                                                    "contactdcid": contactdcid,
+                                                    "phone_number": phoneNumberElem.val(),
+                                                    "phone_type": phoneTypeElem.val(),
+                                                    "phone_priority": i.toString(),
+                                                    "opts_voice_high_priority": $('#phone' + i + '-opts-voice-high-priority').is(':checked') ? "1" : "",
+                                                    "opts_voice_general": $('#phone' + i + '-opts-voice-general').is(':checked') ? "1" : "",
+                                                    "opts_voice_attendance": $('#phone' + i + '-opts-voice-attendance').is(':checked') ? "1" : "",
+                                                    "opts_voice_survey": $('#phone' + i + '-opts-voice-survey').is(':checked') ? "1" : "",
+                                                    "opts_text_high_priority": $('#phone' + i + '-opts-text-high-priority').is(':checked') ? "1" : "",
+                                                    "opts_text_general": $('#phone' + i + '-opts-text-general').is(':checked') ? "1" : "",
+                                                    "opts_text_attendance": $('#phone' + i + '-opts-text-attendance').is(':checked') ? "1" : "",
+                                                    "opts_text_survey": $('#phone' + i + '-opts-text-survey').is(':checked') ? "1" : ""
+                                                };
+
+                                                var saveContactPhoneArgs = [];
+
+                                                if (phoneTypeElem.val() && phoneNumberElem.val()) {
+                                                    // A new record must have the foreign key (studentsdcid) passed in.
+                                                    contactPhoneData.tables[config.contactsPhoneTable].studentsdcid = psData.studentdcid;
+                                                    saveContactPhoneArgs.push(contactPhoneData);
+                                                    saveContactPhoneArgs.push(config.contactsPhoneTable);
+                                                    // Record ID is not needed here since it's a new record
+                                                    saveContactPhoneArgs.push(null);
+                                                    // Force the ajax call to be synchronous
+                                                    saveContactPhoneArgs.push(true);
+                                                }
 
 
-                                                    if (saveContactPhoneArgs.length !== 0) {
-                                                        saveContact.apply(this, saveContactPhoneArgs).done(function () {
-                                                            $.noop();
-                                                        });
-                                                    }
+                                                if (saveContactPhoneArgs.length !== 0) {
+                                                    saveContact.apply(this, saveContactPhoneArgs).done(function () {
+                                                        $.noop();
+                                                    });
+                                                }
 
-                                                    if (i === 3) {
-                                                        m_table.fnClose(sourcerow);
-                                                        $('.addcontact').show();
-                                                        refreshContact(addContactResp.contactnumber, sourcerow);
-                                                    }
-                                                });
-                                            }
-
-                                            var saveContactEmailArgs = [];
-
-                                            if ($('#email').val() !== "") {
-                                                contactEmailData.tables[config.contactsEmailTable].studentsdcid = psData.studentdcid;
-                                                contactEmailData.tables[config.contactsEmailTable].contactdcid = contactCoreResp.result[0].success_message.id.toString();
-                                                saveContactEmailArgs.push(contactEmailData);
-                                                saveContactEmailArgs.push(config.contactsEmailTable);
-                                            }
-
-                                            if (saveContactEmailArgs.length !== 0) {
-                                                saveContact.apply(this, saveContactEmailArgs).done(function () {
-
-                                                    savePhones();
+                                                if (i === 3) {
                                                     m_table.fnClose(sourcerow);
                                                     $('.addcontact').show();
                                                     refreshContact(addContactResp.contactnumber, sourcerow);
-                                                });
-                                            } else {
-                                                savePhones();
-                                            }
+                                                }
+                                            });
+                                        }
+
+
+                                        var contactCoreDataTlc = getDomCoreDataTlc();
+                                        saveCoreContactDataUsingTlC(contactCoreDataTlc).done(function(contactCoreResp) {
+                                            var contactId = addContactResp.contactnumber.toString();
+                                            var studentDcid = psData.studentdcid;
+                                            $.getJSON('/admin/students/contacts/getContactRecordId.json.html?contactid=' + contactId + '&studentsdcid=' + studentDcid, function (contactRecordResp) {
+                                                setContactDcid(contactRecordResp.id).done(function(setContactDcidResp) {
+                                                    var contactEmailData = {
+                                                        name: config.contactsEmailTable,
+                                                        tables: {}
+                                                    };
+
+                                                    contactEmailData.tables[config.contactsEmailTable] = {
+                                                        email_address: $('#email').val(),
+                                                        opts_high_priority: $('#email-opts-high-priority').val() ? "1" : "",
+                                                        opts_general: $('#email-opts-general').val() ? "1" : "",
+                                                        opts_attendance: $('#email-opts-attendance').val() ? "1" : "",
+                                                        opts_survey: $('#email-opts-survey').val() ? "1" : ""
+                                                    };
+
+                                                    var saveContactEmailArgs = [];
+
+                                                    if ($('#email').val() !== "") {
+                                                        contactEmailData.tables[config.contactsEmailTable].studentsdcid = psData.studentdcid;
+                                                        contactEmailData.tables[config.contactsEmailTable].contactdcid = contactRecordResp.id.toString();
+                                                        saveContactEmailArgs.push(contactEmailData);
+                                                        saveContactEmailArgs.push(config.contactsEmailTable);
+                                                    }
+
+                                                    if (saveContactEmailArgs.length !== 0) {
+                                                        saveContact.apply(this, saveContactEmailArgs).done(function() {
+                                                            savePhones(contactRecordResp.id);
+                                                            m_table.fnClose(sourcerow);
+                                                            $('.addcontact').show();
+                                                            refreshContact(addContactResp.contactnumber, sourcerow);
+                                                        });
+                                                    } else {
+                                                        savePhones(contactRecordResp.id);
+                                                    }
+                                                })
+                                            });
+
                                         });
 
-                                        /*
-                                         // Create the new contact
-                                         var postData = {
-                                         name: config.contactsTable,
-                                         tables: {}
-                                         };
 
-                                         postData.tables[config.contactsTable] = {
-                                         studentsdcid: psData.studentdcid,
-                                         contact_id: data.contactnumber.toString(),
-                                         status: '0',
-                                         legal_guardian: $('#legal_guardian').val(),
-                                         last_name: $('#last-name').val(),
-                                         first_name: $('#first-name').val(),
-                                         priority: $('#priority').val(),
-                                         relationship: $('#relationship').val(),
-                                         residence_street: $('#residence-street').val(),
-                                         residence_city: $('#residence-city').val(),
-                                         residence_state: $('#residence-state').val(),
-                                         residence_zip: $('#residence-zip').val(),
-                                         mailing_street: $('#mailing-street').val(),
-                                         mailing_city: $('#mailing-city').val(),
-                                         mailing_state: $('#mailing-state').val(),
-                                         mailing_zip: $('#mailing-zip').val(),
-                                         employer: $('#employer').val()
-                                         };
-
-                                         saveContact(postData, config.contactsTable).done(function () {
-                                         m_table.fnClose(sourcerow);
-                                         refreshContact(n, sourcerow);
-                                         $('.addcontact').show();
-                                         });
-                                         */
 
 
                                     });
@@ -655,7 +696,7 @@
                 if (row) {
                     var sourcerow = row;
                     var contactId = m_table.fnGetData(row)[m_keyindex];
-                    var contactDcid = contactsCollection[contactId][1].contactdcid;
+                    var contactDcid = contactsCollection[contactId][1].record_id;
                     $.get(m_requestURL, {
                         "frn": psData.frn,
                         "contactdcid": contactDcid,
@@ -864,10 +905,11 @@
 
                                 contactEmailData.tables[config.contactsEmailTable] = {
                                     email_address: $('#email').val(),
-                                    opts_high_priority: $('#email-opts-high-priority').val() ? "1" : "",
-                                    opts_general: $('#email-opts-general').val() ? "1" : "",
-                                    opts_attendance: $('#email-opts-attendance').val() ? "1" : "",
-                                    opts_survey: $('#email-opts-survey').val() ? "1" : ""
+                                    contactdcid: contactsCollection[contactId][1].record_id.toString(),
+                                    opts_high_priority: $('#email-opts-high-priority').is(':checked') ? "1" : "",
+                                    opts_general: $('#email-opts-general').is(':checked') ? "1" : "",
+                                    opts_attendance: $('#email-opts-attendance').is(':checked') ? "1" : "",
+                                    opts_survey: $('#email-opts-survey').is(':checked') ? "1" : ""
                                 };
 
                                 // If this email corresponds to an existing contact, the contactdcid was inserted into the contactsCollection
@@ -895,7 +937,7 @@
                                             };
 
                                             contactPhoneData.tables[config.contactsPhoneTable] = {
-                                                "contactdcid": contactsCollection[contactId][1].contactdcid.toString(),
+                                                "contactdcid": contactsCollection[contactId][1].record_id.toString(),
                                                 "phone_number": phoneNumberElem.val(),
                                                 "phone_type": phoneTypeElem.val(),
                                                 "phone_extension": phoneExtElem.val(),
@@ -918,21 +960,19 @@
 
                                             // A contact with a matching priority to "i" exists, so this phone record must already exist
                                             if (contCollPhoneWithThisPriority.length !== 0) {
-                                                if (phoneTypeElem.val() && phoneNumberElem.val()) {
-                                                    saveContactPhoneArgs.push(contactPhoneData);
-                                                    saveContactPhoneArgs.push(config.contactsPhoneTable);
+                                                saveContactPhoneArgs.push(contactPhoneData);
+                                                saveContactPhoneArgs.push(config.contactsPhoneTable);
 
-                                                    // The api expects the db record id for this phone record
-                                                    // not to be confused with the contactdcid, which is the foreign key that ties this number
-                                                    // to its corresponding contact
-                                                    saveContactPhoneArgs.push(contCollPhoneWithThisPriority[0].id);
+                                                // The api expects the db record id for this phone record
+                                                // not to be confused with the contactdcid, which is the foreign key that ties this number
+                                                // to its corresponding contact
+                                                saveContactPhoneArgs.push(contCollPhoneWithThisPriority[0].id);
 
-                                                    // Force the ajax call to be synchronous
-                                                    saveContactPhoneArgs.push(true);
-                                                }
-                                                // No contact in the contactsCollection array was found to match the phone with the current priority,
-                                                // so, check if any data was entered for this phone number, and if that is true, create a new phone number+data
-                                                // for this phone priority.
+                                                // Force the ajax call to be synchronous
+                                                saveContactPhoneArgs.push(true);
+                                            // No contact in the contactsCollection array was found to match the phone with the current priority,
+                                            // so, check if any data was entered for this phone number, and if that is true, create a new phone number+data
+                                            // for this phone priority.
                                             } else {
                                                 if (phoneTypeElem.val() && phoneNumberElem.val()) {
                                                     // A new record must have the foreign key (studentsdcid) passed in.
@@ -964,7 +1004,7 @@
                                     // If contact had email when page was loaded
                                     var saveContactEmailArgs = [];
                                     if (contCollEmail.hasOwnProperty('email_address')) {
-                                        // If this is a new contact, use the dcid of the new contact
+                                        // If this is a new contact, use the dcid of the new contact (given in "data" response obj)
                                         if (!contactEmailData.tables[config.contactsEmailTable].contactdcid) {
                                             contactEmailData.tables[config.contactsEmailTable].contactdcid = data.id;
                                         }
@@ -981,6 +1021,7 @@
                                         }
                                     }
 
+                                    // If any email options were input to the page
                                     if (saveContactEmailArgs.length !== 0) {
                                         saveContact.apply(this, saveContactEmailArgs).done(function () {
 
@@ -989,6 +1030,8 @@
                                             $('.addcontact').show();
                                             refreshContact(contactId, sourcerow);
                                         });
+
+                                    // Else, just save phones.
                                     } else {
                                         savePhones();
                                     }
@@ -1009,7 +1052,7 @@
                     var rowData = m_table.fnGetData(row);
                     var contactId = rowData[m_keyindex];
                     var contactName = $(row).find('td').eq(0).find('p').eq(0).text();
-                    if (window.confirm("Delete contact, \"" + contactName + "\"?")) {
+                    if (window.confirm("Inactivate contact, \"" + contactName + "\"?")) {
                         var postData = {
                             name: 'u_student_contacts',
                             tables: {
@@ -1142,7 +1185,7 @@
 
         loadContactData(contactId).done(function (contactsData) {
             contactsCollection[contactId] = contactsData;
-            var emailPhoneAjax = loadEmailPhoneData(contactsData[1].contactdcid);
+            var emailPhoneAjax = loadEmailPhoneData(contactsData[1].record_id);
             $.when.apply($, emailPhoneAjax)
                 .done(function (contactEmailData, contactPhoneData) {
                     contactsCollection[contactId][3]['email'] = contactEmailData[0];

@@ -1,0 +1,9 @@
+~[tlist_sql;
+    select
+        id
+    from u_student_contacts
+    where contact_id=~[gpv:contactid]
+    and studentsdcid=~[gpv:studentsdcid]
+]
+    {"id": "~(id)"}
+[/tlist_sql]
