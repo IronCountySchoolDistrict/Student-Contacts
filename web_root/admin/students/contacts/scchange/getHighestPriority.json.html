@@ -1,0 +1,15 @@
+~[tlist_sql;
+    SELECT
+    max(priority)
+    from (
+        select priority from u_student_contacts
+        where studentsdcid=~[gpv:studentsdcid]
+        union all
+        select priority from u_student_contacts_staging
+        where studentsdcid=~[gpv:studentsdcid]
+    )
+]
+    {
+        "priority": "~(priority)"
+    }
+[/tlist_sql]

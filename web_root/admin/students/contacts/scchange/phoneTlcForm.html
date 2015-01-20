@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<!-- non framed -->
+<head>
+    <title>phone</title>
+    ~[wc:commonscripts]
+    <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+    <link href="/images/css/print.css" rel="stylesheet" media="print">
+</head>
+<body>
+<form method="POST" action="/admin/changesrecorded.white.html">
+    ~[tlist_child:Students.U_student_contacts.U_sc_phone;displaycols:CONTACTDCID,OPTS_TEXT_ATTENDANCE,OPTS_TEXT_GENERAL,OPTS_TEXT_HIGH_PRIORITY,OPTS_TEXT_SURVEY,OPTS_VOICE_ATTENDANCE,OPTS_VOICE_GENERAL,OPTS_VOICE_HIGH_PRIORITY,OPTS_VOICE_SURVEY,PHONE_EXTENSION,PHONE_NUMBER,PHONE_PRIORITY,PHONE_TYPE;fieldNames:CONTACTDCID,OPTS_TEXT_ATTENDANCE,OPTS_TEXT_GENERAL,OPTS_TEXT_HIGH_PRIORITY,OPTS_TEXT_SURVEY,OPTS_VOICE_ATTENDANCE,OPTS_VOICE_GENERAL,OPTS_VOICE_HIGH_PRIORITY,OPTS_VOICE_SURVEY,PHONE_EXTENSION,PHONE_NUMBER,PHONE_PRIORITY,PHONE_TYPE;type:html]
+    <input type="hidden" name="ac" value="prim"/>
+    <div class="button-row">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+</body>
+</html>

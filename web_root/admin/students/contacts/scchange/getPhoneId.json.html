@@ -1,0 +1,9 @@
+~[tlist_sql;
+    select
+        id
+    from u_sc_phone
+    where contactdcid=~[gpv:contactdcid]
+    and phone_priority=~[gpv:priority];nonemessage={}
+]
+    {"id": "~(id)"}
+[/tlist_sql]

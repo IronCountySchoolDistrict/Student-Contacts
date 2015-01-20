@@ -9,8 +9,7 @@
     opts_survey,
     studentsdcid
     FROM u_sc_email_staging
-    where contactdcid=~[gpv:contactdcid]
-    and (status<>-99 or status is null)
+    where contactdcid=~[gpv:stagingcontactdcid]
 ]
     {
         "id": "~(id)",

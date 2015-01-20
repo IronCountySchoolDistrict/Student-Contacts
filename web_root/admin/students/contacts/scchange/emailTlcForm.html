@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<!-- non framed -->
+<head>
+    <title>email</title>
+    ~[wc:commonscripts]
+    <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+    <link href="/images/css/print.css" rel="stylesheet" media="print">
+</head>
+<body>
+<form method="POST" action="/admin/changesrecorded.white.html">
+    ~[tlist_child:Students.U_student_contacts.U_sc_email;displaycols:CONTACTDCID,EMAIL_ADDRESS,OPTS_ATTENDANCE,OPTS_GENERAL,OPTS_HIGH_PRIORITY,OPTS_SURVEY;fieldNames:CONTACTDCID,EMAIL_ADDRESS,OPTS_ATTENDANCE,OPTS_GENERAL,OPTS_HIGH_PRIORITY,OPTS_SURVEY;type:html]
+    <input type="hidden" name="ac" value="prim"/>
+    <div class="button-row">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+</body>
+</html>

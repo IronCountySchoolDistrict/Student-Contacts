@@ -1,0 +1,40 @@
+[
+    ~[tlist_sql;
+    SELECT
+        id,
+        contactdcid,
+        phone_number,
+        phone_type,
+        phone_extension,
+        phone_priority,
+        opts_voice_high_priority,
+        opts_voice_general,
+        opts_voice_attendance,
+        opts_voice_survey,
+        opts_text_high_priority,
+        opts_text_general,
+        opts_text_attendance,
+        opts_text_survey,
+        studentsdcid
+        FROM u_sc_phone_staging
+        WHERE contactdcid=~[gpv:stagingcontactdcid]
+    ]
+        {
+            "id": "~(id)",
+            "contactdcid": "~(contactdcid)",
+            "phone_number": "~(phone_number)",
+            "phone_type": "~(phone_type)",
+            "phone_extension": "~(phone_extension)",
+            "phone_priority": "~(phone_priority)",
+            "opts_voice_high_priority": "~(opts_voice_high_priority)",
+            "opts_voice_general": "~(opts_voice_general)",
+            "opts_voice_attendance": "~(opts_voice_attendance)",
+            "opts_voice_survey": "~(opts_voice_survey)",
+            "opts_text_high_priority": "~(opts_text_high_priority)",
+            "opts_text_general": "~(opts_text_general)",
+            "opts_text_attendance": "~(opts_text_attendance)",
+            "opts_text_survey": "~(opts_text_survey)",
+            "studentsdcid": "~(studentsdcid)"
+        },
+    [/tlist_sql]{}
+]
