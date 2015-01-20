@@ -1,0 +1,8 @@
+~[tlist_sql;
+    select
+    id
+    from u_sc_email
+    where contactdcid=~[gpv:contactdcid];nonemessage={}
+]
+    {"id": "~(id)"}
+[/tlist_sql]
