@@ -426,7 +426,6 @@ $j(function () {
                             contactMatchingContactId = [];
                         }
 
-
                         // This contact's contact_id exists in the contactIds array, so it
                         // must be an update operation.
                         if (contactMatchingContactId.length > 0) {

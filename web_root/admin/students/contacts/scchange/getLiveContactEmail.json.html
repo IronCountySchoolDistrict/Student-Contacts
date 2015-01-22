@@ -8,8 +8,8 @@
     opts_attendance,
     opts_survey,
     studentsdcid
-    FROM u_sc_email_staging
-    where contactdcid=~[gpv:stagingcontactdcid];nonemessage={}
+    FROM u_sc_email
+    where contactdcid=~[gpv:livecontactdcid];nonemessage={}
 ]
     {
         "id": "~(id)",

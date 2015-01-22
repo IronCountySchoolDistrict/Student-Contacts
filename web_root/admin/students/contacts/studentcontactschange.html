@@ -47,26 +47,28 @@
             
             <tr>
                 <td class="bold">&nbsp;</td>
-                <td width="200">Parent/Guardian Submitted Changes</td>
-                <td>&nbsp;</td>
                 <td>On file with the school.</td>
+                <td><input type="button" value="Approve All" id="approve-all"/></td>
+                <td width="200">Parent/Guardian Submitted Changes</td>
+
             </tr>
             <tr>
                 <td class="bold">First Name</td>
                 <td>
                     <input type="text"
-                           id="staging-first-name"
-                           class="staging"
-                           value=""
-                           size="30">
+                        id="live-first-name"
+                        value=""
+                        size="30">
 
                 </td>
-                <td><input type="button" value="Approve" onClick="mailingAddressChange();"/></td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
                 <td>
-                    <input type="text"
-                           id="live-first-name"
-                           value=""
-                           size="30">
+                    
+                   <input type="text"
+                       id="staging-first-name"
+                       class="staging"
+                       value=""
+                       size="30">
                 </td>
             </tr>
 
@@ -74,32 +76,32 @@
                 <td class="bold">Last Name</td>
                 <td>
                     <input type="text"
-                           id="staging-last-name"
-                           class="staging"
+                           id="live-last-name"
                            value=""
                            size="30">
 
                 </td>
-                <td><input type="button" value="Approve"/></td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
                 <td>
                     <input type="text"
-                           id="live-last-name"
-                           value=""
-                           size="30">
+                        id="staging-last-name"
+                        class="staging"
+                        value=""
+                        size="30">
+                    
                 </td>
             </tr>
 
             <tr>
                 <td class="bold">Emergency Contact Priority</td>
                 <td>
-                    <select id="staging-priority" required>
+                    <select id="live-priority" required>
                         <option></option>
                     </select>
-
                 </td>
-                <td><input type="button" value="Approve"/></td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
                 <td>
-                    <select id="live-priority" required>
+                    <select id="staging-priority">
                         <option></option>
                     </select>
                 </td>
@@ -109,8 +111,7 @@
                 <td class="bold">Relationship</td>
                 <td>
                     <select
-                        id="staging-relationship"
-                        class="staging"
+                        id="live-relationship"
                         required>
                         <option selected></option>
                         <option value="Mother">Mother</option>
@@ -136,13 +137,12 @@
                         <option value="Teaching Parent">Teaching Parent</option>
                         <option value="Other">Other</option>
                     </select>
-
                 </td>
-                <td><input type="button" value="Approve"/></td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
                 <td>
                     <select
-                        id="live-relationship"
-                        required>
+                        id="staging-relationship"
+                        class="staging">
                         <option selected></option>
                         <option value="Mother">Mother</option>
                         <option value="Father">Father</option>
@@ -174,6 +174,17 @@
                 <td class="bold">Legal Guardian</td>
                 <td>
                     <select
+                        id="live-legal-guardian"
+                        required>
+                        <option selected></option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+
+                </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
+                    <select
                         id="staging-legal-guardian"
                         class="staging"
                         required>
@@ -181,34 +192,23 @@
                         <option value="1">Yes</option>
                         <option value="0">No</option>
                     </select>
-
-                </td>
-                <td><input type="button" value="Approve"/></td>
-                <td>
-                    <select
-                        id="live-legal-guardian"
-                        required>
-                        <option selected></option>
-                        <option value="1">Yes</option>
-                        <option value="0">No</option>
-                    </select>
+                    
                 </td>
             </tr>
 
             <tr>
                 <td class="bold">Residence Street</td>
                 <td>
+                    <input id="live-residence-street"
+                        type="text"
+                        value=""
+                        size="30">
+                </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
                     <input id="staging-residence-street"
                         type="text"
                         class="staging"
-                        value=""
-                        size="30">
-
-                </td>
-                <td><input type="button" value="Approve"/></td>
-                <td>
-                    <input id="live-residence-street"
-                        type="text"
                         value=""
                         size="30">
                 </td>
@@ -217,17 +217,16 @@
             <tr>
                 <td class="bold">Residence City</td>
                 <td>
+                    <input id="live-residence-city"
+                        type="text"
+                        value=""
+                        size="30">
+                </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
                     <input id="staging-residence-city"
                         type="text"
                         class="staging"
-                        value=""
-                        size="30">
-
-                </td>
-                <td><input type="button" value="Approve"/></td>
-                <td>
-                    <input id="live-residence-city"
-                        type="text"
                         value=""
                         size="30">
                 </td>
@@ -237,8 +236,7 @@
                 <td class="bold">Residence State</td>
                 <td>
                     <select
-                        id="staging-residence-state"
-                        class="staging"
+                        id="live-residence-state"
                         required>
                         <option></option>
                         <option value="AL">Alabama</option>
@@ -293,12 +291,12 @@
                         <option value="WI">Wisconsin</option>
                         <option value="WY">Wyoming</option>
                     </select>
-
                 </td>
-                <td><input type="button" value="Approve"/></td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
                 <td>
                     <select
-                        id="live-residence-state"
+                        id="staging-residence-state"
+                        class="staging"
                         required>
                         <option></option>
                         <option value="AL">Alabama</option>
@@ -359,17 +357,16 @@
             <tr>
                 <td class="bold">Residence Zip</td>
                 <td>
+                    <input id="live-residence-zip"
+                        type="text"
+                        value=""
+                        size="6">
+                </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
                     <input id="staging-residence-zip"
                         type="text"
                         class="staging"
-                        value=""
-                        size="6">
-
-                </td>
-                <td><input type="button" value="Approve"/></td>
-                <td>
-                    <input id="live-residence-zip"
-                        type="text"
                         value=""
                         size="6">
                 </td>
@@ -378,17 +375,18 @@
             <tr>
                 <td class="bold">Mailing Street</td>
                 <td>
+                    <input id="live-mailing-street"
+                        type="text"
+                        value=""
+                        size="30">
+                    
+
+                </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
                     <input id="staging-mailing-street"
                         type="text"
                         class="staging"
-                        value=""
-                        size="30">
-
-                </td>
-                <td><input type="button" value="Approve"/></td>
-                <td>
-                    <input id="live-mailing-street"
-                        type="text"
                         value=""
                         size="30">
                 </td>
@@ -397,17 +395,16 @@
             <tr>
                 <td class="bold">Mailing City</td>
                 <td>
+                    <input id="live-mailing-city"
+                        type="text"
+                        value=""
+                        size="30">
+                </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
                     <input id="staging-mailing-city"
                         type="text"
                         class="staging"
-                        value=""
-                        size="30">
-
-                </td>
-                <td><input type="button" value="Approve"/></td>
-                <td>
-                    <input id="live-mailing-city"
-                        type="text"
                         value=""
                         size="30">
                 </td>
@@ -417,8 +414,7 @@
                 <td class="bold">Mailing State</td>
                 <td>
                     <select
-                        id="staging-mailing-state"
-                        class="staging"
+                        id="live-mailing-state"
                         required>
                         <option></option>
                         <option value="AL">Alabama</option>
@@ -473,12 +469,12 @@
                         <option value="WI">Wisconsin</option>
                         <option value="WY">Wyoming</option>
                     </select>
-
                 </td>
-                <td><input type="button" value="Approve"/></td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
                 <td>
                     <select
-                        id="live-mailing-state"
+                        id="staging-mailing-state"
+                        class="staging"
                         required>
                         <option></option>
                         <option value="AL">Alabama</option>
@@ -539,17 +535,16 @@
             <tr>
                 <td class="bold">Mailing Zip</td>
                 <td>
+                    <input id="live-mailing-zip"
+                        type="text"
+                        value=""
+                        size="6">
+                </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
                     <input id="staging-mailing-zip"
                         type="text"
                         class="staging"
-                        value=""
-                        size="6">
-
-                </td>
-                <td><input type="button" value="Approve"/></td>
-                <td>
-                    <input id="live-mailing-zip"
-                        type="text"
                         value=""
                         size="6">
                 </td>
@@ -558,17 +553,18 @@
             <tr>
                 <td class="bold">Employer</td>
                 <td>
+                    <input id="live-employer"
+                        type="text"
+                        value=""
+                        size="30">
+                    
+
+                </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
                     <input id="staging-employer"
                         type="text"
                         class="staging"
-                        value=""
-                        size="30">
-
-                </td>
-                <td><input type="button" value="Approve"/></td>
-                <td>
-                    <input id="live-employer"
-                        type="text"
                         value=""
                         size="30">
                 </td>
@@ -577,17 +573,16 @@
             <tr>
                 <td class="bold">Notes</td>
                 <td>
+                    <textarea id="live-notes"
+                        type="text"
+                        value=""
+                        size="30"></textarea>
+                </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
                     <textarea id="staging-notes"
                         type="text"
                         class="staging"
-                        value=""
-                        size="30"></textarea>
-
-                </td>
-                <td><input type="button" value="Approve"/></td>
-                <td>
-                    <textarea id="live-notes"
-                        type="text"
                         value=""
                         size="30"></textarea>
                 </td>
@@ -596,17 +591,18 @@
             <tr>
                 <td class="bold">Email</td>
                 <td>
+                    <input id="live-email"
+                        type="text"
+                        value=""
+                        size="30">
+                    
+
+                </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
                     <input id="staging-email"
                         type="text"
                         class="staging"
-                        value=""
-                        size="30">
-
-                </td>
-                <td><input type="button" value="Approve"/></td>
-                <td>
-                    <input id="live-email"
-                        type="text"
                         value=""
                         size="30">
                 </td>
@@ -614,44 +610,6 @@
 
             <tr>
                 <td class="bold">Email Contact Options</td>
-                <td>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Contact Type</th>
-                                <th>Enable</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>High Priority</td>
-                                <td>
-                                    <input type="checkbox"
-                                        id="staging-email-opts-high-priority">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>General</td>
-                                <td><input type="checkbox"
-                                           id="staging-email-opts-general">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Attendance</td>
-                                <td><input type="checkbox"
-                                           id="staging-email-opts-attendance">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Survey</td>
-                                <td><input type="checkbox"
-                                           id="staging-email-opts-survey">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
-                <td><input type="button" value="Approve"/></td>
                 <td>
                     <table>
                         <thead>
@@ -689,22 +647,60 @@
                         </tbody>
                     </table>
                 </td>
+                <td><input type="button" value="Approve" class="opts-approve"/></td>
+                <td>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Contact Type</th>
+                                <th>Enable</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>High Priority</td>
+                                <td>
+                                    <input type="checkbox"
+                                        id="staging-email-opts-high-priority">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>General</td>
+                                <td><input type="checkbox"
+                                           id="staging-email-opts-general">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Attendance</td>
+                                <td><input type="checkbox"
+                                           id="staging-email-opts-attendance">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Survey</td>
+                                <td><input type="checkbox"
+                                           id="staging-email-opts-survey">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
             </tr>
 
             <tr>
                 <td class="bold">Phone 1 Type</td>
                 <td>
-                    <select id="staging-phone-1-type"
-                        class="staging">
+                    <select id="live-phone-1-type">
                         <option></option>
                         <option value="Home">Home</option>
                         <option value="Cell">Cell</option>
                         <option value="Work">Work</option>
                     </select>
                 </td>
-                <td><input type="button" value="Approve"/></td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
                 <td>
-                    <select id="live-phone-1-type">
+                    <select id="staging-phone-1-type"
+                        class="staging">
                         <option></option>
                         <option value="Home">Home</option>
                         <option value="Cell">Cell</option>
@@ -716,17 +712,16 @@
             <tr>
                 <td class="bold">Phone 1 Number</td>
                 <td>
+                    <input id="live-phone-1-number"
+                        type="text"
+                        value=""
+                        size="30"></input>
+                </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
                     <input id="staging-phone-1-number"
                         type="text"
                         class="staging"
-                        value=""
-                        size="30"></input>
-
-                </td>
-                <td><input type="button" value="Approve"/></td>
-                <td>
-                    <input id="live-phone-1-number"
-                        type="text"
                         value=""
                         size="30"></input>
                 </td>
@@ -735,76 +730,25 @@
             <tr>
                 <td class="bold">Phone 1 Extension</td>
                 <td>
+                    <input id="live-phone-1-extension"
+                        type="text"
+                        value=""
+                        size="30">
+                    
+
+                </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
                     <input id="staging-phone-1-extension"
                         type="text"
                         class="staging"
                         value=""
-                        size="30"></textarea>
-
-                </td>
-                <td><input type="button" value="Approve"/></td>
-                <td>
-                    <input id="live-phone-1-extension"
-                        type="text"
-                        value=""
-                        size="30"></textarea>
+                        size="30">
                 </td>
             </tr>
 
             <tr>
                 <td class="bold">Phone 1 Contact Options</td>
-                <td>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Contact Type</th>
-                                <th>Voice</th>
-                                <th>Text</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>High Priority</td>
-                                <td>
-                                    <input type="checkbox"
-                                        id="staging-phone1-opts-voice-high-priority">
-                                </td>
-                                <td>
-                                    <input type="checkbox"
-                                        id="staging-phone1-opts-text-high-priority">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>General</td>
-                                <td><input type="checkbox"
-                                           id="staging-phone1-opts-voice-general">
-                                </td>
-                                <td><input type="checkbox"
-                                           id="staging-phone1-opts-text-general">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Attendance</td>
-                                <td><input type="checkbox"
-                                           id="staging-phone1-opts-voice-attendance">
-                                </td>
-                                <td><input type="checkbox"
-                                           id="staging-phone1-opts-text-attendance">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Survey</td>
-                                <td><input type="checkbox"
-                                           id="staging-phone1-opts-voice-survey">
-                                </td>
-                                <td><input type="checkbox"
-                                           id="staging-phone1-opts-text-survey">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
-                <td><input type="button" value="Approve"/></td>
                 <td>
                     <table>
                         <thead>
@@ -856,20 +800,62 @@
                         </tbody>
                     </table>
                 </td>
+                <td><input type="button" value="Approve" class="opts-approve"/></td>
+                <td>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Contact Type</th>
+                                <th>Voice</th>
+                                <th>Text</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>High Priority</td>
+                                <td>
+                                    <input type="checkbox"
+                                        id="staging-phone1-opts-voice-high-priority">
+                                </td>
+                                <td>
+                                    <input type="checkbox"
+                                        id="staging-phone1-opts-text-high-priority">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>General</td>
+                                <td><input type="checkbox"
+                                           id="staging-phone1-opts-voice-general">
+                                </td>
+                                <td><input type="checkbox"
+                                           id="staging-phone1-opts-text-general">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Attendance</td>
+                                <td><input type="checkbox"
+                                           id="staging-phone1-opts-voice-attendance">
+                                </td>
+                                <td><input type="checkbox"
+                                           id="staging-phone1-opts-text-attendance">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Survey</td>
+                                <td><input type="checkbox"
+                                           id="staging-phone1-opts-voice-survey">
+                                </td>
+                                <td><input type="checkbox"
+                                           id="staging-phone1-opts-text-survey">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
             </tr>
 
             <tr>
                 <td class="bold">Phone 2 Type</td>
-                <td>
-                    <select id="staging-phone-2-type"
-                        class="staging">
-                        <option></option>
-                        <option value="Home">Home</option>
-                        <option value="Cell">Cell</option>
-                        <option value="Work">Work</option>
-                    </select>
-                </td>
-                <td><input type="button" value="Approve"/></td>
                 <td>
                     <select id="live-phone-2-type">
                         <option></option>
@@ -878,48 +864,111 @@
                         <option value="Work">Work</option>
                     </select>
                 </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
+                    <select id="staging-phone-2-type"
+                        class="staging">
+                        <option></option>
+                        <option value="Home">Home</option>
+                        <option value="Cell">Cell</option>
+                        <option value="Work">Work</option>
+                    </select>
+                    
+                </td>
             </tr>
 
             <tr>
                 <td class="bold">Phone 2 Number</td>
                 <td>
+                    <input id="live-phone-2-number"
+                        type="text"
+                        value=""
+                        size="30">
+                </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
                     <input id="staging-phone-2-number"
                         type="text"
                         class="staging"
                         value=""
-                        size="30"></input>
-
-                </td>
-                <td><input type="button" value="Approve"/></td>
-                <td>
-                    <input id="live-phone-2-number"
-                        type="text"
-                        value=""
-                        size="30"></input>
+                        size="30">
                 </td>
             </tr>
 
             <tr>
                 <td class="bold">Phone 2 Extension</td>
                 <td>
+                    <input id="live-phone-2-extension"
+                        type="text"
+                        value=""
+                        size="30">
+                    
+
+                </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
                     <input id="staging-phone-2-extension"
                         type="text"
                         class="staging"
                         value=""
-                        size="30"></textarea>
-
-                </td>
-                <td><input type="button" value="Approve"/></td>
-                <td>
-                    <input id="live-phone-2-extension"
-                        type="text"
-                        value=""
-                        size="30"></textarea>
+                        size="30">
                 </td>
             </tr>
 
             <tr>
                 <td class="bold">Phone 2 Contact Options</td>
+                <td>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Contact Type</th>
+                                <th>Voice</th>
+                                <th>Text</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>High Priority</td>
+                                <td>
+                                    <input type="checkbox"
+                                        id="live-phone2-opts-voice-high-priority">
+                                </td>
+                                <td>
+                                    <input type="checkbox"
+                                        id="live-phone2-opts-text-high-priority">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>General</td>
+                                <td><input type="checkbox"
+                                           id="live-phone2-opts-voice-general">
+                                </td>
+                                <td><input type="checkbox"
+                                           id="live-phone2-opts-text-general">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Attendance</td>
+                                <td><input type="checkbox"
+                                           id="live-phone2-opts-voice-attendance">
+                                </td>
+                                <td><input type="checkbox"
+                                           id="live-phone2-opts-text-attendance">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Survey</td>
+                                <td><input type="checkbox"
+                                           id="live-phone2-opts-voice-survey">
+                                </td>
+                                <td><input type="checkbox"
+                                           id="live-phone2-opts-text-survey">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td><input type="button" value="Approve" class="opts-approve"/></td>
                 <td>
                     <table>
                         <thead>
@@ -971,7 +1020,70 @@
                         </tbody>
                     </table>
                 </td>
-                <td><input type="button" value="Approve"/></td>
+            </tr>
+
+            <tr>
+                <td class="bold">Phone 3 Type</td>
+                <td>
+                    <select id="live-phone-3-type">
+                        <option></option>
+                        <option value="Home">Home</option>
+                        <option value="Cell">Cell</option>
+                        <option value="Work">Work</option>
+                    </select>
+                </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
+                    <select id="staging-phone-3-type"
+                        class="staging">
+                        <option></option>
+                        <option value="Home">Home</option>
+                        <option value="Cell">Cell</option>
+                        <option value="Work">Work</option>
+                    </select>
+                    
+                </td>
+            </tr>
+
+            <tr>
+                <td class="bold">Phone 3 Number</td>
+                <td>
+                    <input id="live-phone-3-number"
+                        type="text"
+                        value=""
+                        size="30">
+                </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
+                    <input id="staging-phone-3-number"
+                        type="text"
+                        class="staging"
+                        value=""
+                        size="30">
+                    
+                </td>
+            </tr>
+
+            <tr>
+                <td class="bold">Phone 3 Extension</td>
+                <td>
+                    <input id="live-phone-3-extension"
+                        type="text"
+                        value=""
+                        size="30">
+                </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
+                    <input id="staging-phone-3-extension"
+                        type="text"
+                        class="staging"
+                        value=""
+                        size="30">
+                </td>
+            </tr>
+
+            <tr>
+                <td class="bold">Phone 3 Contact Options</td>
                 <td>
                     <table>
                         <thead>
@@ -986,109 +1098,46 @@
                                 <td>High Priority</td>
                                 <td>
                                     <input type="checkbox"
-                                        id="live-phone2-opts-voice-high-priority">
+                                        id="live-phone3-opts-voice-high-priority">
                                 </td>
                                 <td>
                                     <input type="checkbox"
-                                        id="live-phone2-opts-text-high-priority">
+                                        id="live-phone3-opts-text-high-priority">
                                 </td>
                             </tr>
                             <tr>
                                 <td>General</td>
                                 <td><input type="checkbox"
-                                           id="live-phone2-opts-voice-general">
+                                           id="live-phone3-opts-voice-general">
                                 </td>
                                 <td><input type="checkbox"
-                                           id="live-phone2-opts-text-general">
+                                           id="live-phone3-opts-text-general">
                                 </td>
                             </tr>
                             <tr>
                                 <td>Attendance</td>
                                 <td><input type="checkbox"
-                                           id="live-phone2-opts-voice-attendance">
+                                           id="live-phone3-opts-voice-attendance">
                                 </td>
                                 <td><input type="checkbox"
-                                           id="live-phone2-opts-text-attendance">
+                                           id="live-phone3-opts-text-attendance">
                                 </td>
                             </tr>
                             <tr>
                                 <td>Survey</td>
                                 <td><input type="checkbox"
-                                           id="live-phone2-opts-voice-survey">
+                                           id="live-phone3-opts-voice-survey">
                                 </td>
                                 <td><input type="checkbox"
-                                           id="live-phone2-opts-text-survey">
+                                           id="live-phone3-opts-text-survey">
                                 </td>
                             </tr>
                         </tbody>
                     </table>
                 </td>
-            </tr>
-
-            <tr>
-                <td class="bold">Phone 3 Type</td>
+                <td><input type="button" value="Approve" class="opts-approve"/></td>
                 <td>
-                    <select id="staging-phone-3-type"
-                        class="staging">
-                        <option></option>
-                        <option value="Home">Home</option>
-                        <option value="Cell">Cell</option>
-                        <option value="Work">Work</option>
-                    </select>
-                </td>
-                <td><input type="button" value="Approve"/></td>
-                <td>
-                    <select id="live-phone-3-type">
-                        <option></option>
-                        <option value="Home">Home</option>
-                        <option value="Cell">Cell</option>
-                        <option value="Work">Work</option>
-                    </select>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="bold">Phone 3 Number</td>
-                <td>
-                    <input id="staging-phone-3-number"
-                        type="text"
-                        class="staging"
-                        value=""
-                        size="30"></input>
-
-                </td>
-                <td><input type="button" value="Approve"/></td>
-                <td>
-                    <input id="live-phone-3-number"
-                        type="text"
-                        value=""
-                        size="30"></input>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="bold">Phone 3 Extension</td>
-                <td>
-                    <input id="staging-phone-3-extension"
-                        type="text"
-                        class="staging"
-                        value=""
-                        size="30"></textarea>
-
-                </td>
-                <td><input type="button" value="Approve"/></td>
-                <td>
-                    <input id="live-phone-3-extension"
-                        type="text"
-                        value=""
-                        size="30"></textarea>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="bold">Phone 3 Contact Options</td>
-                <td>
-                    <table>
+                <table>
                         <thead>
                             <tr>
                                 <th>Contact Type</th>
@@ -1138,61 +1187,7 @@
                         </tbody>
                     </table>
                 </td>
-                <td><input type="button" value="Approve"/></td>
-                <td>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Contact Type</th>
-                                <th>Voice</th>
-                                <th>Text</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>High Priority</td>
-                                <td>
-                                    <input type="checkbox"
-                                        id="live-phone2-opts-voice-high-priority">
-                                </td>
-                                <td>
-                                    <input type="checkbox"
-                                        id="live-phone2-opts-text-high-priority">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>General</td>
-                                <td><input type="checkbox"
-                                           id="live-phone2-opts-voice-general">
-                                </td>
-                                <td><input type="checkbox"
-                                           id="live-phone2-opts-text-general">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Attendance</td>
-                                <td><input type="checkbox"
-                                           id="live-phone2-opts-voice-attendance">
-                                </td>
-                                <td><input type="checkbox"
-                                           id="live-phone2-opts-text-attendance">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Survey</td>
-                                <td><input type="checkbox"
-                                           id="live-phone2-opts-voice-survey">
-                                </td>
-                                <td><input type="checkbox"
-                                           id="live-phone2-opts-text-survey">
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
             </tr>
-
-
             <!-- end copy here -->
         </table>
     </div>

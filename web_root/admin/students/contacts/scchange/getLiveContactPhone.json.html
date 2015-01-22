@@ -16,8 +16,8 @@
         opts_text_attendance,
         opts_text_survey,
         studentsdcid
-        FROM u_sc_phone_staging
-        WHERE contactdcid=~[gpv:stagingcontactdcid];nonemessage=[]
+        FROM u_sc_phone
+        WHERE contactdcid=~[gpv:livecontactdcid];nonemessage=[]
     ]
         {
             "id": "~(id)",
