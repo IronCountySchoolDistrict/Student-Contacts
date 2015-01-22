@@ -840,6 +840,10 @@
 
         } else {
             // Live contact was not found, so create a new contact.
+
+            // contactObjToTlc expects the liveContactFormData to contain contact_id and studentsdcid fields.
+            liveContactFormData.studentsdcid = studentsdcid;
+            liveContactFormData.contact_id = contactData.stagingContact.contact_id;
             var tlcContact = contactObjToTlc(liveContactFormData);
             tlcContact.ac = 'prim';
 
@@ -852,7 +856,7 @@
                     data: tlcContact
                 }).done(function (newContactResp) {
 
-                    $j.getJSON('/admin/students/contacts/getContactRecordId.json.html?contactid=' + contactDcid.stagingContact.contact_id + '&studentsdcid=' + studentsdcid, function (contactRecordId) {
+                    $j.getJSON('/admin/students/contacts/getContactRecordId.json.html?contactid=' + contactData.stagingContact.contact_id + '&studentsdcid=' + studentsdcid, function (contactRecordId) {
                         var newContactCalls = [];
 
                         // Set live contact's contactdcid field
@@ -862,7 +866,7 @@
                         $j.when.apply($j, newContactCalls).done(function (contactDcidResp, contactMigratedResp) {
 
                             // Is there a live email record to update?
-                            if (contactData.liveEmail.id) {
+                            if (contactData.liveEmail) {
                                 // Make sure there is an email staging record to pull from
                                 if (contactData.stagingEmail.id) {
                                     updateEmail(liveEmailFormData, contactData.liveEmail.id).done(function (updateEmailResp) {
