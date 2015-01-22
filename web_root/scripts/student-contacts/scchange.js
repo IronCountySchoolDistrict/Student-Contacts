@@ -365,38 +365,32 @@
      * @param contactRecordId {Number|String} - If a new phone record needs to be created, contactdcid of the live contact the new phone records will be linked to
      */
     function migratePhones(stagingContactPhones, contactRecordId) {
+        var phoneAjaxCalls = [];
         $j.each(stagingContactPhones, function (index, stagingPhone) {
             // If phoneId has id, then there is an existing phone record that should be updated
-            var stagingPhoneWithPriority = $j.grep(contactData.stagingPhones, function(elem) {
-                return elem.phone_priority == index + 1;
-            });
-            if (stagingPhoneWithPriority.length > 0) {
-                stagingPhoneWithPriority = stagingPhoneWithPriority[0];
-            }
             var livePhoneWithPriority = $j.grep(contactData.livePhones, function(elem) {
                 return elem.phone_priority == index + 1;
             });
             if (livePhoneWithPriority.length > 0) {
                 livePhoneWithPriority = livePhoneWithPriority[0];
             }
-            if (livePhoneWithPriority && stagingPhoneWithPriority) {
-                updatePhone(stagingPhone, livePhoneWithPriority.id).done(function (updatePhoneResp) {
-                    setPhoneStatusToMigrated(stagingPhoneWithPriority.id).done(function() {
-                        returnToStudentContacts();
-                    });
-                });
+            if (livePhoneWithPriority) {
+                phoneAjaxCalls.push(updatePhone(stagingPhone, livePhoneWithPriority.id));
+                phoneAjaxCalls.push(setPhoneStatusToMigrated(stagingPhone.id));
 
-            // phoneId did not have an id property so this is a new phone record
+
+            // no livePhoneWithPriority found, so create new phone
             } else {
                 stagingPhone.contactdcid = contactRecordId;
                 var tlcPhone = phoneObjToTlc(stagingPhone);
                 tlcPhone.ac = 'prim';
-                newPhone(tlcPhone, stagingPhone.studentsdcid).then(function () {
-                    setPhoneStatusToMigrated(stagingPhone.id).done(function() {
-                        returnToStudentContacts();
-                    });
-                });
+                phoneAjaxCalls.push(newPhone(tlcPhone, stagingPhone.studentsdcid));
+                phoneAjaxCalls.push(setPhoneStatusToMigrated(stagingPhone.id));
             }
+        });
+
+        phoneAjaxCalls.then(function() {
+            returnToStudentContacts();
         });
     }
 
@@ -705,10 +699,6 @@
                 highestPriority = highestPriorityResp[0];
 
                 contactData.stagingContact = stagingContact;
-                if (stagingContactEmail) {
-                }
-                if (stagingContactPhones) {
-                }
 
                 var safeHighestPriority;
                 if (highestPriority.priority) {
@@ -717,20 +707,20 @@
                     safeHighestPriority = 1;
                 }
                 createOptionsForStagingPriority(safeHighestPriority);
+
+                // Create options for live priority here so if user approve staging priority there is an option to be selected
+                createOptionsForLivePriority(safeHighestPriority);
+
                 fillFormStagingContact(stagingContact);
                 setStagingRelationship(stagingContact.relationship);
 
-                if (stagingContactEmail) {
-                    contactData.stagingEmail = stagingContactEmail;
-                    fillFormStagingEmail(stagingContactEmail);
-                }
+                contactData.stagingEmail = stagingContactEmail;
+                fillFormStagingEmail(stagingContactEmail);
 
-                if (stagingContactPhones) {
-                    contactData.stagingPhones = stagingContactPhones;
-                    $j.each(stagingContactPhones, function (index, stagingPhone) {
-                        fillFormStagingPhone(stagingPhone, stagingPhone.phone_priority);
-                    });
-                }
+                contactData.stagingPhones = stagingContactPhones;
+                $j.each(stagingContactPhones, function (index, stagingPhone) {
+                    fillFormStagingPhone(stagingPhone, stagingPhone.phone_priority);
+                });
 
                 $j.getJSON('/admin/students/contacts/scchange/getLiveContactWithId.json.html?studentsdcid=' + psData.studentDcid + '&contactid=' + stagingContact.contact_id, function (liveContact) {
 
@@ -741,7 +731,6 @@
                         liveExtendedTableCalls.push($j.getJSON('/admin/students/contacts/scchange/getLiveContactEmail.json.html?livecontactdcid=' + liveContact.record_id));
                         liveExtendedTableCalls.push($j.getJSON('/admin/students/contacts/scchange/getLiveContactPhone.json.html?livecontactdcid=' + liveContact.record_id));
 
-                        createOptionsForLivePriority(safeHighestPriority);
                         fillFormLiveContact(liveContact);
                         setLiveRelationship(liveContact.relationship);
 
@@ -781,11 +770,9 @@
             updateContact(liveContactFormData, contactData.liveContact.record_id).done(function (updateContactResp) {
                 setContactStatusToMigrated(contactData.stagingContact.record_id).done(function () {
 
-                    // If getEmailId returned with an id, there is a live email record that should be updated
+                    // Is there is a live email record that should be updated
                     if (contactData.liveEmail.id) {
 
-                        // There is a staging email record to pull from, so save email
-                        if (contactData.stagingEmail.id) {
                             updateEmail(liveEmailFormData, contactData.liveEmail.id).done(function (updateEmailResp) {
                                 setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
 
@@ -798,42 +785,19 @@
                                     }
                                 });
                             });
-                            // No staging email record to pull from, so try to migrate phones
-                        } else {
-
-                            // If there are phones, save them
-                            if (contactData.stagingPhones) {
-                                migratePhones(livePhonesFormData, contactData.liveContact.record_id);
-                            // If no phones exist, we're done, so go back to student contacts
-                            } else {
-                                returnToStudentContacts();
-                            }
-                        }
-                        // EmailId did not return with an id, so this is a new live email record
+                    // Create a new live email record
                     } else {
-                        // Make sure there is an email staging record to pull from
-                        if (contactData.stagingEmail.id) {
-                            var tlcEmail = emailObjToTlc(liveEmailFormData);
-                            tlcEmail.ac = 'prim';
-                            newEmail(tlcEmail, studentsdcid).then(function (newEmailResp) {
-                                //Now that a new email record has been created, we can get its id in order
-                                //to set its status to migrated.
-                                setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
-                                    if (contactData.stagingPhones) {
-                                        migratePhones(livePhonesFormData, contactData.liveContact.record_id);
-                                    }
-                                });
+                        var tlcEmail = emailObjToTlc(liveEmailFormData);
+                        tlcEmail.ac = 'prim';
+                        newEmail(tlcEmail, studentsdcid).then(function (newEmailResp) {
+                            //Now that a new email record has been created, we can get its id in order
+                            //to set its status to migrated.
+                            setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
+                                if (contactData.stagingPhones) {
+                                    migratePhones(livePhonesFormData, contactData.liveContact.record_id);
+                                }
                             });
-                        // There isn't an email staging record to save, so just try to save phones
-                        } else {
-                            if (contactData.stagingPhones) {
-                                migratePhones(livePhonesFormData, contactData.liveContact.record_id);
-                            // If no phones exist, we're done, so go back to student contacts
-                            } else {
-                                returnToStudentContacts();
-                            }
-                        }
-
+                        });
                     }
                 });
             });
@@ -866,72 +830,40 @@
                         $j.when.apply($j, newContactCalls).done(function (contactDcidResp, contactMigratedResp) {
 
                             // Is there a live email record to update?
+
                             if (contactData.liveEmail) {
-                                // Make sure there is an email staging record to pull from
-                                if (contactData.stagingEmail.id) {
-                                    updateEmail(liveEmailFormData, contactData.liveEmail.id).done(function (updateEmailResp) {
-                                        setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
-
-                                            // If there are phones, save them
-                                            if (contactData.stagingPhones) {
-                                                migratePhones(livePhonesFormData, contactData.liveContact.record_id);
-                                            }
-                                        });
+                                updateEmail(liveEmailFormData, contactData.liveEmail.id).done(function (updateEmailResp) {
+                                    setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
+                                        // If there are phones, save them
+                                        if (contactData.stagingPhones) {
+                                            migratePhones(livePhonesFormData, contactData.liveContact.record_id);
+                                        }
                                     });
-                                } else {
-                                    // If there are phones, save them
-                                    if (contactData.stagingPhones) {
-                                        migratePhones(livePhonesFormData, contactData.liveContact.record_id);
-                                    // If no phones exist, we're done, so go back to student contacts
-                                    } else {
-                                        returnToStudentContacts();
-                                    }
+                                });
 
-                                }
-
-                                // There isn't a live email to update, so create a new one
+                            // There isn't a live email to update, so create a new one
                             } else {
+                                //Set the new email's contactdcid to the new contact's id
+                                liveEmailFormData.contactdcid = contactRecordId.id;
+                                var tlcEmail = emailObjToTlc(liveEmailFormData);
+                                tlcEmail.ac = 'prim';
 
-                                // Make sure there is a staging email to pull from
-                                if (contactData.stagingEmail.id) {
-                                    //Set the new email's contactdcid to the new contact's id
-                                    liveEmailFormData.contactdcid = contactRecordId.id;
-                                    var tlcEmail = emailObjToTlc(liveEmailFormData);
-                                    tlcEmail.ac = 'prim';
+                                // Enable new email operation
+                                $j.get('/admin/students/contacts/massimport/emailTlcForm.html?frn=001' + studentsdcid, function (emailFormResp) {
+                                    //Create new email
+                                    $j.ajax({
+                                        type: 'POST',
+                                        url: '/admin/changesrecorded.white.html',
+                                        data: tlcEmail
+                                    }).done(function () {
 
-                                    // Enable new email operation
-                                    $j.get('/admin/students/contacts/massimport/emailTlcForm.html?frn=001' + studentsdcid, function (emailFormResp) {
-                                        //Create new email
-                                        $j.ajax({
-                                            type: 'POST',
-                                            url: '/admin/changesrecorded.white.html',
-                                            data: tlcEmail
-                                        }).done(function () {
-
-                                            // Set staging email to migrated
-                                            setEmailStatusToMigrated(contactData.stagingContact.id).done(function () {
-                                                // Migrate phones if there are any
-                                                if (contactData.stagingPhones) {
-                                                    migratePhones(livePhonesFormData, contactData.liveContact.record_id);
-                                                // If no phones exist, we're done, so go back to student contacts
-                                                } else {
-                                                    returnToStudentContacts();
-                                                }
-                                            });
-
+                                        // Set staging email to migrated
+                                        setEmailStatusToMigrated(contactData.stagingContact.id).done(function () {
+                                             migratePhones(livePhonesFormData, contactData.liveContact.record_id);
                                         });
-                                    });
 
-                                    // There wasn't a staging email, so try to migrate phones
-                                } else {
-                                    // Migrate phones if there are any
-                                    if (contactData.stagingPhones) {
-                                        migratePhones(livePhonesFormData, contactData.liveContact.record_id);
-                                    // If no phones exist, we're done, so go back to student contacts
-                                    } else {
-                                        returnToStudentContacts();
-                                    }
-                                }
+                                    });
+                                });
                             }
                         });
                     }).fail(function () {
