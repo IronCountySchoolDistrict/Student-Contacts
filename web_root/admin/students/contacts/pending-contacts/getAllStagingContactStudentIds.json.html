@@ -1,0 +1,13 @@
+[
+    ~[tlist_sql;
+        SELECT
+            distinct s.id
+        FROM u_student_contacts_staging scs
+        inner join students s on s.dcid=scs.studentsdcid
+        WHERE status <> -99
+        and s.SchoolID=~(curschoolid)
+        ;nonemessage={}
+    ]
+    ~(id),
+    [/tlist_sql]""
+]

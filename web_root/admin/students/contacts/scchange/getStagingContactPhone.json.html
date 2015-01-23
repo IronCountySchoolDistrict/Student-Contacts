@@ -17,7 +17,7 @@
         opts_text_survey,
         studentsdcid
         FROM u_sc_phone_staging
-        WHERE contactdcid=~[gpv:stagingcontactdcid]
+        WHERE stagingcontactdcid=~[gpv:stagingcontactdcid]
         and status <> -99
     ]
         {
