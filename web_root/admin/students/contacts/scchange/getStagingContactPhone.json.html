@@ -17,8 +17,8 @@
         opts_text_survey,
         studentsdcid
         FROM u_sc_phone_staging
-        WHERE stagingcontactdcid=~[gpv:stagingcontactdcid]
-        and status <> -99
+        WHERE contactdcid=~[gpv:stagingcontactdcid]
+        and (status<>-99 or status is null)
     ]
         {
             "id": "~(id)",

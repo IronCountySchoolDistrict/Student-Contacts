@@ -20,7 +20,11 @@
         employer,
         notes,
         status,
-        studentsdcid
+        studentsdcid,
+        whocreated,
+        whencreated,
+        whomodified,
+        whenmodified
     FROM u_student_contacts_staging
     WHERE id=~[gpv:stagingcontactdcid]
     and status <> -99;nonemessage={}
@@ -45,6 +49,10 @@
         "employer":"~(employer;js)",
         "notes":"~(notes;js)",
         "status":"~(status;js)",
-        "studentsdcid":"~(studentsdcid;js)"
+        "studentsdcid":"~(studentsdcid;js)",
+        "whoCreated":"~(whocreated;js)",
+        "whenCreated":"~(whencreated;js)",
+        "whoModified":"~(whomodified;js)",
+        "whenModified":"~(whenmodified;js)"
     }
 [/tlist_sql]

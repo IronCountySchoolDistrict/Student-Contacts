@@ -10,7 +10,7 @@
     studentsdcid
     FROM u_sc_email_staging
     where contactdcid=~[gpv:stagingcontactdcid]
-    and status <> -99;nonemessage={}
+    and (status<>-99 or status is null);nonemessage={}
 ]
     {
         "id": "~(id)",

@@ -63,8 +63,8 @@
                             data: jsonData,
                             dataType: 'json',
                             contentType: 'application/json; charset=utf-8'
-                        }).done(function() {
-                            $j.get('/admin/students/contacts/studentcontacts.html?frn=001' + psData.studentdcid, function() {
+                        }).done(function(studentSelResp) {
+                            $j.get('/admin/students/contacts/studentcontacts.html?frn=001' + studentSelResp.students[0].dcid, function() {
                                 window.location = '/admin/students/home.html';
                             });
                         });

@@ -42,18 +42,14 @@
 
         <table border="0" cellspacing="0" cellpadding="4">
             <tr>
-                <td  style="display: none;">
-
-                </td>
-            </tr>
-            <tr>
                 <td class="bold">If SSO is on then this person is who last submitted a change:
-                    ~(parent_wholastchanged)
+                    <span id="last-submitted-change"></span>
                 </td>
             </tr>
             <tr>
                 <td class="bold">If this box is checked, any guardian can see demographics data and request changes
-                    (potential legal issues!):<input type="checkbox" name="[students]enabledemoupdate" value="1"/></td>
+                    (potential legal issues!):<input type="checkbox" name="[students]enabledemoupdate" id="enable-demo-update"/>
+                </td>
             </tr>
         </table>
         <table class="linkDescList" border="0" cellspacing="0" cellpadding="4">
@@ -1208,8 +1204,6 @@
         <input type="hidden" name="Students.dcid" value="~(rn)">
         <input type="hidden" name="ac" value="prim">
 
-        <span id="uncheck-span">Uncheck when done verifying information. --></span>
-        <input type="checkbox" id="parent-verify" name="[students.U_Students_Extension]parent_verify"/>
 
         ~[tlist_sql;select s.dcid, sta.id
         from u_student_info_staging sta
