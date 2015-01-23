@@ -22,6 +22,7 @@
 </head>
 <body data-validation="exclude">
 
+
 <form action="/admin/changesrecorded.white.html" method="POST" id="student-info-form">
     ~[wc:admin_header_frame_css]<!-- breadcrumb start --><a href="/admin/home.html" target="_top">~[text:psx.html.admin_students.modifydata.start_page]</a>
     &gt; <a href="home.html?selectstudent=nosearch" target="_top">~[text:psx.html.admin_students.modifydata.student_selection]</a>
@@ -30,9 +31,21 @@
     ~[wc:title_student_begin_css]Student Contacts Verify~[wc:title_student_end_css]
 
     <!-- start of content and bounding box -->
+    <div id="staging-already-migrated" class="box-round" style="display: none;">
+        <div style="color: #ff0000;">This contact has already been migrated.</div>
+        <div class="button-row">
+            <button type="submit" id="btnBack" name="btnBack">Back</button>
+        </div>
+    </div>
+
     <div class="box-round">
 
         <table border="0" cellspacing="0" cellpadding="4">
+            <tr>
+                <td  style="display: none;">
+
+                </td>
+            </tr>
             <tr>
                 <td class="bold">If SSO is on then this person is who last submitted a change:
                     ~(parent_wholastchanged)

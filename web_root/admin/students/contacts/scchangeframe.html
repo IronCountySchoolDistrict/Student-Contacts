@@ -1,0 +1,29 @@
+~[frame_type:frameset]<!DOCTYPE html>
+<html>
+<head>
+    ~[get_js_texts:psx.jshtml.admin_students.home.]
+    <title>~(lastfirst)</title>
+    ~[wc:commonscripts]
+    <script language="JavaScript">
+
+        function newstudent() {
+            us=prompt(pss_text('psx.jshtml.admin_students.home.student_name'),"");
+            if(us!=null) {
+                window.frames[0].document.forms[0].selectstudent.value=us;
+                window.frames[0].document.forms[0].submit();
+            }
+        }
+
+    </script>
+
+</head>
+<frameset id="frameSet" cols="208,*" border=0>
+    <frame id="frameMenu" src="/admin/students/more2.html?frn=~(studentfrn)" name="menu">
+    <frame id="frameContent" src="studentcontactschange.html?frn=~(studentfrn)&stagingcontactdcid=~[gpv:stagingcontactdcid]" name="content">
+</frameset>
+
+<noframes><body>
+
+<p>~[text:psx.html.admin_students.home.this_page_is_designed_to_be_viewed_by_a_browser_which_suppor]</body></noframes>
+
+</html>

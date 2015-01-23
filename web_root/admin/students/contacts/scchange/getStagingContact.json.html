@@ -22,7 +22,8 @@
         status,
         studentsdcid
     FROM u_student_contacts_staging
-    WHERE id=~[gpv:stagingcontactdcid];nonemessage={}
+    WHERE id=~[gpv:stagingcontactdcid]
+    and status <> -99;nonemessage={}
 ]
     {
         "record_id":"~(id;js)",

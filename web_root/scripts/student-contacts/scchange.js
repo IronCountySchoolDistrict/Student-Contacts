@@ -128,6 +128,7 @@
             first_name: $j('#live-first-name').val(),
             last_name: $j('#live-last-name').val(),
             priority: $j('#live-priority').val(),
+            relationship: $j('#live-relationship').val(),
             legal_guardian: $j('#live-legal-guardian').val(),
             residence_street: $j('#live-residence-street').val(),
             residence_city: $j('#live-residence-city').val(),
@@ -363,35 +364,47 @@
      *
      * @param stagingContactPhones {Array} - array of phone objects
      * @param contactRecordId {Number|String} - If a new phone record needs to be created, contactdcid of the live contact the new phone records will be linked to
+     * @param studentsdcid {Number|String}
      */
-    function migratePhones(stagingContactPhones, contactRecordId) {
+    function migratePhones(stagingContactPhones, contactRecordId, studentsdcid) {
         var phoneAjaxCalls = [];
-        $j.each(stagingContactPhones, function (index, stagingPhone) {
-            // If phoneId has id, then there is an existing phone record that should be updated
-            var livePhoneWithPriority = $j.grep(contactData.livePhones, function(elem) {
+        // The elements of stagingContactPhones are the objects that were pulled from the form.
+        $j.each(stagingContactPhones, function (index, stagingFormPhone) {
+            var stagingPhoneWithPriority = $j.grep(contactData.stagingPhones, function(elem) {
                 return elem.phone_priority == index + 1;
             });
-            if (livePhoneWithPriority.length > 0) {
-                livePhoneWithPriority = livePhoneWithPriority[0];
-            }
-            if (livePhoneWithPriority) {
-                phoneAjaxCalls.push(updatePhone(stagingPhone, livePhoneWithPriority.id));
-                phoneAjaxCalls.push(setPhoneStatusToMigrated(stagingPhone.id));
+            // If phoneId has id, then there is an existing phone record that should be updated
+            if (contactData.livePhones) {
+                var livePhoneWithPriority = $j.grep(contactData.livePhones, function(elem) {
+                    return elem.phone_priority == index + 1;
+                });
+                if (livePhoneWithPriority.length > 0) {
+                    livePhoneWithPriority = livePhoneWithPriority[0];
+                }
+                if (livePhoneWithPriority) {
+                    phoneAjaxCalls.push(updatePhone(stagingFormPhone, livePhoneWithPriority.id));
+                    phoneAjaxCalls.push(setPhoneStatusToMigrated(stagingPhoneWithPriority[0].id));
+                }
 
-
-            // no livePhoneWithPriority found, so create new phone
+            // no contactData.livePhones, so create new phones
             } else {
-                stagingPhone.contactdcid = contactRecordId;
-                var tlcPhone = phoneObjToTlc(stagingPhone);
+                stagingFormPhone.contactdcid = contactRecordId;
+                stagingFormPhone.studentsdcid = studentsdcid;
+                var tlcPhone = phoneObjToTlc(stagingFormPhone);
                 tlcPhone.ac = 'prim';
-                phoneAjaxCalls.push(newPhone(tlcPhone, stagingPhone.studentsdcid));
-                phoneAjaxCalls.push(setPhoneStatusToMigrated(stagingPhone.id));
+                phoneAjaxCalls.push(newPhone(tlcPhone, stagingFormPhone.studentsdcid));
+                phoneAjaxCalls.push(setPhoneStatusToMigrated(stagingPhoneWithPriority[0].id));
             }
         });
 
-        phoneAjaxCalls.then(function() {
+        if (phoneAjaxCalls.length > 0) {
+            $j.when.apply($j, phoneAjaxCalls).then(function() {
+                returnToStudentContacts();
+            });
+        } else {
             returnToStudentContacts();
-        });
+        }
+
     }
 
     /**
@@ -670,18 +683,28 @@
         });
     }
 
-    function returnToStudentContacts() {
-        // Set studentscreendoc to studentcontacts.html
-        $j.get('/admin/students/contacts/studentcontacts.html', function() {
+    function bindShowStagingAlreadyMigrated() {
 
-            // Go to home.html so we have frames -- normal looking student page.
-            window.location = '/admin/students/home.html?frn=001' + psData.studentDcid;
-        });
+        // If contactData.stagingContact is empty, that means the staging contact's status was set to -99, which means
+        // it has already been migrated, so show contact migrated status message.
+        if ($j.isEmptyObject(contactData.stagingContact)) {
+            $j('.button-row').eq(1).css({'display':'none'});
+            $j('#student-info-form').find('.box-round').css({'display':'none'});
+            $j('#staging-already-migrated').css({display: 'block'});
+            $j('#btnBack').on('click', function(event) {
+                event.preventDefault();
+                returnToStudentContacts();
+            })
+        }
+    }
+
+    function returnToStudentContacts() {
+        window.location = '/admin/students/contacts/studentcontacts.html?frn=001' + psData.studentDcid;
     }
 
 
     function fillForm() {
-        $j.getJSON('/admin/students/contacts/getStagingContact.json.html?stagingcontactdcid=' + psData.stagingContactDcid, function (stagingContact) {
+        $j.getJSON('/admin/students/contacts/scchange/getStagingContact.json.html?stagingcontactdcid=' + psData.stagingContactDcid, function (stagingContact) {
             if (stagingContact)
                 var extendedTableCalls = [];
 
@@ -699,6 +722,7 @@
                 highestPriority = highestPriorityResp[0];
 
                 contactData.stagingContact = stagingContact;
+                bindShowStagingAlreadyMigrated();
 
                 var safeHighestPriority;
                 if (highestPriority.priority) {
@@ -754,6 +778,7 @@
                                     fillFormLivePhone(livePhone, livePhone.phone_priority);
                                 });
                             }
+
                         });
                     }
                 });
@@ -771,14 +796,14 @@
                 setContactStatusToMigrated(contactData.stagingContact.record_id).done(function () {
 
                     // Is there is a live email record that should be updated
-                    if (contactData.liveEmail.id) {
+                    if (contactData.liveEmail) {
 
                             updateEmail(liveEmailFormData, contactData.liveEmail.id).done(function (updateEmailResp) {
                                 setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
 
                                     // If phone exists, save them
                                     if (contactData.stagingPhones) {
-                                        migratePhones(livePhonesFormData, contactData.liveContact.record_id);
+                                        migratePhones(livePhonesFormData, contactData.liveContact.record_id, studentsdcid);
                                     // If no phones exist, we're done, so go back to student contacts
                                     } else {
                                         returnToStudentContacts();
@@ -793,9 +818,7 @@
                             //Now that a new email record has been created, we can get its id in order
                             //to set its status to migrated.
                             setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
-                                if (contactData.stagingPhones) {
-                                    migratePhones(livePhonesFormData, contactData.liveContact.record_id);
-                                }
+                                migratePhones(livePhonesFormData, contactData.liveContact.record_id, studentsdcid);
                             });
                         });
                     }
@@ -830,13 +853,12 @@
                         $j.when.apply($j, newContactCalls).done(function (contactDcidResp, contactMigratedResp) {
 
                             // Is there a live email record to update?
-
                             if (contactData.liveEmail) {
                                 updateEmail(liveEmailFormData, contactData.liveEmail.id).done(function (updateEmailResp) {
                                     setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
                                         // If there are phones, save them
                                         if (contactData.stagingPhones) {
-                                            migratePhones(livePhonesFormData, contactData.liveContact.record_id);
+                                            migratePhones(livePhonesFormData, contactRecordId.id, studentsdcid);
                                         }
                                     });
                                 });
@@ -845,6 +867,9 @@
                             } else {
                                 //Set the new email's contactdcid to the new contact's id
                                 liveEmailFormData.contactdcid = contactRecordId.id;
+
+                                // emailObjToTlc needs to know what foreign key (studentsdcid) is, so add it liveEmailFormData
+                                liveEmailFormData.studentsdcid = studentsdcid;
                                 var tlcEmail = emailObjToTlc(liveEmailFormData);
                                 tlcEmail.ac = 'prim';
 
@@ -858,10 +883,9 @@
                                     }).done(function () {
 
                                         // Set staging email to migrated
-                                        setEmailStatusToMigrated(contactData.stagingContact.id).done(function () {
-                                             migratePhones(livePhonesFormData, contactData.liveContact.record_id);
+                                        setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
+                                             migratePhones(livePhonesFormData, contactRecordId.id, studentsdcid);
                                         });
-
                                     });
                                 });
                             }

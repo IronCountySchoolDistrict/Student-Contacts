@@ -1,0 +1,25 @@
+[
+    ~[tlist_sql;
+        SELECT
+            id,
+            contact_id,
+            contactdcid,
+            first_name,
+            last_name,
+            status,
+            studentsdcid
+        FROM u_student_contacts_staging
+        WHERE id=~[gpv:stagingcontactdcid]
+        and status <> -99;nonemessage={}
+    ]
+        {
+            "record_id":"~(id;js)",
+            "contact_id":"~(contact_id;js)",
+            "contactdcid":"~(contactdcid;js)",
+            "first_name":"~(first_name;js)",
+            "last_name":"~(last_name;js)",
+            "status":"~(status;js)",
+            "studentsdcid":"~(studentsdcid;js)"
+        },
+    [/tlist_sql]{}
+]
