@@ -18,6 +18,7 @@
         <field name="RESIDENCE_ZIP" type="String" length="10"/>
         <field name="EMPLOYER" type="String" length="40"/>
         <field name="NOTES" type="String" length="400"/>
+        <field name="CORRES_LANG" type="String" length="40" description="Language of correspondence"/>
         <field name="STATUS" type="Integer" description="Determines if the contact is active(0) or inactive(-2)."/>
         <field name="CONTACT_ID" type="Integer" description="Link between Contacts and Contacts Staging tables. Only needs to be unique among a single student's contacts."/>
         <field name="CONTACTDCID" type="Integer"/>
@@ -66,6 +67,7 @@
         <field name="RESIDENCE_ZIP" type="String" length="10"/>
         <field name="EMPLOYER" type="String" length="40"/>
         <field name="NOTES" type="String" length="400"/>
+        <field name="CORRES_LANG" type="String" length="40" description="Language of correspondence"/>
         <field name="STATUS" type="Integer" description="Determines if the contact is active(0) or inactive(-2)."/>
         <field name="CONTACT_ID" type="Integer" description="Link between Contacts and Contacts Staging tables. Only needs to be unique among a single student's contacts."/>
         <field name="CONTACTDCID" type="Integer"/>

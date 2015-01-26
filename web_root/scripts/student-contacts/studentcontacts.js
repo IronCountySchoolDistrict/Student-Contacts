@@ -766,7 +766,7 @@
                             // Set the right option of the legal guardian dropdown
                             var legalGuardianSelect = $editRow.find('#legal-guardian');
                             var legalGuardian = legalGuardianSelect.data().value;
-                            if (legalGuardian === "1") {
+                            if (legalGuardian.toString() === "1") {
                                 legalGuardianSelect.find('option[value="1"]').attr('selected', 'selected');
                             } else {
                                 legalGuardianSelect.find('option[value="0"]').attr('selected', 'selected');
