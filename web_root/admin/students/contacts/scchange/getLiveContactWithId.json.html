@@ -18,6 +18,7 @@
         mailing_zip,
         employer,
         notes,
+        corres_lang,
         studentsdcid
     FROM u_student_contacts
     WHERE studentsdcid=~[gpv:studentsdcid]
@@ -42,6 +43,7 @@
     "mailing_zip":"~(mailing_zip;js)",
     "employer":"~(employer;js)",
     "notes":"~(notes;js)",
+    "corres_lang":"~(corres_lang;js)",
     "studentsdcid":"~(studentsdcid;js)"
 }
 [/tlist_sql]

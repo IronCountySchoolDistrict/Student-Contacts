@@ -14,6 +14,7 @@
             id,
             contactdcid,
             email_address,
+            opts_emergency,
             opts_high_priority,
             opts_general,
             opts_attendance,
@@ -25,6 +26,7 @@
             "id": "~(id)",
             "contactdcid": "~(contactdcid)",
             "email_address": "~(email_address)",
+            "opts_emergency": "~(opts_emergency)",
             "opts_high_priority": "~(opts_high_priority)",
             "opts_general": "~(opts_general)",
             "opts_attendance": "~(opts_attendance)",
@@ -42,10 +44,12 @@
                 phone_type,
                 phone_extension,
                 phone_priority,
+                opts_voice_emergency,
                 opts_voice_high_priority,
                 opts_voice_general,
                 opts_voice_attendance,
                 opts_voice_survey,
+                opts_text_emergency,
                 opts_text_high_priority,
                 opts_text_general,
                 opts_text_attendance,
@@ -60,10 +64,12 @@
                 "phone_type": "~(phone_type)",
                 "phone_extension": "~(phone_extension)",
                 "phone_priority": "~(phone_priority)",
+                "opts_voice_emergency": "~(opts_voice_emergency)",
                 "opts_voice_high_priority": "~(opts_voice_high_priority)",
                 "opts_voice_general": "~(opts_voice_general)",
                 "opts_voice_attendance": "~(opts_voice_attendance)",
                 "opts_voice_survey": "~(opts_voice_survey)",
+                "opts_text_emergency": "~(opts_text_emergency)",
                 "opts_text_high_priority": "~(opts_text_high_priority)",
                 "opts_text_general": "~(opts_text_general)",
                 "opts_text_attendance": "~(opts_text_attendance)",
@@ -83,6 +89,7 @@
         last_name,
         relationship,
         legal_guardian,
+        corres_lang,
         residence_street,
         residence_city,
         residence_state,
@@ -107,7 +114,8 @@
                 "firstname":"~(first_name;js)",
                 "lastname":"~(last_name;js)",
                 "relation":"~(relationship;js)",
-                "legal_guardian": "~(legal_guardian;js)"
+                "legal_guardian": "~(legal_guardian;js)",
+                "corres_lang": "~(corres_lang)"
             },
             {
                 "residence_street":"~(residence_street;js)",
@@ -194,37 +202,29 @@ where studentsdcid=~[gpv:sdcid]
 </tr>
 
 <tr>
-    <td class="bold">Name</td>
     <td class="bold">
-        <span style="width: 112px; float: left;">
-            <input
-                    type="text"
-                    name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]first_name"
-                    id="first-name"
-                    value="~[tlist_sql; select first_name from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(first_name)[/tlist_sql]"
-                    style="width: 90px;"
-                    required/>
-        </span>
-        <span style="width: 112px; float: left;">
-            <input
-                    type="text"
-                    name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]last_name"
-                    id="last-name"
-                    value="~[tlist_sql; select last_name from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(last_name)[/tlist_sql]"
-                    size="15"
-                    required/>
-        </span>
+        First Name
     </td>
-    <td class="bold">Emergency<br/> Contact Priority</td>
+    <td class="bold">
+            <input type="text"
+                   name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]first_name"
+                   id="first-name"
+                   value="~[tlist_sql; select first_name from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(first_name)[/tlist_sql]"
+                   size="25"
+                   required/>
+    </td>
+    <td class="bold">
+        Last Name
+    </td>
     <td>
-        <select
-                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]priority"
-                id="priority"
-                data-value="~[tlist_sql; select priority from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(priority)[/tlist_sql]"
-                required>
-            <option></option>
-        </select>
+        <input type="text"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]last_name"
+               id="last-name"
+               value="~[tlist_sql; select last_name from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(last_name)[/tlist_sql]"
+               size="25"
+               required/>
     </td>
+
 </tr>
 <tr>
     <td class="bold">Relationship</td>
@@ -493,6 +493,27 @@ where studentsdcid=~[gpv:sdcid]
 </tr>
 
 <tr>
+    <td class="bold">Language of Correspondence:</td>
+    <td>
+        <select id="corres-lang"
+               data-value="~[tlist_sql; select corres_lang from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(corres_lang)[/tlist_sql]">
+            <option value="ENG">English</option>
+            <option value="SPA">Spanish</option>
+        </select>
+    </td>
+    <td class="bold">Emergency<br/> Contact Priority</td>
+    <td>
+        <select
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]priority"
+                id="priority"
+                data-value="~[tlist_sql; select priority from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(priority)[/tlist_sql]"
+                required>
+            <option></option>
+        </select>
+    </td>
+</tr>
+
+<tr>
     <td class="bold">
         Email:
     </td>
@@ -515,11 +536,21 @@ where studentsdcid=~[gpv:sdcid]
             </thead>
             <tbody>
                 <tr>
+                    <td>Emergency</td>
+                    <td>
+                        <input type="checkbox"
+                               id="email-opts-emergency"
+                               value="~[tlist_sql; select OPTS_EMERGENCY from u_sc_email where contactdcid=~[gpv:contactdcid]]~(OPTS_EMERGENCY)[/tlist_sql]"
+                               data-parsley-excluded
+                               data-parsley-ui-enabled="false">
+                    </td>
+                </tr>
+                <tr>
                     <td>High Priority</td>
                     <td>
                         <input type="checkbox"
                             id="email-opts-high-priority"
-                            value="~[tlist_sql; select OPTS_HIGH_PRIORITY from u_sc_email where contactdcid=~[gpv:contactdcid]]~(email)[/tlist_sql]"
+                            value="~[tlist_sql; select OPTS_HIGH_PRIORITY from u_sc_email where contactdcid=~[gpv:contactdcid]]~(OPTS_HIGH_PRIORITY)[/tlist_sql]"
                             data-parsley-excluded
                             data-parsley-ui-enabled="false">
                     </td>
@@ -528,7 +559,7 @@ where studentsdcid=~[gpv:sdcid]
                     <td>General</td>
                     <td><input type="checkbox"
                                id="email-opts-general"
-                               value="~[tlist_sql; select OPTS_GENERAL from u_sc_email where contactdcid=~[gpv:contactdcid]]~(email)[/tlist_sql]"
+                               value="~[tlist_sql; select OPTS_GENERAL from u_sc_email where contactdcid=~[gpv:contactdcid]]~(OPTS_GENERAL)[/tlist_sql]"
                                data-parsley-excluded
                                data-parsley-ui-enabled="false">
                     </td>
@@ -537,7 +568,7 @@ where studentsdcid=~[gpv:sdcid]
                     <td>Attendance</td>
                     <td><input type="checkbox"
                                id="email-opts-attendance"
-                               value="~[tlist_sql; select OPTS_ATTENDANCE from u_sc_email where contactdcid=~[gpv:contactdcid]]~(email)[/tlist_sql]"
+                               value="~[tlist_sql; select OPTS_ATTENDANCE from u_sc_email where contactdcid=~[gpv:contactdcid]]~(OPTS_ATTENDANCE)[/tlist_sql]"
                                data-parsley-excluded
                                data-parsley-ui-enabled="false">
                     </td>
@@ -626,13 +657,36 @@ where studentsdcid=~[gpv:sdcid]
                 <th>Text</th>
             </tr>
             <tr>
+                <td>Emergency</td>
+                <td>
+                    <input type="checkbox"
+                           id="phone1-opts-voice-emergency"
+                           data-parsley-excluded
+                           data-parsley-ui-enabled="false"
+                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
+                    ~(checked)
+                    [/tlist_sql]
+                    >
+                </td>
+                <td>
+                    <input type="checkbox"
+                           id="phone1-opts-text-emergency"
+                           data-parsley-excluded
+                           data-parsley-ui-enabled="false"
+                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
+                    ~(checked)
+                    [/tlist_sql]
+                    >
+                </td>
+            </tr>
+            <tr>
                 <td>High Priority</td>
                 <td>
                     <input type="checkbox"
                            id="phone1-opts-voice-high-priority"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_HIGH_PRIORITY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_HIGH_PRIORITY from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
+                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_HIGH_PRIORITY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
                                ~(checked)
                            [/tlist_sql]
                     >
@@ -642,7 +696,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone1-opts-text-high-priority"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_HIGH_PRIORITY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
+                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_HIGH_PRIORITY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
                                 ~(checked)
                            [/tlist_sql]
                     >
@@ -655,7 +709,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone1-opts-voice-general"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_GENERAL=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_ATTENDANCE from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
+                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_GENERAL=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
                                 ~(checked)
                            [/tlist_sql]
                     >
@@ -665,7 +719,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone1-opts-text-general"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_GENERAL=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_SURVEY from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
+                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_GENERAL=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
                                 ~(checked)
                            [/tlist_sql]
                     >
@@ -678,7 +732,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone1-opts-voice-attendance"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_ATTENDANCE=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_SURVEY from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
+                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_ATTENDANCE=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
                                 ~(checked)
                            [/tlist_sql]
                     >
@@ -688,7 +742,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone1-opts-text-attendance"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_ATTENDANCE=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_SURVEY from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
+                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_ATTENDANCE=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
                                ~(checked)
                            [/tlist_sql]
                     >
@@ -701,7 +755,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone1-opts-voice-survey"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_SURVEY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
+                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_SURVEY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
                                ~(checked)
                            [/tlist_sql]
                     >
@@ -711,7 +765,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone1-opts-text-survey"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_SURVEY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_SURVEY from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
+                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_SURVEY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
                                ~(checked)
                            [/tlist_sql]
                     >
@@ -787,13 +841,36 @@ where studentsdcid=~[gpv:sdcid]
                 <th>Text</th>
             </tr>
             <tr>
+                <td>Emergency</td>
+                <td>
+                    <input type="checkbox"
+                           id="phone2-opts-voice-emergency"
+                           data-parsley-excluded
+                           data-parsley-ui-enabled="false"
+                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
+                    ~(checked)
+                    [/tlist_sql]
+                    >
+                </td>
+                <td>
+                    <input type="checkbox"
+                           id="phone2-opts-text-emergency"
+                           data-parsley-excluded
+                           data-parsley-ui-enabled="false"
+                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
+                    ~(checked)
+                    [/tlist_sql]
+                    >
+                </td>
+            </tr>
+            <tr>
                 <td>High Priority</td>
                 <td>
                     <input type="checkbox"
                            id="phone2-opts-voice-high-priority"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_HIGH_PRIORITY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_HIGH_PRIORITY from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
+                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_HIGH_PRIORITY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
                               ~(checked)
                            [/tlist_sql]
                     >
@@ -803,7 +880,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone2-opts-text-high-priority"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_HIGH_PRIORITY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_HIGH_PRIORITY from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
+                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_HIGH_PRIORITY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
                                ~(checked)
                            [/tlist_sql]
                     >
@@ -816,7 +893,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone2-opts-voice-general"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_GENERAL=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
+                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_GENERAL=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
                                ~(checked)
                            [/tlist_sql]
                     >
@@ -826,7 +903,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone2-opts-text-general"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_GENERAL=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
+                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_GENERAL=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
                                ~(checked)
                            [/tlist_sql]
                     >
@@ -839,7 +916,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone2-opts-voice-attendance"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_ATTENDANCE=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
+                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_ATTENDANCE=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
                                ~(checked)
                            [/tlist_sql]>
                 </td>
@@ -848,7 +925,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone2-opts-text-attendance"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_ATTENDANCE=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
+                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_ATTENDANCE=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
                     ~(checked)
                     [/tlist_sql]>
                 </td>
@@ -860,7 +937,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone2-opts-voice-survey"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_SURVEY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
+                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_SURVEY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
                                ~(checked)
                            [/tlist_sql]>
                 </td>
@@ -869,7 +946,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone2-opts-text-survey"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_SURVEY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
+                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_SURVEY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
                     ~(checked)
                     [/tlist_sql]>
                 </td>
@@ -944,13 +1021,36 @@ where studentsdcid=~[gpv:sdcid]
                 <th>Text</th>
             </tr>
             <tr>
+                <td>Emergency</td>
+                <td>
+                    <input type="checkbox"
+                           id="phone3-opts-voice-emergency"
+                           data-parsley-excluded
+                           data-parsley-ui-enabled="false"
+                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
+                    ~(checked)
+                    [/tlist_sql]
+                    >
+                </td>
+                <td>
+                    <input type="checkbox"
+                           id="phone3-opts-text-emergency"
+                           data-parsley-excluded
+                           data-parsley-ui-enabled="false"
+                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
+                    ~(checked)
+                    [/tlist_sql]
+                    >
+                </td>
+            </tr>
+            <tr>
                 <td>High Priority</td>
                 <td>
                     <input type="checkbox"
                            id="phone3-opts-voice-high-priority"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_HIGH_PRIORITY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_HIGH_PRIORITY from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
+                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_HIGH_PRIORITY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
                     ~(checked)
                     [/tlist_sql]
                     >
@@ -960,7 +1060,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone3-opts-text-high-priority"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_HIGH_PRIORITY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_HIGH_PRIORITY from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
+                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_HIGH_PRIORITY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
                     ~(checked)
                     [/tlist_sql]
                     >
@@ -973,7 +1073,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone3-opts-voice-general"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_GENERAL=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
+                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_GENERAL=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
                     ~(checked)
                     [/tlist_sql]
                     >
@@ -983,7 +1083,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone3-opts-text-general"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_GENERAL=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
+                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_GENERAL=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
                     ~(checked)
                     [/tlist_sql]
                     >
@@ -996,7 +1096,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone3-opts-voice-attendance"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_ATTENDANCE=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
+                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_ATTENDANCE=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
                     ~(checked)
                     [/tlist_sql]>
                 </td>
@@ -1005,7 +1105,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone3-opts-text-attendance"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_ATTENDANCE=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
+                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_ATTENDANCE=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
                                ~(checked)
                            [/tlist_sql]
                     >
@@ -1018,7 +1118,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone3-opts-voice-survey"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_SURVEY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
+                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_SURVEY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
                     ~(checked)
                     [/tlist_sql]>
                 </td>
@@ -1027,7 +1127,7 @@ where studentsdcid=~[gpv:sdcid]
                            id="phone3-opts-text-survey"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_SURVEY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
+                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_SURVEY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
                     ~(checked)
                     [/tlist_sql]>
                 </td>
@@ -1350,6 +1450,20 @@ where studentsdcid=~[gpv:sdcid]
         </tr>
 
         <tr>
+            <td class="bold">Language of Correspondence:</td>
+            <td>
+                <select name="CF-[STUDENTS:~(rn;t).u_student_contacts.u_student_contacts:-1]corres_lang"
+                       id="corres-lang">
+                    <option selected="selected"></option>
+                    <option value="ENG">English</option>
+                    <option value="SPA">Spanish</option>
+                </select>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+
+        <tr>
             <td class="bold">
                 Email:
             </td>
@@ -1365,6 +1479,16 @@ where studentsdcid=~[gpv:sdcid]
                     <tr>
                         <th>Contact Type</th>
                         <th>Enable</th>
+                    </tr>
+                    <tr>
+                        <td>Emergency</td>
+                        <td>
+                            <input type="checkbox"
+                                   id="email-opts-emergency"
+                                   checked
+                                   data-parsley-excluded
+                                   data-parsley-ui-enabled="false">
+                        </td>
                     </tr>
                     <tr>
                         <td>High Priority</td>
@@ -1460,24 +1584,35 @@ where studentsdcid=~[gpv:sdcid]
                 <th>Text</th>
             </tr>
             <tr>
+                <td>Emergency</td>
+                <td>
+                    <input type="checkbox"
+                           id="phone1-opts-voice-emergency"
+                           checked
+                           data-parsley-excluded
+                           data-parsley-ui-enabled="false"/>
+                </td>
+                <td>
+                    <input type="checkbox"
+                           id="phone1-opts-text-emergency"
+                           checked
+                           data-parsley-excluded
+                           data-parsley-ui-enabled="false"/>
+                </td>
+            </tr>
+            <tr>
                 <td>High Priority</td>
                 <td>
                     <input type="checkbox"
                            id="phone1-opts-voice-high-priority"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_HIGH_PRIORITY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_HIGH_PRIORITY from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
-                               ~(checked)
-                           [/tlist_sql]>
+                           data-parsley-ui-enabled="false"/>
                 </td>
                 <td>
                     <input type="checkbox"
                            id="phone1-opts-text-high-priority"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_HIGH_PRIORITY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
-                               ~(checked)
-                           [/tlist_sql]>
+                           data-parsley-ui-enabled="false"/>
                 </td>
             </tr>
             <tr>
@@ -1486,21 +1621,13 @@ where studentsdcid=~[gpv:sdcid]
                     <input type="checkbox"
                            id="phone1-opts-voice-general"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_GENERAL=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_ATTENDANCE from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
-                               ~(checked)
-                           [/tlist_sql]
-                    >
+                           data-parsley-ui-enabled="false"/>
                 </td>
                 <td>
                     <input type="checkbox"
                            id="phone1-opts-text-general"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_GENERAL=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_SURVEY from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
-                               ~(checked)
-                           [/tlist_sql]
-                    >
+                           data-parsley-ui-enabled="false"/>
                 </td>
             </tr>
             <tr>
@@ -1509,21 +1636,13 @@ where studentsdcid=~[gpv:sdcid]
                     <input type="checkbox"
                            id="phone1-opts-voice-attendance"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_ATTENDANCE=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_SURVEY from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
-                               ~(checked)
-                           [/tlist_sql]
-                    >
+                           data-parsley-ui-enabled="false"/>
                 </td>
                 <td>
                     <input type="checkbox"
                            id="phone1-opts-text-attendance"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_ATTENDANCE=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_SURVEY from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
-                               ~(checked)
-                           [/tlist_sql]
-                    >
+                           data-parsley-ui-enabled="false"/>
                 </td>
             </tr>
             <tr>
@@ -1532,21 +1651,13 @@ where studentsdcid=~[gpv:sdcid]
                     <input type="checkbox"
                            id="phone1-opts-voice-survey"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_SURVEY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
-                                ~(checked)
-                           [/tlist_sql]
-                    >
+                           data-parsley-ui-enabled="false"/>
                 </td>
                 <td>
                     <input type="checkbox"
                            id="phone1-opts-text-survey"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_SURVEY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_SURVEY from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
-                               ~(checked)
-                           [/tlist_sql]
-                    >
+                           data-parsley-ui-enabled="false"/>
                 </td>
             </tr>
         </table>
@@ -1605,25 +1716,35 @@ where studentsdcid=~[gpv:sdcid]
                 <th>Text</th>
             </tr>
             <tr>
+                <td>Emergency</td>
+                <td>
+                    <input type="checkbox"
+                           id="phone2-opts-voice-emergency"
+                           checked
+                           data-parsley-excluded
+                           data-parsley-ui-enabled="false"/>
+                </td>
+                <td>
+                    <input type="checkbox"
+                           id="phone2-opts-text-emergency"
+                           checked
+                           data-parsley-excluded
+                           data-parsley-ui-enabled="false"/>
+                </td>
+            </tr>
+            <tr>
                 <td>High Priority</td>
                 <td>
                     <input type="checkbox"
                            id="phone2-opts-voice-high-priority"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_HIGH_PRIORITY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_HIGH_PRIORITY from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
-                    ~(checked)
-                    [/tlist_sql]
-                    >
+                           data-parsley-ui-enabled="false"/>
                 </td>
                 <td>
                     <input type="checkbox"
                            id="phone2-opts-text-high-priority"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_HIGH_PRIORITY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_HIGH_PRIORITY from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
-                    ~(checked)
-                    [/tlist_sql]>
+                           data-parsley-ui-enabled="false"/>
                 </td>
             </tr>
             <tr>
@@ -1632,20 +1753,13 @@ where studentsdcid=~[gpv:sdcid]
                     <input type="checkbox"
                            id="phone2-opts-voice-general"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_GENERAL=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
-                    ~(checked)
-                    [/tlist_sql]>
+                           data-parsley-ui-enabled="false"/>
                 </td>
                 <td>
                     <input type="checkbox"
                            id="phone2-opts-text-general"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_GENERAL=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
-                    ~(checked)
-                    [/tlist_sql]
-                    >
+                           data-parsley-ui-enabled="false"/>
                 </td>
             </tr>
             <tr>
@@ -1654,19 +1768,13 @@ where studentsdcid=~[gpv:sdcid]
                     <input type="checkbox"
                            id="phone2-opts-voice-attendance"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_ATTENDANCE=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
-                    ~(checked)
-                    [/tlist_sql]>
+                           data-parsley-ui-enabled="false"/>
                 </td>
                 <td>
                     <input type="checkbox"
                            id="phone2-opts-text-attendance"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_ATTENDANCE=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
-                    ~(checked)
-                    [/tlist_sql]>
+                           data-parsley-ui-enabled="false"/>
                 </td>
             </tr>
             <tr>
@@ -1675,19 +1783,13 @@ where studentsdcid=~[gpv:sdcid]
                     <input type="checkbox"
                            id="phone2-opts-voice-survey"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_SURVEY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
-                    ~(checked)
-                    [/tlist_sql]>
+                           data-parsley-ui-enabled="false"/>
                 </td>
                 <td>
                     <input type="checkbox"
                            id="phone2-opts-text-survey"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_SURVEY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
-                    ~(checked)
-                    [/tlist_sql]>
+                           data-parsley-ui-enabled="false"/>
                 </td>
             </tr>
         </table>
@@ -1745,24 +1847,35 @@ where studentsdcid=~[gpv:sdcid]
                 <th>Text</th>
             </tr>
             <tr>
+                <td>Emergency</td>
+                <td>
+                    <input type="checkbox"
+                           id="phone3-opts-voice-emergency"
+                           checked
+                           data-parsley-excluded
+                           data-parsley-ui-enabled="false"/>
+                </td>
+                <td>
+                    <input type="checkbox"
+                           id="phone3-opts-text-emergency"
+                           checked
+                           data-parsley-excluded
+                           data-parsley-ui-enabled="false"/>
+                </td>
+            </tr>
+            <tr>
                 <td>High Priority</td>
                 <td>
                     <input type="checkbox"
                            id="phone3-opts-voice-high-priority"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_HIGH_PRIORITY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_HIGH_PRIORITY from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
-                    ~(checked)
-                    [/tlist_sql]>
+                           data-parsley-ui-enabled="false"/>
                 </td>
                 <td>
                     <input type="checkbox"
                            id="phone3-opts-text-high-priority"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_HIGH_PRIORITY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_HIGH_PRIORITY from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
-                    ~(checked)
-                    [/tlist_sql]>
+                           data-parsley-ui-enabled="false"/>
                 </td>
             </tr>
             <tr>
@@ -1771,19 +1884,13 @@ where studentsdcid=~[gpv:sdcid]
                     <input type="checkbox"
                            id="phone3-opts-voice-general"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_GENERAL=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
-                    ~(checked)
-                    [/tlist_sql]>
+                           data-parsley-ui-enabled="false"/>
                 </td>
                 <td>
                     <input type="checkbox"
                            id="phone3-opts-text-general"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_GENERAL=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
-                    ~(checked)
-                    [/tlist_sql]>
+                           data-parsley-ui-enabled="false"/>
                 </td>
             </tr>
             <tr>
@@ -1792,20 +1899,13 @@ where studentsdcid=~[gpv:sdcid]
                     <input type="checkbox"
                            id="phone3-opts-voice-attendance"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_ATTENDANCE=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
-                    ~(checked)
-                    [/tlist_sql]>
+                           data-parsley-ui-enabled="false"/>
                 </td>
                 <td>
                     <input type="checkbox"
                            id="phone3-opts-text-attendance"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_ATTENDANCE=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
-                    ~(checked)
-                    [/tlist_sql]
-                    >
+                           data-parsley-ui-enabled="false"/>
                 </td>
             </tr>
             <tr>
@@ -1814,19 +1914,13 @@ where studentsdcid=~[gpv:sdcid]
                     <input type="checkbox"
                            id="phone3-opts-voice-survey"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_SURVEY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
-                    ~(checked)
-                    [/tlist_sql]>
+                           data-parsley-ui-enabled="false"/>
                 </td>
                 <td>
                     <input type="checkbox"
                            id="phone3-opts-text-survey"
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_SURVEY=1 THEN 'checked' ELSE '' END AS OPTS_VOICE_GENERAL from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
-                    ~(checked)
-                    [/tlist_sql]>
+                           data-parsley-ui-enabled="false"/>
                 </td>
             </tr>
         </table>
@@ -1836,7 +1930,6 @@ where studentsdcid=~[gpv:sdcid]
 
 <tr>
     <td colspan="4" align="right">
-        <!--end hidden sync fields.txt -->
         <input type="hidden" name="ac" value="prim"/>
         <button id="cancelbtn~[gpv:gidx]" class="button edit_cancel" type="button">Cancel</button>
         <button id="submitbtn~[gpv:gidx]" type="submit">Submit</button>

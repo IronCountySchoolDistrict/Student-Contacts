@@ -14,7 +14,8 @@
         }
         psData.studentFrn = "~(studentfrn)";
         psData.studentDcid = psData.studentFrn.slice(3);
-        psData.parent_verify = "~([students.U_Students_Extension]parent_verify)";
+        psData.parent_verify = "~([Students.U_Students_Extension]parent_verify)";
+        psData.enableDemoUpdate = "~([Students]enabledemoupdate)";
         psData.stagingContactDcid = "~[gpv:stagingcontactdcid]";
 
     </script>
@@ -47,8 +48,12 @@
                 </td>
             </tr>
             <tr>
-                <td class="bold">If this box is checked, any guardian can see demographics data and request changes
-                    (potential legal issues!):<input type="checkbox" name="[students]enabledemoupdate" id="enable-demo-update"/>
+                <td class="bold">
+                    Guardian Student Info Modify Access:
+                    <select id="enable-demo-update" data-value="~([Students]enabledemoupdate)">
+                        <option value="0">Enabled</option>
+                        <option value="1">Disabled</option>
+                    </select>
                 </td>
             </tr>
         </table>
@@ -97,22 +102,6 @@
                         class="staging"
                         value=""
                         size="30">
-                    
-                </td>
-            </tr>
-
-            <tr>
-                <td class="bold">Emergency Contact Priority</td>
-                <td>
-                    <select id="live-priority" required>
-                        <option></option>
-                    </select>
-                </td>
-                <td><input type="button" value="Approve" class="default-approve"/></td>
-                <td>
-                    <select id="staging-priority">
-                        <option></option>
-                    </select>
                 </td>
             </tr>
 
@@ -594,6 +583,39 @@
                         class="staging"
                         value=""
                         size="30"></textarea>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="bold">Language of Corrsepondence</td>
+                <td>
+                    <select id="live-corres-lang" required>
+                        <option value="ENG">English</option>
+                        <option value="SPA">Spanish</option>
+                    </select>
+                </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
+                    <select id="staging-corres-lang">
+                        <option></option>
+                        <option value="ENG">English</option>
+                        <option value="SPA">Spanish</option>
+                    </select>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="bold">Emergency Contact Priority</td>
+                <td>
+                    <select id="live-priority" required>
+                        <option></option>
+                    </select>
+                </td>
+                <td><input type="button" value="Approve" class="default-approve"/></td>
+                <td>
+                    <select id="staging-priority">
+                        <option></option>
+                    </select>
                 </td>
             </tr>
 

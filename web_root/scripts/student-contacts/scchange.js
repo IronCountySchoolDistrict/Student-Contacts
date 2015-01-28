@@ -54,6 +54,8 @@
         contactCoreData[keyName] = contactObject.employer;
         keyName = toContactTlcFieldName('notes', -1, contactObject.studentsdcid);
         contactCoreData[keyName] = contactObject.notes;
+        keyName = toContactTlcFieldName('corres_lang', -1, contactObject.studentsdcid);
+        contactCoreData[keyName] = contactObject.corres_lang;
         keyName = toContactTlcFieldName('status', -1, contactObject.studentsdcid, true);
         contactCoreData[keyName] = contactObject.status;
         return contactCoreData;
@@ -139,7 +141,8 @@
             mailing_state: $j('#live-mailing-state').val(),
             mailing_zip: $j('#live-mailing-zip').val(),
             employer: $j('#live-employer').val(),
-            notes: $j('#live-notes').val()
+            notes: $j('#live-notes').val(),
+            corres_lang: $j('#live-corres-lang').val()
         };
     }
 
@@ -277,7 +280,7 @@
             url: '/ws/schema/table/' + config.contactsTable + '/' + contactRecordId,
             data: JSON.stringify(contactDcidData),
             dataType: 'json',
-            contentType:"application/json; charset=utf-8",
+            contentType: "application/json; charset=utf-8",
             type: 'PUT'
         });
 
@@ -298,7 +301,7 @@
             url: '/ws/schema/table/' + config.contactsStagingTable + '/' + contactRecordId,
             data: JSON.stringify(contactDcidData),
             dataType: 'json',
-            contentType:"application/json; charset=utf-8",
+            contentType: "application/json; charset=utf-8",
             type: 'PUT'
         });
     }
@@ -318,7 +321,7 @@
             url: '/ws/schema/table/' + config.contactEmailStagingTable + '/' + emailRecordId,
             data: JSON.stringify(contactDcidData),
             dataType: 'json',
-            contentType:"application/json; charset=utf-8",
+            contentType: "application/json; charset=utf-8",
             type: 'PUT'
         });
     }
@@ -338,7 +341,7 @@
             url: '/ws/schema/table/' + config.contactPhoneStagingTable + '/' + phoneRecordId,
             data: JSON.stringify(contactDcidData),
             dataType: 'json',
-            contentType:"application/json; charset=utf-8",
+            contentType: "application/json; charset=utf-8",
             type: 'PUT'
         });
     }
@@ -432,7 +435,7 @@
             url: '/ws/schema/table/' + config.contactsTable + '/' + contactRecordId,
             data: JSON.stringify(contactUpdateData),
             dataType: 'json',
-            contentType:"application/json; charset=utf-8",
+            contentType: "application/json; charset=utf-8",
             type: 'PUT'
         });
     }
@@ -454,7 +457,7 @@
             url: '/ws/schema/table/' + config.contactsEmailTable + '/' + emailRecordId,
             data: JSON.stringify(emailUpdateData),
             dataType: 'json',
-            contentType:"application/json; charset=utf-8",
+            contentType: "application/json; charset=utf-8",
             type: 'PUT'
         });
     }
@@ -476,7 +479,7 @@
             url: '/ws/schema/table/' + config.contactsPhoneTable + '/' + phoneRecordId,
             data: JSON.stringify(phoneUpdateData),
             dataType: 'json',
-            contentType:"application/json; charset=utf-8",
+            contentType: "application/json; charset=utf-8",
             type: 'PUT'
         });
     }
@@ -522,6 +525,7 @@
         $j('#staging-mailing-zip').val(stagingContactData.mailing_zip);
         $j('#staging-employer').val(stagingContactData.employer);
         $j('#staging-notes').val(stagingContactData.notes);
+        $j('#staging-corres-lang').val(stagingContactData.corres_lang);
     }
 
     /**
@@ -543,6 +547,7 @@
         $j('#live-mailing-zip').val(liveContactData.mailing_zip);
         $j('#live-employer').val(liveContactData.employer);
         $j('#live-notes').val(liveContactData.notes);
+        $j('#live-corres-lang').val(liveContactData.corres_lang);
     }
 
     /**
@@ -718,22 +723,9 @@
         }
     }
 
-    function setEnableDemoUpdate() {
-        var enableDemoUpdateName = $j('#enable-demo-update').attr('name');
-        var postData = {
-            ac: 'prim'
-        };
-        postData[enableDemoUpdateName] = $j('#enable-demo-update').is(':checked') ? 'on': '';
-        return $j.ajax({
-            type: 'POST',
-            data: postData,
-            url: '/admin/changesrecorded.white.html'
-        });
-    }
-
-
     function fillForm() {
         $j.getJSON('/admin/students/contacts/scchange/getStagingContact.json.html?stagingcontactdcid=' + psData.stagingContactDcid, function (stagingContact) {
+
             if (stagingContact) {
                 showLastModified(stagingContact);
                 var extendedTableCalls = [];
@@ -818,119 +810,117 @@
     }
 
     function doSubmit() {
-        setEnableDemoUpdate().done(function() {
-            var studentsdcid = psData.studentDcid;
-            var liveContactFormData = getContactFormData();
-            var liveEmailFormData = getEmailFormData();
-            var livePhonesFormData = getPhoneFormData();
+        var studentsdcid = psData.studentDcid;
+        var liveContactFormData = getContactFormData();
+        var liveEmailFormData = getEmailFormData();
+        var livePhonesFormData = getPhoneFormData();
 
-            if (!$j.isEmptyObject(contactData.liveContact)) {
-                updateContact(liveContactFormData, contactData.liveContact.record_id).done(function (updateContactResp) {
-                    setContactStatusToMigrated(contactData.stagingContact.record_id).done(function () {
+        if (!$j.isEmptyObject(contactData.liveContact)) {
+            updateContact(liveContactFormData, contactData.liveContact.record_id).done(function (updateContactResp) {
+                setContactStatusToMigrated(contactData.stagingContact.record_id).done(function () {
 
-                        // Is there is a live email record that should be updated
-                        if (!$j.isEmptyObject(contactData.liveEmail)) {
+                    // Is there is a live email record that should be updated
+                    if (!$j.isEmptyObject(contactData.liveEmail)) {
 
-                            updateEmail(liveEmailFormData, contactData.liveEmail.id).done(function (updateEmailResp) {
-                                setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
+                        updateEmail(liveEmailFormData, contactData.liveEmail.id).done(function (updateEmailResp) {
+                            setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
 
-                                    // If phone exists, save them
-                                    if (!$j.isEmptyObject(contactData.stagingPhones)) {
-                                        migratePhones(livePhonesFormData, contactData.liveContact.record_id, studentsdcid);
-                                        // If no phones exist, we're done, so go back to student contacts
-                                    } else {
-                                        returnToStudentContacts();
-                                    }
-                                });
-                            });
-                            // Create a new live email record
-                        } else {
-                            var tlcEmail = emailObjToTlc(liveEmailFormData);
-                            tlcEmail.ac = 'prim';
-                            newEmail(tlcEmail, studentsdcid).then(function (newEmailResp) {
-                                //Now that a new email record has been created, we can get its id in order
-                                //to set its status to migrated.
-                                setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
+                                // If phone exists, save them
+                                if (!$j.isEmptyObject(contactData.stagingPhones)) {
                                     migratePhones(livePhonesFormData, contactData.liveContact.record_id, studentsdcid);
-                                });
-                            });
-                        }
-                    });
-                });
-
-            } else {
-                // Live contact was not found, so create a new contact.
-
-                // contactObjToTlc expects the liveContactFormData to contain contact_id and studentsdcid fields.
-                liveContactFormData.studentsdcid = studentsdcid;
-                liveContactFormData.contact_id = contactData.stagingContact.contact_id;
-                liveContactFormData.status = '0';
-                var tlcContact = contactObjToTlc(liveContactFormData);
-                tlcContact.ac = 'prim';
-
-                // Enable creating a new record by requesting page with tlist_child tag present
-                $j.get('/admin/students/contacts/scchange/contactTlcForm.html?frn=001' + studentsdcid, function (contactFormResp) {
-                    // Create new contact record
-                    $j.ajax({
-                        type: 'POST',
-                        url: '/admin/changesrecorded.white.html',
-                        data: tlcContact
-                    }).done(function (newContactResp) {
-
-                        $j.getJSON('/admin/students/contacts/getContactRecordId.json.html?contactid=' + contactData.stagingContact.contact_id + '&studentsdcid=' + studentsdcid, function (contactRecordId) {
-                            var newContactCalls = [];
-
-                            // Set live contact's contactdcid field
-                            newContactCalls.push(setContactDcid(contactRecordId.id));
-                            // Set the staging contact's status to the migrated status (so we can delete later)
-                            newContactCalls.push(setContactStatusToMigrated(contactData.stagingContact.record_id));
-                            $j.when.apply($j, newContactCalls).done(function (contactDcidResp, contactMigratedResp) {
-
-                                // Is there a live email record to update?
-                                if (!$j.isEmptyObject(contactData.liveEmail)) {
-                                    updateEmail(liveEmailFormData, contactData.liveEmail.id).done(function (updateEmailResp) {
-                                        setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
-                                            // If there are phones, save them
-                                            if (contactData.stagingPhones) {
-                                                migratePhones(livePhonesFormData, contactRecordId.id, studentsdcid);
-                                            }
-                                        });
-                                    });
-
-                                    // There isn't a live email to update, so create a new one
+                                    // If no phones exist, we're done, so go back to student contacts
                                 } else {
-                                    //Set the new email's contactdcid to the new contact's id
-                                    liveEmailFormData.contactdcid = contactRecordId.id;
-
-                                    // emailObjToTlc needs to know what foreign key (studentsdcid) is, so add it liveEmailFormData
-                                    liveEmailFormData.studentsdcid = studentsdcid;
-                                    var tlcEmail = emailObjToTlc(liveEmailFormData);
-                                    tlcEmail.ac = 'prim';
-
-                                    // Enable new email operation
-                                    $j.get('/admin/students/contacts/massimport/emailTlcForm.html?frn=001' + studentsdcid, function (emailFormResp) {
-                                        //Create new email
-                                        $j.ajax({
-                                            type: 'POST',
-                                            url: '/admin/changesrecorded.white.html',
-                                            data: tlcEmail
-                                        }).done(function () {
-
-                                            // Set staging email to migrated
-                                            setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
-                                                migratePhones(livePhonesFormData, contactRecordId.id, studentsdcid);
-                                            });
-                                        });
-                                    });
+                                    returnToStudentContacts();
                                 }
                             });
-                        }).fail(function () {
-                            console.log('couldnt get id of new record -- studentsdcid =' + contact.studentsdcid + ', first_name=' + contact.first_name + ' last_name=' + contact.last_name);
                         });
+                        // Create a new live email record
+                    } else {
+                        var tlcEmail = emailObjToTlc(liveEmailFormData);
+                        tlcEmail.ac = 'prim';
+                        newEmail(tlcEmail, studentsdcid).then(function (newEmailResp) {
+                            //Now that a new email record has been created, we can get its id in order
+                            //to set its status to migrated.
+                            setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
+                                migratePhones(livePhonesFormData, contactData.liveContact.record_id, studentsdcid);
+                            });
+                        });
+                    }
+                });
+            });
+
+        } else {
+            // Live contact was not found, so create a new contact.
+
+            // contactObjToTlc expects the liveContactFormData to contain contact_id and studentsdcid fields.
+            liveContactFormData.studentsdcid = studentsdcid;
+            liveContactFormData.contact_id = contactData.stagingContact.contact_id;
+            liveContactFormData.status = '0';
+            var tlcContact = contactObjToTlc(liveContactFormData);
+            tlcContact.ac = 'prim';
+
+            // Enable creating a new record by requesting page with tlist_child tag present
+            $j.get('/admin/students/contacts/scchange/contactTlcForm.html?frn=001' + studentsdcid, function (contactFormResp) {
+                // Create new contact record
+                $j.ajax({
+                    type: 'POST',
+                    url: '/admin/changesrecorded.white.html',
+                    data: tlcContact
+                }).done(function (newContactResp) {
+
+                    $j.getJSON('/admin/students/contacts/getContactRecordId.json.html?contactid=' + contactData.stagingContact.contact_id + '&studentsdcid=' + studentsdcid, function (contactRecordId) {
+                        var newContactCalls = [];
+
+                        // Set live contact's contactdcid field
+                        newContactCalls.push(setContactDcid(contactRecordId.id));
+                        // Set the staging contact's status to the migrated status (so we can delete later)
+                        newContactCalls.push(setContactStatusToMigrated(contactData.stagingContact.record_id));
+                        $j.when.apply($j, newContactCalls).done(function (contactDcidResp, contactMigratedResp) {
+
+                            // Is there a live email record to update?
+                            if (!$j.isEmptyObject(contactData.liveEmail)) {
+                                updateEmail(liveEmailFormData, contactData.liveEmail.id).done(function (updateEmailResp) {
+                                    setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
+                                        // If there are phones, save them
+                                        if (contactData.stagingPhones) {
+                                            migratePhones(livePhonesFormData, contactRecordId.id, studentsdcid);
+                                        }
+                                    });
+                                });
+
+                                // There isn't a live email to update, so create a new one
+                            } else {
+                                //Set the new email's contactdcid to the new contact's id
+                                liveEmailFormData.contactdcid = contactRecordId.id;
+
+                                // emailObjToTlc needs to know what foreign key (studentsdcid) is, so add it liveEmailFormData
+                                liveEmailFormData.studentsdcid = studentsdcid;
+                                var tlcEmail = emailObjToTlc(liveEmailFormData);
+                                tlcEmail.ac = 'prim';
+
+                                // Enable new email operation
+                                $j.get('/admin/students/contacts/massimport/emailTlcForm.html?frn=001' + studentsdcid, function (emailFormResp) {
+                                    //Create new email
+                                    $j.ajax({
+                                        type: 'POST',
+                                        url: '/admin/changesrecorded.white.html',
+                                        data: tlcEmail
+                                    }).done(function () {
+
+                                        // Set staging email to migrated
+                                        setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
+                                            migratePhones(livePhonesFormData, contactRecordId.id, studentsdcid);
+                                        });
+                                    });
+                                });
+                            }
+                        });
+                    }).fail(function () {
+                        console.log('couldnt get id of new record -- studentsdcid =' + contact.studentsdcid + ', first_name=' + contact.first_name + ' last_name=' + contact.last_name);
                     });
                 });
-            }
-        });
+            });
+        }
 
     }
 

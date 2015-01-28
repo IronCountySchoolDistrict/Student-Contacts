@@ -30,10 +30,12 @@
         <field name="PHONE_TYPE" type="String" length="10"/>
         <field name="PHONE_PRIORITY" type="Integer"/>
         <field name="PHONE_EXTENSION" type="Integer"/>
+        <field name="OPTS_VOICE_EMERGENCY" type="Boolean"/>
         <field name="OPTS_VOICE_HIGH_PRIORITY" type="Boolean"/>
         <field name="OPTS_VOICE_SURVEY" type="Boolean"/>
         <field name="OPTS_VOICE_ATTENDANCE" type="Boolean"/>
         <field name="OPTS_VOICE_GENERAL" type="Boolean"/>
+        <field name="OPTS_TEXT_EMERGENCY" type="Boolean"/>
         <field name="OPTS_TEXT_HIGH_PRIORITY" type="Boolean"/>
         <field name="OPTS_TEXT_SURVEY" type="Boolean"/>
         <field name="OPTS_TEXT_ATTENDANCE" type="Boolean"/>
@@ -44,6 +46,7 @@
     <extendedTable coreTable="Students" dbTableName="u_sc_email_staging" childName="u_sc_email_staging" comment="">
         <field name="CONTACTDCID" type="String" length="40" description="Contact_staging's ID field that is used as the foreign key, not to be confused with CONTACT_ID."/>
         <field name="EMAIL_ADDRESS" type="String" length="60"/>
+        <field name="OPTS_EMERGENCY" type="Boolean"/>
         <field name="OPTS_HIGH_PRIORITY" type="Boolean"/>
         <field name="OPTS_SURVEY" type="Boolean"/>
         <field name="OPTS_ATTENDANCE" type="Boolean"/>
@@ -79,10 +82,12 @@
         <field name="PHONE_TYPE" type="String" length="10"/>
         <field name="PHONE_PRIORITY" type="Integer"/>
         <field name="PHONE_EXTENSION" type="Integer"/>
+        <field name="OPTS_VOICE_EMERGENCY" type="Boolean"/>
         <field name="OPTS_VOICE_HIGH_PRIORITY" type="Boolean"/>
         <field name="OPTS_VOICE_SURVEY" type="Boolean"/>
         <field name="OPTS_VOICE_ATTENDANCE" type="Boolean"/>
         <field name="OPTS_VOICE_GENERAL" type="Boolean"/>
+        <field name="OPTS_TEXT_EMERGENCY" type="Boolean"/>
         <field name="OPTS_TEXT_HIGH_PRIORITY" type="Boolean"/>
         <field name="OPTS_TEXT_SURVEY" type="Boolean"/>
         <field name="OPTS_TEXT_ATTENDANCE" type="Boolean"/>
@@ -92,6 +97,7 @@
     <extendedTable coreTable="Students" dbTableName="u_sc_email" childName="u_sc_email" comment="">
         <field name="CONTACTDCID" type="String" length="40" description="Contact's ID field that is used as the foreign key, not to be confused with CONTACT_ID."/>
         <field name="EMAIL_ADDRESS" type="String" length="60"/>
+        <field name="OPTS_EMERGENCY" type="Boolean"/>
         <field name="OPTS_HIGH_PRIORITY" type="Boolean"/>
         <field name="OPTS_SURVEY" type="Boolean"/>
         <field name="OPTS_ATTENDANCE" type="Boolean"/>

@@ -90,11 +90,14 @@
                             }
                             result += '<p style="font-weight:bold;">' + info.firstname + ' ' + info.lastname + '</p>';
                             if (info.priority) {
-                                result += '<span style="font-size:8pt;">(Contact Priority #' + info.priority + ')</span><br />';
+                                result += '<span style="font-size:8pt; display: block;">(Contact Priority #' + info.priority + ')</span>';
                             }
-                            result += '<span style="font-size:8pt;">(' + info.relation + ')</span>';
+                            result += '<span style="font-size:8pt; display: block;">(' + info.relation + ')</span>';
                             if (info.legal_guardian === "1") {
-                                result += '<br /><span style="font-size:8pt;">(Legal Guardian)</span><br />';
+                                result += '<span style="font-size:8pt; display: block;">(Legal Guardian)</span>';
+                            }
+                            if (info.corres_lang !== "") {
+                                result += '<span style="font-size:8pt; display: block;">(' + info.corres_lang + ')</span>';
                             }
                             return result;
                         },
@@ -510,6 +513,8 @@
                                             contactCoreData[keyName] = $('#employer').val();
                                             keyName = toTlcFieldName('notes', -1, psData.studentdcid);
                                             contactCoreData[keyName] = $('#notes').val();
+                                            keyName = toTlcFieldName('corres_lang', -1, psData.studentdcid);
+                                            contactCoreData[keyName] = $('#corres-lang').val();
                                             keyName = toTlcFieldName('status', -1, psData.studentdcid, true);
                                             contactCoreData[keyName] = "0";
                                             return contactCoreData;
@@ -756,12 +761,7 @@
                             // Set the right option of the relationship dropdown
                             var relationshipSelect = $editRow.find('#relationship');
                             var relationship = relationshipSelect.data().value;
-                            var relationshipOptions = relationshipSelect.find('option');
-                            $.each(relationshipOptions, function (index, option) {
-                                if ($(option).val() === relationship) {
-                                    $(option).attr('selected', 'selected');
-                                }
-                            });
+                            relationshipSelect.val(relationship);
 
                             // Set the right option of the legal guardian dropdown
                             var legalGuardianSelect = $editRow.find('#legal-guardian');
@@ -770,6 +770,15 @@
                                 legalGuardianSelect.find('option[value="1"]').attr('selected', 'selected');
                             } else {
                                 legalGuardianSelect.find('option[value="0"]').attr('selected', 'selected');
+                            }
+
+                            //Set the right option of the language of correspondence dropdown
+                            var corresLangSelect = $editRow.find('#corres-lang');
+                            var corresLangVal = corresLangSelect.data().value;
+                            corresLangSelect.val(corresLangVal);
+                            // If nothing was selected, select the English default option
+                            if (corresLangSelect.data().value === '') {
+                                corresLangSelect.val('ENG');
                             }
 
                             // Set the right option for the residence state dropdown
@@ -794,6 +803,9 @@
                             var numberOfContacts = Object.keys(contactsCollection).length;
 
                             // Set email contact options checkboxes to checked
+                            if ($('#email-opts-emergency').attr('value') === '1') {
+                                $('#email-opts-emergency').attr('checked', 'checked');
+                            }
                             if ($('#email-opts-high-priority').attr('value') === '1') {
                                 $('#email-opts-high-priority').attr('checked', 'checked');
                             }
@@ -806,7 +818,6 @@
                             if ($('#email-opts-survey').attr('value') === '1') {
                                 $('#email-opts-survey').attr('checked', 'checked');
                             }
-
 
                             $('form', editrow).submit(function (event) {
                                 event.preventDefault();
@@ -895,7 +906,8 @@
                                     mailing_state: $('#mailing-state').val(),
                                     mailing_zip: $('#mailing-zip').val(),
                                     employer: $('#employer').val(),
-                                    notes: $('#notes').val()
+                                    notes: $('#notes').val(),
+                                    corres_lang: $('#corres-lang').val()
                                 };
 
                                 var contactEmailData = {
@@ -906,6 +918,7 @@
                                 contactEmailData.tables[config.contactsEmailTable] = {
                                     email_address: $('#email').val(),
                                     contactdcid: contactsCollection[contactId][1].record_id.toString(),
+                                    opts_emergency: $('#email-opts-emergency').is(':checked') ? "1" : "",
                                     opts_high_priority: $('#email-opts-high-priority').is(':checked') ? "1" : "",
                                     opts_general: $('#email-opts-general').is(':checked') ? "1" : "",
                                     opts_attendance: $('#email-opts-attendance').is(':checked') ? "1" : "",
@@ -942,10 +955,12 @@
                                                 "phone_type": phoneTypeElem.val(),
                                                 "phone_extension": phoneExtElem.val(),
                                                 "phone_priority": i.toString(),
+                                                "opts_voice_emergency": $('#phone' + i + '-opts-voice-emergency').is(':checked') ? "1" : "",
                                                 "opts_voice_high_priority": $('#phone' + i + '-opts-voice-high-priority').is(':checked') ? "1" : "",
                                                 "opts_voice_general": $('#phone' + i + '-opts-voice-general').is(':checked') ? "1" : "",
                                                 "opts_voice_attendance": $('#phone' + i + '-opts-voice-attendance').is(':checked') ? "1" : "",
                                                 "opts_voice_survey": $('#phone' + i + '-opts-voice-survey').is(':checked') ? "1" : "",
+                                                "opts_text_emergency": $('#phone' + i + '-opts-text-emergency').is(':checked') ? "1" : "",
                                                 "opts_text_high_priority": $('#phone' + i + '-opts-text-high-priority').is(':checked') ? "1" : "",
                                                 "opts_text_general": $('#phone' + i + '-opts-text-general').is(':checked') ? "1" : "",
                                                 "opts_text_attendance": $('#phone' + i + '-opts-text-attendance').is(':checked') ? "1" : "",
