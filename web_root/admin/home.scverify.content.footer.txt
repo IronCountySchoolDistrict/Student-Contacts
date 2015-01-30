@@ -1,12 +1,12 @@
 <style>
-    #student-info-link {
+    .verify-link {
         font-weight: bold;
         color: #FF0000;
     }
 </style>
 
 <script type="text/template" id="student-contacts-verify-template">
-    <a id="student-contacts-verify-link">
+    <a class="verify-link" id="student-contacts-verify-link">
         Student Contacts Verify
     </a>
 </script>

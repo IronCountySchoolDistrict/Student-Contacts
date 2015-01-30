@@ -720,7 +720,7 @@
                             $editRow.find('.zip').inputmask('99999');
 
                             // Only bind input mask to email field if the guardian email doesn't have commas
-                            var guardianEmail = $editRow.find('#guardianemail').text();
+                            var guardianEmail = $editRow.find('#email').text();
                             if (guardianEmail.indexOf(',') === -1) {
                                 $editRow.find('#email').inputmask({'alias': 'email'});
                             }
