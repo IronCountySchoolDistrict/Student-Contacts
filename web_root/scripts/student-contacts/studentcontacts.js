@@ -245,7 +245,7 @@
                     url: url,
                     data: JSON.stringify(contactData),
                     dataType: 'json',
-                    contentType: 'json',
+                    contentType: 'application/json; charset=utf-8',
                     type: type,
                     async: async
                 });
@@ -571,7 +571,7 @@
                                                 url: '/ws/schema/table/' + config.contactsTable + '/' + contactRecordId,
                                                 data: JSON.stringify(contactDcidData),
                                                 dataType: 'json',
-                                                contentType: 'json',
+                                                contentType: 'application/json; charset=utf-8',
                                                 type: 'PUT'
                                             });
 
@@ -1081,7 +1081,7 @@
                             data: JSON.stringify(postData),
                             type: "PUT",
                             dataType: "json",
-                            contentType: "json"
+                            contentType: 'application/json; charset=utf-8'
                         })
                             .success(function () {
                                 refreshContact(contactId, row);
@@ -1113,7 +1113,7 @@
                             data: JSON.stringify(postData),
                             type: "PUT",
                             dataType: "json",
-                            contentType: "json"
+                            contentType: 'application/json; charset=utf-8'
                         })
                             .success(function () {
                                 refreshContact(contactId, row);

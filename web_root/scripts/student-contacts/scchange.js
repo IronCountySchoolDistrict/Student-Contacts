@@ -384,6 +384,7 @@
                 if (livePhoneWithPriority.length > 0) {
                     livePhoneWithPriority = livePhoneWithPriority[0];
                     phoneAjaxCalls.push(updatePhone(stagingFormPhone, livePhoneWithPriority.id));
+                    if (!$j.isEmptyObject
                     phoneAjaxCalls.push(setPhoneStatusToMigrated(stagingPhoneWithPriority[0].id));
                 } else {
 
@@ -908,9 +909,13 @@
                                     }).done(function () {
 
                                         // Set staging email to migrated
-                                        setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
+                                        if (!$j.isEmptyObject(contactData.stagingEmail)) {
+                                            setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
+                                                migratePhones(livePhonesFormData, contactRecordId.id, studentsdcid);
+                                            });
+                                        } else {
                                             migratePhones(livePhonesFormData, contactRecordId.id, studentsdcid);
-                                        });
+                                        }
                                     });
                                 });
                             }
