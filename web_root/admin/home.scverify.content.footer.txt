@@ -30,8 +30,8 @@
         loadingTemplate.insertAfter(loadingSelector);
 
         $j.getJSON('/admin/students/contacts/pending-contacts/getStagingContactsCount.json.html', function(stuContactsResp) {
+            var insertSelector = $j('[href^="/admin/storedselections"]');
             if (stuContactsResp.studentContactsCount !== '0') {
-                var insertSelector = $j('[href^="/admin/storedselections"]');
 
                 var contactsCount = stuContactsResp.studentContactsCount;
 
