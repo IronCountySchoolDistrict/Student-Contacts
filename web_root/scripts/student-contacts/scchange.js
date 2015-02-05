@@ -384,8 +384,9 @@
                 if (livePhoneWithPriority.length > 0) {
                     livePhoneWithPriority = livePhoneWithPriority[0];
                     phoneAjaxCalls.push(updatePhone(stagingFormPhone, livePhoneWithPriority.id));
-                    if (!$j.isEmptyObject
-                    phoneAjaxCalls.push(setPhoneStatusToMigrated(stagingPhoneWithPriority[0].id));
+                    if (!$j.isEmptyObject(stagingPhoneWithPriority[0])) {
+                        phoneAjaxCalls.push(setPhoneStatusToMigrated(stagingPhoneWithPriority[0].id));
+                    }
                 } else {
 
                     // There exists at least one live phone for this contact, but there was no phone that matches this priority,
@@ -395,7 +396,9 @@
                     var tlcPhone = phoneObjToTlc(stagingFormPhone);
                     tlcPhone.ac = 'prim';
                     phoneAjaxCalls.push(newPhone(tlcPhone, stagingFormPhone.studentsdcid));
-                    phoneAjaxCalls.push(setPhoneStatusToMigrated(stagingPhoneWithPriority[0].id));
+                    if (!$j.isEmptyObject(stagingPhoneWithPriority[0])) {
+                        phoneAjaxCalls.push(setPhoneStatusToMigrated(stagingPhoneWithPriority[0].id));
+                    }
                 }
 
                 // no contactData.livePhones, so create new phones
@@ -405,7 +408,9 @@
                 var tlcPhone = phoneObjToTlc(stagingFormPhone);
                 tlcPhone.ac = 'prim';
                 phoneAjaxCalls.push(newPhone(tlcPhone, stagingFormPhone.studentsdcid));
-                phoneAjaxCalls.push(setPhoneStatusToMigrated(stagingPhoneWithPriority[0].id));
+                if (!$j.isEmptyObject(stagingPhoneWithPriority[0])) {
+                    phoneAjaxCalls.push(setPhoneStatusToMigrated(stagingPhoneWithPriority[0].id));
+                }
             }
         });
 
@@ -824,8 +829,18 @@
                     if (!$j.isEmptyObject(contactData.liveEmail)) {
 
                         updateEmail(liveEmailFormData, contactData.liveEmail.id).done(function (updateEmailResp) {
-                            setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
+                            if (!$j.isEmptyObject(contactData.stagingEmail)) {
+                                setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
 
+                                    // If phone exists, save them
+                                    if (!$j.isEmptyObject(contactData.stagingPhones)) {
+                                        migratePhones(livePhonesFormData, contactData.liveContact.record_id, studentsdcid);
+                                        // If no phones exist, we're done, so go back to student contacts
+                                    } else {
+                                        returnToStudentContacts();
+                                    }
+                                });
+                            } else {
                                 // If phone exists, save them
                                 if (!$j.isEmptyObject(contactData.stagingPhones)) {
                                     migratePhones(livePhonesFormData, contactData.liveContact.record_id, studentsdcid);
@@ -833,7 +848,7 @@
                                 } else {
                                     returnToStudentContacts();
                                 }
-                            });
+                            }
                         });
                         // Create a new live email record
                     } else {
@@ -881,12 +896,22 @@
                             // Is there a live email record to update?
                             if (!$j.isEmptyObject(contactData.liveEmail)) {
                                 updateEmail(liveEmailFormData, contactData.liveEmail.id).done(function (updateEmailResp) {
-                                    setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
-                                        // If there are phones, save them
-                                        if (contactData.stagingPhones) {
-                                            migratePhones(livePhonesFormData, contactRecordId.id, studentsdcid);
+                                    if (!$j.isEmptyObject(contactData.stagingEmail)) {
+                                        setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
+                                            // If there are phones, save them
+                                            if (contactData.stagingPhones) {
+                                                migratePhones(livePhonesFormData, contactRecordId.id, studentsdcid);
+                                            }
+                                        });
+                                    } else {
+                                        // If phone exists, save them
+                                        if (!$j.isEmptyObject(contactData.stagingPhones)) {
+                                            migratePhones(livePhonesFormData, contactData.liveContact.record_id, studentsdcid);
+                                            // If no phones exist, we're done, so go back to student contacts
+                                        } else {
+                                            returnToStudentContacts();
                                         }
-                                    });
+                                    }
                                 });
 
                                 // There isn't a live email to update, so create a new one
