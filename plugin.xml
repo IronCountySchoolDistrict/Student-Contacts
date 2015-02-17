@@ -26,9 +26,7 @@
         <field table="U_STUDENT_CONTACTS_STAGING" field="STATUS" access="FullAccess" />
         <field table="U_STUDENT_CONTACTS_STAGING" field="CONTACT_ID" access="FullAccess" />
         <field table="U_STUDENT_CONTACTS_STAGING" field="CONTACTDCID" access="FullAccess" />
-    </access_request>
 
-    <access_request>
         <field table="U_SC_PHONE_STAGING" field="CONTACTDCID" access="FullAccess"/>
         <field table="U_SC_PHONE_STAGING" field="PHONE_NUMBER" access="FullAccess"/>
         <field table="U_SC_PHONE_STAGING" field="PHONE_TYPE" access="FullAccess"/>
@@ -45,9 +43,7 @@
         <field table="U_SC_PHONE_STAGING" field="OPTS_TEXT_ATTENDANCE" access="FullAccess"/>
         <field table="U_SC_PHONE_STAGING" field="OPTS_TEXT_GENERAL" access="FullAccess"/>
         <field table="U_SC_PHONE_STAGING" field="STATUS" access="FullAccess"/>
-    </access_request>
 
-    <access_request>
         <field table="U_SC_EMAIL_STAGING" field="CONTACTDCID" access="FullAccess"/>
         <field table="U_SC_EMAIL_STAGING" field="EMAIL_ADDRESS" access="FullAccess"/>
         <field table="U_SC_EMAIL_STAGING" field="OPTS_EMERGENCY" access="FullAccess"/>
@@ -56,9 +52,7 @@
         <field table="U_SC_EMAIL_STAGING" field="OPTS_ATTENDANCE" access="FullAccess"/>
         <field table="U_SC_EMAIL_STAGING" field="OPTS_GENERAL" access="FullAccess"/>
         <field table="U_SC_EMAIL_STAGING" field="STATUS" access="FullAccess"/>
-    </access_request>
 
-    <access_request>
         <field table="U_STUDENT_CONTACTS" field="PRIORITY" access="FullAccess" />
         <field table="U_STUDENT_CONTACTS" field="LEGAL_GUARDIAN" access="FullAccess" />
         <field table="U_STUDENT_CONTACTS" field="LAST_NAME" access="FullAccess" />
@@ -78,9 +72,7 @@
         <field table="U_STUDENT_CONTACTS" field="STATUS" access="FullAccess" />
         <field table="U_STUDENT_CONTACTS" field="CONTACT_ID" access="FullAccess" />
         <field table="U_STUDENT_CONTACTS" field="CONTACTDCID" access="FullAccess" />
-    </access_request>
 
-    <access_request>
         <field table="U_SC_PHONE" field="CONTACTDCID" access="FullAccess"/>
         <field table="U_SC_PHONE" field="PHONE_NUMBER" access="FullAccess"/>
         <field table="U_SC_PHONE" field="PHONE_TYPE" access="FullAccess"/>
@@ -96,10 +88,7 @@
         <field table="U_SC_PHONE" field="OPTS_TEXT_SURVEY" access="FullAccess"/>
         <field table="U_SC_PHONE" field="OPTS_TEXT_ATTENDANCE" access="FullAccess"/>
         <field table="U_SC_PHONE" field="OPTS_TEXT_GENERAL" access="FullAccess"/>
-        <field table="U_SC_PHONE" field="STATUS" access="FullAccess"/>
-    </access_request>
 
-    <access_request>
         <field table="U_SC_EMAIL" field="CONTACTDCID" access="FullAccess"/>
         <field table="U_SC_EMAIL" field="EMAIL_ADDRESS" access="FullAccess"/>
         <field table="U_SC_EMAIL" field="OPTS_EMERGENCY" access="FullAccess"/>
@@ -107,10 +96,7 @@
         <field table="U_SC_EMAIL" field="OPTS_SURVEY" access="FullAccess"/>
         <field table="U_SC_EMAIL" field="OPTS_ATTENDANCE" access="FullAccess"/>
         <field table="U_SC_EMAIL" field="OPTS_GENERAL" access="FullAccess"/>
-        <field table="U_SC_EMAIL" field="STATUS" access="FullAccess"/>
     </access_request>
-
-
 
     <publisher name="Iron County School District Data Team">
         <contact email="data@ironmail.org"/>
