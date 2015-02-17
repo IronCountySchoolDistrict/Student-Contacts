@@ -16,7 +16,7 @@
 
 ~[wc:feedback_js_vars]
 
-<script src="/scripts/psutils.js"></script>
+<script src="/scripts/psDialog.js"></script>
 <script type="text/javascript">
     /**
      * Need to configure require js before psbehaviors.
@@ -24,20 +24,27 @@
     require.config({
         baseUrl: ~[scripts_url],
         paths: {
-            'handlebars':            'handlebars/require-handlebars.1.0.0.rc3',
-            'json2':                 'handlebars/json2',
-            'hbs':                   'hbs/0.4.0/hbs',
-            'underscore':            'underscore/underscore-'+~[if.jsdebug]'dev'[else]'min'[/if]+'-1.4.4',
-            'backbone':              'backbone/backbone-'+~[if.jsdebug]'dev'[else]'min'[/if]+'-0.9.10',
-            'psValidationFunctions': 'psValidationFunctions',
-            'psDateWidget':          'psDateWidget',
-            'psDateValidate':        'psDateValidate',
-            'psRequired':            'psRequired',
-            'psNumWidget':           'psNumWidget',
-            'psDateValidate':        'psDateValidate',
-            'psFormValidate':        'psFormValidate',
-            'psTextWidget':          'psTextWidget',
-            'psDirtyStateController':'psDirtyStateController',
+            'handlebars':                'handlebars/require-handlebars.1.0.0.rc3',
+            'json2':                     'handlebars/json2',
+            'hbs':                       'hbs/0.4.0/hbs',
+            'underscore':                'underscore/underscore-'+~[if.jsdebug]'dev'[else]'min'[/if]+'-1.4.4',
+            'backbone':                  'backbone/backbone-'+~[if.jsdebug]'dev'[else]'min'[/if]+'-0.9.10',
+            'jquery.cookie':             'jquery.cookie',
+            'psDateValidate':            'psDateValidate',
+            'psDateWidget':              'psDateWidget',
+            'psDirtyStateController':    'psDirtyStateController',
+            'psFormValidate':            'psFormValidate',
+            'psNumWidget':               'psNumWidget',
+            'psReloader/psReloader-min': 'psReloader/psReloader-min',
+            'psRequired':                'psRequired',
+            'psTextWidget':              'psTextWidget',
+            'psValidationFunctions':     'psValidationFunctions',
+        //'angular':                   'lib/angular/angular',
+            'angular':                   'lib/angular/angular.min',
+            'angular-cookies':           'lib/angular/angular-cookies.min',
+            'angular-route':             'lib/angular/angular-route.min',
+            'angular-sanitize':          'lib/angular/angular-sanitize',
+            'angular-translate':         'lib/angular/angular-translate.min',
     },
 
     hbs: {
@@ -51,6 +58,21 @@
         'backbone': {
             exports: 'Backbone',
                     deps: ['underscore']
+        },
+        'angular': {
+            exports: 'angular'
+        },
+        'angular-translate':{
+            deps: ['angular']
+        },
+        'angular-sanitize':{
+            deps: ['angular']
+        },
+        'angular-route':{
+            deps: ['angular']
+        },
+        'angular-cookies':{
+            deps: ['angular']
         }
     },
 
@@ -58,14 +80,10 @@
         '*': {
             'Handlebars': 'handlebars'
         }
-    }
-
-    });
-    define('jquery', function () {
-        return jQuery;
-    });
-    define('jquery-ui', ['jquery'], function($) {
-        return $.ui;
+    },
+    priority: [
+        'angular'
+    ]
     });
 </script>
 <script src="/scripts/psbehaviors.js"></script>
