@@ -141,7 +141,7 @@
 [/if#req]
 ~[if#req.~[gpv:action]=deletecontact]
 <form action="/admin/changesrecorded.white.html" method="POST" id="delete-form">
-    <input name="DC-STUDENTS:~(rn).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]"
+    <input name="DC-STUDENTS:~(rn).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]"
            type="hidden"
            value="on">
     <input type="hidden" name="ac" value="prim"/>
@@ -207,7 +207,7 @@ where studentsdcid=~[gpv:sdcid]
     </td>
     <td class="bold">
             <input type="text"
-                   name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]first_name"
+                   name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]first_name"
                    id="first-name"
                    value="~[tlist_sql; select first_name from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(first_name)[/tlist_sql]"
                    size="25"
@@ -218,7 +218,7 @@ where studentsdcid=~[gpv:sdcid]
     </td>
     <td>
         <input type="text"
-               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]last_name"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]last_name"
                id="last-name"
                value="~[tlist_sql; select last_name from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(last_name)[/tlist_sql]"
                size="25"
@@ -230,7 +230,7 @@ where studentsdcid=~[gpv:sdcid]
     <td class="bold">Relationship</td>
     <td>
         <select
-                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]relationship"
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]relationship"
                 id="relationship"
                 data-value="~[tlist_sql; select relationship from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(relationship)[/tlist_sql]"
                 required>
@@ -262,7 +262,7 @@ where studentsdcid=~[gpv:sdcid]
     <td class="bold">Legal Guardian</td>
     <td>
         <select
-                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]LEGAL_GUARDIAN"
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]LEGAL_GUARDIAN"
                 id="legal-guardian"
                 data-value="~[tlist_sql; select legal_guardian from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(legal_guardian)[/tlist_sql]"
                 required>
@@ -280,7 +280,7 @@ where studentsdcid=~[gpv:sdcid]
     <td>
         Street<br/>
         <input id="residence-street" size="26"
-               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]residence_street"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]residence_street"
                value="~[tlist_sql; select residence_street from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(residence_street)[/tlist_sql]"
                type="text"
                style="width: 218px;"
@@ -291,7 +291,7 @@ where studentsdcid=~[gpv:sdcid]
         City
         <br/>
         <input id="residence-city" size="20"
-               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]residence_city"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]residence_city"
                value="~[tlist_sql; select residence_city from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(residence_city)[/tlist_sql]"
                type="text"
                data-parsley-resaddress
@@ -302,7 +302,7 @@ where studentsdcid=~[gpv:sdcid]
         <br />
         <select
                 id="residence-state"
-                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]residence_state"
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]residence_state"
                 data-value="~[tlist_sql;select residence_state from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(residence_state)[/tlist_sql]"
                 data-parsley-resaddress
                 data-parsley-trigger="change"
@@ -366,7 +366,7 @@ where studentsdcid=~[gpv:sdcid]
         <input id="residence-zip"
                class="zip"
                size="6"
-               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]residence_zip"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]residence_zip"
                value="~[tlist_sql; select residence_zip from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(residence_zip)[/tlist_sql]"
                type="text"
                data-parsley-resaddress
@@ -380,7 +380,7 @@ where studentsdcid=~[gpv:sdcid]
     <td colspan="3">
         Street<br/>
         <input id="mailing-street" size="26"
-               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]mailing_street"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]mailing_street"
                value="~[tlist_sql; select mailing_street from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(mailing_street)[/tlist_sql]"
                type="text"
                style="width: 218px;"
@@ -391,7 +391,7 @@ where studentsdcid=~[gpv:sdcid]
         City
         <br/>
         <input id="mailing-city" size="20"
-               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]mailing_city"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]mailing_city"
                value="~[tlist_sql; select mailing_city from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(mailing_city)[/tlist_sql]"
                type="text"
                data-parsley-mailaddress
@@ -402,7 +402,7 @@ where studentsdcid=~[gpv:sdcid]
         <br />
         <select
                 id="mailing-state"
-                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]mailing_state"
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]mailing_state"
                 data-value="~[tlist_sql; select mailing_state from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(mailing_state)[/tlist_sql]"
                 data-parsley-mailaddress
                 data-parsley-trigger="change"
@@ -466,7 +466,7 @@ where studentsdcid=~[gpv:sdcid]
         <input id="mailing-zip"
                class="zip"
                size="6"
-               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]mailing_zip"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]mailing_zip"
                value="~[tlist_sql; select mailing_zip from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(mailing_zip)[/tlist_sql]"
                type="text"
                data-parsley-mailaddress
@@ -504,7 +504,7 @@ where studentsdcid=~[gpv:sdcid]
     <td class="bold">Emergency<br/> Contact Priority</td>
     <td>
         <select
-                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]priority"
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]priority"
                 id="priority"
                 data-value="~[tlist_sql; select priority from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(priority)[/tlist_sql]"
                 required>
@@ -601,7 +601,7 @@ where studentsdcid=~[gpv:sdcid]
     </td>
     <td valign="top" style="padding-bottom: 10px;">
         <select
-                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1type"
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1type"
                 id="phone1type"
                 data-value="~[tlist_sql;select phone_type from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]~(phone_type)[/tlist_sql]"
                 style="margin-right:125px;margin-bottom: 40px;"
@@ -615,7 +615,7 @@ where studentsdcid=~[gpv:sdcid]
             <option value="Work">Work</option>
         </select>
         <input size="17" type="text"
-               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1"
                value="~[tlist_sql; select phone_number from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]~(phone_number)[/tlist_sql]"
                style="margin-right:125px;margin-bottom: 20px;"
                id="phone1"
@@ -629,7 +629,7 @@ where studentsdcid=~[gpv:sdcid]
         <input type="text"
                size="6"
                maxlength="6"
-               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1"
                value="~[tlist_sql; select phone_extension from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]~(phone_number)[/tlist_sql]"
                id="phone1ext"
                data-parsley-onephonereq
@@ -789,7 +789,7 @@ where studentsdcid=~[gpv:sdcid]
     </td>
     <td valign="top" style="padding-bottom: 10px;">
         <select
-                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone2type"
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone2type"
                 id="phone2type"
                 data-value="~[tlist_sql;select phone_type from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]~(phone_type)[/tlist_sql]"
                 style="margin-right:125px;margin-bottom: 40px;"
@@ -968,7 +968,7 @@ where studentsdcid=~[gpv:sdcid]
     </td>
     <td valign="top" style="padding-bottom: 10px;">
         <select
-                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone3type"
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone3type"
                 id="phone3type"
                 data-value="~[tlist_sql;select phone_type from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]~(phone_type)[/tlist_sql]"
                 style="margin-right:125px;margin-bottom: 40px;"
@@ -981,7 +981,7 @@ where studentsdcid=~[gpv:sdcid]
             <option value="Work">Work</option>
         </select>
         <input type="text" size="17"
-               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone3"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone3"
                value="~[tlist_sql; select phone_number from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]~(phone_number)[/tlist_sql]"
                id="phone3"
                class="phone"
@@ -1540,7 +1540,7 @@ where studentsdcid=~[gpv:sdcid]
     </td>
     <td valign="top" style="padding-bottom: 10px;">
         <select
-                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1type"
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1type"
                 id="phone1type"
                 style="margin-right:125px;margin-bottom: 40px;"
                 data-parsley-onephonereq
@@ -1553,7 +1553,7 @@ where studentsdcid=~[gpv:sdcid]
             <option value="Work">Work</option>
         </select>
         <input size="17" type="text"
-               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1"
                id="phone1"
                class="phone"
                value=""
@@ -1677,7 +1677,7 @@ where studentsdcid=~[gpv:sdcid]
     </td>
     <td valign="top" style="padding-bottom: 10px;">
         <select
-                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone2type"
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone2type"
                 id="phone2type"
                 style="margin-right:125px;margin-bottom: 40px;"
                 data-parsley-trigger="change"
@@ -1689,7 +1689,7 @@ where studentsdcid=~[gpv:sdcid]
             <option value="Work">Work</option>
         </select>
         <input type="text" size="17"
-               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone2"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone2"
                id="phone2"
                class="phone"
                data-parsley-trigger="change"
@@ -1806,7 +1806,7 @@ where studentsdcid=~[gpv:sdcid]
     </td>
     <td valign="top" style="padding-bottom: 10px;">
         <select
-                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone3type"
+                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone3type"
                 id="phone3type"
                 data-value="~[tlist_sql;select phone_type from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]~(phone_type)[/tlist_sql]"
                 style="margin-right:125px;margin-bottom: 40px;"
@@ -1819,7 +1819,7 @@ where studentsdcid=~[gpv:sdcid]
             <option value="Work">Work</option>
         </select>
         <input type="text" size="17"
-               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS2.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone3"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone3"
                value="~[tlist_sql; select phone_number from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]~(phone_number)[/tlist_sql]"
                id="phone3"
                class="phone"

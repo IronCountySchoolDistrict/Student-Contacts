@@ -326,6 +326,16 @@
         });
     }
 
+    function getLiveEmailRecordId(contactdcid) {
+        return $j.ajax({
+            url: '/ws/schema/table/' + config.contactsEmailTable + '?q=contactdcid==' + contactdcid + '&projection=id',
+            data: JSON.stringify(contactDcidData),
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            type: 'GET'
+        });
+    }
+
     function setPhoneStatusToMigrated(phoneRecordId) {
         var contactDcidData = {
             id: phoneRecordId,
@@ -852,14 +862,19 @@
                         });
                         // Create a new live email record
                     } else {
+                        liveEmailFormData.studentsdcid = studentsdcid;
+                        liveEmailFormData.contactdcid = contactData.liveContact.contactdcid;
                         var tlcEmail = emailObjToTlc(liveEmailFormData);
                         tlcEmail.ac = 'prim';
                         newEmail(tlcEmail, studentsdcid).then(function (newEmailResp) {
-                            //Now that a new email record has been created, we can get its id in order
-                            //to set its status to migrated.
-                            setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
-                                migratePhones(livePhonesFormData, contactData.liveContact.record_id, studentsdcid);
+                            getLiveEmailRecordId(contactData.liveContact.record_id).then(function (liveEmailId) {
+                                //Now that a new email record has been created, we can get its id in order
+                                //to set its status to migrated.
+                                setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
+                                    migratePhones(livePhonesFormData, contactData.liveContact.record_id, studentsdcid);
+                                });
                             });
+                            
                         });
                     }
                 });
