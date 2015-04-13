@@ -1061,7 +1061,7 @@
                 }
             });
 
-            $(document).on('click', '.deletecontact', function (event) {
+            $(document).on('click', '.inactivatecontact', function (event) {
                 var row = $(this).parents('tr')[0];
                 if (row) {
                     var rowData = m_table.fnGetData(row);
@@ -1089,6 +1089,23 @@
                             .error(function (jqxhr) {
                                 displayError(jqxhr.statusText);
                             });
+                    }
+                }
+            });
+
+            $(document).on('click', '.deletecontact', function (event) {
+                var row = $(this).parents('tr')[0];
+                if (row) {
+                    var rowData = m_table.fnGetData(row);
+                    var contactId = rowData[m_keyindex];
+                    var contactName = $(row).find('td').eq(0).find('p').eq(0).text();
+                    if (window.confirm("Delete contact, \"" + contactName + "\"?")) {
+                        $.get("/admin/students/contacts/contactdata.html?action=deletecontact&gidx=" + contactId + "&frn=001" + psData.studentdcid, function(resp) {
+                            $("body").append(resp);
+                            $.post($("#delete-form").attr("action"), $("#delete-form").serialize(), function (resp) {
+                                refreshContact(contactId, row);
+                            });
+                        });
                     }
                 }
             });
@@ -1234,16 +1251,17 @@
                             primary: "ui-icon-pencil"
                         }
                     });
+                    $('.inactivatecontact').button({
+                        icons: {
+                            primary: "ui-icon-cancel"
+                        }
+                    });
                     $('.deletecontact').button({
                         icons: {
                             primary: "ui-icon-trash"
                         }
                     });
-                }).fail(function (jqXHR, textStatus, errorThrown) {
-                    debugger;
                 });
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            debugger;
         });
     }
 

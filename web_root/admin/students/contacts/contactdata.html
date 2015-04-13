@@ -132,7 +132,7 @@
                 "notes":"~(notes;js)",
                 "status":"~(status;js)"
             },
-            "<button class='editcontact'>Edit</button><br/><button class='deletecontact'>Inactivate</button>",
+            "<button class='editcontact'>Edit</button><br/><button class='inactivatecontact'>Inactivate</button><br/><button class='deletecontact'>Delete</button>",
             "~(status;js)",
             "~(priority;js)",
             "~(last_name;js), ~(first_name;js)"
@@ -140,8 +140,9 @@
     [/tlist_sql]
 [/if#req]
 ~[if#req.~[gpv:action]=deletecontact]
+~[tlist_child:STUDENTS.U_STUDENT_CONTACTS.U_STUDENT_CONTACTS;displaycols:first_name;fieldNames:first_name;type:html]
 <form action="/admin/changesrecorded.white.html" method="POST" id="delete-form">
-    <input name="DC-STUDENTS:~(rn).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]"
+    <input name="DC-STUDENTS:~(rn).U_STUDENT_CONTACTS.U_STUDENT_CONTACTS:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]"
            type="hidden"
            value="on">
     <input type="hidden" name="ac" value="prim"/>
