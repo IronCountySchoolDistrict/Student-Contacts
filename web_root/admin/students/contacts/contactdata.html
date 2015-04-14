@@ -150,23 +150,30 @@
     </form>
 </div>
 [/if#req]
+~[if#req.~[gpv:action]=enable.edit.demo]
+    <form action="/admin/changesrecorded.white.html" method="POST" id="delete-form">
+        <input name="[01]father_employer" type="hidden" value="on">
+        <input name="[01]mother_employer" type="hidden" value="on">
+        <input type="hidden" name="ac" value="prim"/>
+    </form>
+[/if#req]
 ~[if#req.~[gpv:action]=addcontact]
-~[tlist_sql;
-SELECT CASE
-           WHEN MAX(contact_id) IS NULL THEN 1
-           ELSE MAX(contact_id) + 1
-       END AS newcontactid
-FROM (
-SELECT contact_id
-FROM u_student_contacts
-WHERE studentsdcid=~[gpv:sdcid]
-UNION ALL
-SELECT contact_id
-FROM u_student_contacts_staging
-WHERE studentsdcid=~[gpv:sdcid]
-)]
-{"contactnumber":~(n;l)}
-[/tlist_sql]
+    ~[tlist_sql;
+    SELECT CASE
+               WHEN MAX(contact_id) IS NULL THEN 1
+               ELSE MAX(contact_id) + 1
+           END AS newcontactid
+    FROM (
+    SELECT contact_id
+    FROM u_student_contacts
+    WHERE studentsdcid=~[gpv:sdcid]
+    UNION ALL
+    SELECT contact_id
+    FROM u_student_contacts_staging
+    WHERE studentsdcid=~[gpv:sdcid]
+    )]
+    {"contactnumber":~(n;l)}
+    [/tlist_sql]
 [/if#req]
 
 ~[if#req.~[gpv:action]=fetchcontacts]
@@ -174,7 +181,7 @@ WHERE studentsdcid=~[gpv:sdcid]
         SELECT contact_id
         FROM u_student_contacts
         WHERE studentsdcid=~[gpv:sdcid]
-        ORDER BY contact_id asc]
+        ORDER BY contact_id ASC]
             refreshContact(~(contact_id));
     [/tlist_sql]
 [/if#req]
@@ -182,14 +189,38 @@ WHERE studentsdcid=~[gpv:sdcid]
 ~[if#req.~[gpv:action]=newfetchcontacts]
 [
     ~[tlist_sql;
-        SELECT
-            contact_id
-    FROM u_student_contacts
-    WHERE studentsdcid=~[gpv:sdcid]
+        SELECT contact_id
+        FROM u_student_contacts
+        WHERE studentsdcid=~[gpv:sdcid]
     ]
         "~(contact_id)",
     [/tlist_sql]""
 ]
+[/if#req]
+
+~[if#req.~[gpv:action]=get.demo.data]
+    ~[tlist_sql;
+        SELECT motherdayphone,
+               mother_employer,
+               mother_home_phone,
+               fatherdayphone,
+               father_employer,
+               father_home_phone,
+               guardianemail
+        FROM students s
+        INNER JOIN studentcorefields scf ON scf.studentsdcid=s.dcid
+        WHERE s.dcid=~[gpv:studentsdcid]
+    ]
+        {
+            "motherdayphone": "~(motherdayphone)",
+            "mother_employer": "~(mother_employer)",
+            "mother_home_phone": "~(mother_home_phone)",
+            "fatherdayphone": "~(fatherdayphone)",
+            "father_employer": "~(father_employer)",
+            "father_home_phone": "~(father_home_phone)",
+            "guardianemail": "~(guardianemail)"
+        }
+    [/tlist_sql]
 [/if#req]
 
 
@@ -482,6 +513,10 @@ WHERE studentsdcid=~[gpv:sdcid]
                value="~[tlist_sql; select employer from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(employer)[/tlist_sql]"
                size="25"
                id="employer"/>
+        <span class="mini">
+            <a class="copy-demo" data-field-name="father_employer" data-input-id="employer">[Copy to Father Employer]</a>
+            <a class="copy-demo" data-field-name="mother_employer" data-input-id="employer">[Copy to Mother Employer]</a>
+        </span>
     </td>
     <td class="bold">Notes:</td>
     <td><textarea type="text"
@@ -521,7 +556,10 @@ WHERE studentsdcid=~[gpv:sdcid]
         <input type="text"
                value="~[tlist_sql; select email_address from u_sc_email where contactdcid=~[gpv:contactdcid]]~(email)[/tlist_sql]"
                id="email"/>
-        <br/>
+               <span class="mini">
+            <a class="copy-demo" data-field-name="father_employer" data-input-id="employer">[Ad]</a>
+            <a class="copy-demo" data-field-name="mother_employer" data-input-id="employer">[Copy to Mother Employer]</a>
+        </span>
     </td>
     <td class="bold">
         Contact Options:
