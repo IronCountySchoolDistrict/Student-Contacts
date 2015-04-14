@@ -1103,7 +1103,7 @@
                         $.get("/admin/students/contacts/contactdata.html?action=deletecontact&gidx=" + contactId + "&frn=001" + psData.studentdcid, function(resp) {
                             $("body").append(resp);
                             $.post($("#delete-form").attr("action"), $("#delete-form").serialize(), function (resp) {
-                                refreshContact(contactId, row);
+                                row.remove();
                             });
                         });
                     }

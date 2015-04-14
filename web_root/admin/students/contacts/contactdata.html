@@ -37,26 +37,26 @@
 ~[if#req.~[gpv:action]=getphone]
     [
         ~[tlist_sql;
-            SELECT
-                id,
-                contactdcid,
-                phone_number,
-                phone_type,
-                phone_extension,
-                phone_priority,
-                opts_voice_emergency,
-                opts_voice_high_priority,
-                opts_voice_general,
-                opts_voice_attendance,
-                opts_voice_survey,
-                opts_text_emergency,
-                opts_text_high_priority,
-                opts_text_general,
-                opts_text_attendance,
-                opts_text_survey
+
+            SELECT id,
+                   contactdcid,
+                   phone_number,
+                   phone_type,
+                   phone_extension,
+                   phone_priority,
+                   opts_voice_emergency,
+                   opts_voice_high_priority,
+                   opts_voice_general,
+                   opts_voice_attendance,
+                   opts_voice_survey,
+                   opts_text_emergency,
+                   opts_text_high_priority,
+                   opts_text_general,
+                   opts_text_attendance,
+                   opts_text_survey
             FROM u_sc_phone
             WHERE contactdcid=~[gpv:cdcid]
-            AND studentsdcid=~[gpv:sdcid]]
+              AND studentsdcid=~[gpv:sdcid]]
             {
                 "id": "~(id)",
                 "contactdcid": "~(contactdcid)",
@@ -140,13 +140,15 @@
     [/tlist_sql]
 [/if#req]
 ~[if#req.~[gpv:action]=deletecontact]
-~[tlist_child:STUDENTS.U_STUDENT_CONTACTS.U_STUDENT_CONTACTS;displaycols:first_name;fieldNames:first_name;type:html]
-<form action="/admin/changesrecorded.white.html" method="POST" id="delete-form">
-    <input name="DC-STUDENTS:~(rn).U_STUDENT_CONTACTS.U_STUDENT_CONTACTS:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]"
-           type="hidden"
-           value="on">
-    <input type="hidden" name="ac" value="prim"/>
-</form>
+<div style="display: none;">
+    ~[tlist_child:STUDENTS.U_STUDENT_CONTACTS.U_STUDENT_CONTACTS;displaycols:first_name;fieldNames:first_name;type:html]
+    <form action="/admin/changesrecorded.white.html" method="POST" id="delete-form">
+        <input name="DC-STUDENTS:~(rn).U_STUDENT_CONTACTS.U_STUDENT_CONTACTS:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]"
+               type="hidden"
+               value="on">
+        <input type="hidden" name="ac" value="prim"/>
+    </form>
+</div>
 [/if#req]
 ~[if#req.~[gpv:action]=addcontact]
 ~[tlist_sql;
