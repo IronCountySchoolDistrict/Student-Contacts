@@ -673,6 +673,7 @@
                 $j(onFileOpts).eq(index).prop('checked', false);
             }
         });
+
     }
 
     function bindDefaultApprove() {
@@ -681,6 +682,7 @@
             var $parentField = $j($target.parents('td').next().children());
             var $onFileField = $j($target.parents('td').prev().children());
             defaultApprove($parentField, $onFileField);
+            $target.attr({approved: true});
         });
     }
 
@@ -695,12 +697,13 @@
 
             // Clear all parent checkboxes.
             $parentOpts.prop('checked', false);
+            $target.attr({approved: true});
         });
     }
 
     function bindApproveAll() {
         $j('#approve-all').on('click', function (event) {
-            $j('input[type="button"]').not('#approve-all').trigger('click');
+            $j('input[type="button"]').not('#approve-all').not('[approved="true"]').trigger('click');
         });
     }
 
@@ -723,7 +726,7 @@
             $j('#btnBack').on('click', function (event) {
                 event.preventDefault();
                 returnToStudentContacts();
-            })
+            });
         }
     }
 
