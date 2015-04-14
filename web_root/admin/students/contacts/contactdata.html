@@ -150,21 +150,18 @@
 [/if#req]
 ~[if#req.~[gpv:action]=addcontact]
 ~[tlist_sql;
-SELECT
-CASE
-WHEN MAX(contact_id) is null
-THEN 1
-ELSE MAX(contact_id) + 1
-END AS newcontactid
-
-from (
-
-select contact_id from u_student_contacts
-where studentsdcid=~[gpv:sdcid]
-union all
-select contact_id from u_student_contacts_staging
-where studentsdcid=~[gpv:sdcid]
-
+SELECT CASE
+           WHEN MAX(contact_id) IS NULL THEN 1
+           ELSE MAX(contact_id) + 1
+       END AS newcontactid
+FROM (
+SELECT contact_id
+FROM u_student_contacts
+WHERE studentsdcid=~[gpv:sdcid]
+UNION ALL
+SELECT contact_id
+FROM u_student_contacts_staging
+WHERE studentsdcid=~[gpv:sdcid]
 )]
 {"contactnumber":~(n;l)}
 [/tlist_sql]
