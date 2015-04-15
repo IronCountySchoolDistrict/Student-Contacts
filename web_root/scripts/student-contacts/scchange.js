@@ -72,6 +72,8 @@
         contactCoreData[keyName] = emailObject.contactdcid;
         keyName = toEmailTlcFieldName('email_address', -1, emailObject.studentsdcid);
         contactCoreData[keyName] = emailObject.email_address;
+        keyName = toEmailTlcFieldName('opts_emergency', -1, emailObject.studentsdcid);
+        contactCoreData[keyName] = emailObject.opts_emergency;
         keyName = toEmailTlcFieldName('opts_high_priority', -1, emailObject.studentsdcid);
         contactCoreData[keyName] = emailObject.opts_high_priority;
         keyName = toEmailTlcFieldName('opts_general', -1, emailObject.studentsdcid);
@@ -101,6 +103,8 @@
         contactCoreData[keyName] = phoneObject.phone_extension;
         keyName = toPhoneTlcFieldName('phone_priority', -1, phoneObject.studentsdcid);
         contactCoreData[keyName] = phoneObject.phone_priority;
+        keyName = toPhoneTlcFieldName('opts_voice_emergency', -1, phoneObject.studentsdcid);
+        contactCoreData[keyName] = phoneObject.opts_voice_emergency;
         keyName = toPhoneTlcFieldName('opts_voice_high_priority', -1, phoneObject.studentsdcid);
         contactCoreData[keyName] = phoneObject.opts_voice_high_priority;
         keyName = toPhoneTlcFieldName('opts_voice_general', -1, phoneObject.studentsdcid);
@@ -109,6 +113,8 @@
         contactCoreData[keyName] = phoneObject.opts_voice_attendance;
         keyName = toPhoneTlcFieldName('opts_voice_survey', -1, phoneObject.studentsdcid);
         contactCoreData[keyName] = phoneObject.opts_voice_survey;
+        keyName = toPhoneTlcFieldName('opts_text_emergency', -1, phoneObject.studentsdcid);
+        contactCoreData[keyName] = phoneObject.opts_text_emergency;
         keyName = toPhoneTlcFieldName('opts_text_high_priority', -1, phoneObject.studentsdcid);
         contactCoreData[keyName] = phoneObject.opts_text_high_priority;
         keyName = toPhoneTlcFieldName('opts_text_general', -1, phoneObject.studentsdcid);
@@ -153,6 +159,7 @@
     function getEmailFormData() {
         return {
             email_address: $j('#live-email').val(),
+            opts_emergency: $j('#live-email-opts-emergency').is(':checked') ? "1" : "",
             opts_high_priority: $j('#live-email-opts-high-priority').is(':checked') ? "1" : "",
             opts_general: $j('#live-email-opts-general').is(':checked') ? "1" : "",
             opts_attendance: $j('#live-email-opts-attendance').is(':checked') ? "1" : "",
@@ -171,10 +178,12 @@
             phone_type: $j('#live-phone-1-type').val(),
             phone_number: $j('#live-phone-1-number').val(),
             phone_extension: $j('#live-phone-1-extension').val(),
+            opts_voice_emergency: $j('#live-phone1-opts-voice-emergency').is(':checked') ? "1" : "",
             opts_voice_high_priority: $j('#live-phone1-opts-voice-high-priority').is(':checked') ? "1" : "",
             opts_voice_general: $j('#live-phone1-opts-voice-general').is(':checked') ? "1" : "",
             opts_voice_attendance: $j('#live-phone1-opts-voice-attendance').is(':checked') ? "1" : "",
             opts_voice_survey: $j('#live-phone1-opts-voice-survey').is(':checked') ? "1" : "",
+            opts_text_emergency: $j('#live-phone1-opts-text-emergency').is(':checked') ? "1" : "",
             opts_text_high_priority: $j('#live-phone1-opts-text-high-priority').is(':checked') ? "1" : "",
             opts_text_general: $j('#live-phone1-opts-text-general').is(':checked') ? "1" : "",
             opts_text_attendance: $j('#live-phone1-opts-text-attendance').is(':checked') ? "1" : "",
@@ -185,10 +194,12 @@
             phone_type: $j('#live-phone-2-type').val(),
             phone_number: $j('#live-phone-2-number').val(),
             phone_extension: $j('#live-phone-2-extension').val(),
+            opts_voice_emergency: $j('#live-phone2-opts-voice-emergency').is(':checked') ? "1" : "",
             opts_voice_high_priority: $j('#live-phone2-opts-voice-high-priority').is(':checked') ? "1" : "",
             opts_voice_general: $j('#live-phone2-opts-voice-general').is(':checked') ? "1" : "",
             opts_voice_attendance: $j('#live-phone2-opts-voice-attendance').is(':checked') ? "1" : "",
             opts_voice_survey: $j('#live-phone2-opts-voice-survey').is(':checked') ? "1" : "",
+            opts_text_emergency: $j('#live-phone2-opts-text-emergency').is(':checked') ? "1" : "",
             opts_text_high_priority: $j('#live-phone2-opts-text-high-priority').is(':checked') ? "1" : "",
             opts_text_general: $j('#live-phone2-opts-text-general').is(':checked') ? "1" : "",
             opts_text_attendance: $j('#live-phone2-opts-text-attendance').is(':checked') ? "1" : "",
@@ -199,10 +210,12 @@
             phone_type: $j('#live-phone-3-type').val(),
             phone_number: $j('#live-phone-3-number').val(),
             phone_extension: $j('#live-phone-3-extension').val(),
+            opts_voice_emergency: $j('#live-phone3-opts-voice-emergency').is(':checked') ? "1" : "",
             opts_voice_high_priority: $j('#live-phone3-opts-voice-high-priority').is(':checked') ? "1" : "",
             opts_voice_general: $j('#live-phone3-opts-voice-general').is(':checked') ? "1" : "",
             opts_voice_attendance: $j('#live-phone3-opts-voice-attendance').is(':checked') ? "1" : "",
             opts_voice_survey: $j('#live-phone3-opts-voice-survey').is(':checked') ? "1" : "",
+            opts_text_emergency: $j('#live-phone3-opts-text-emergency').is(':checked') ? "1" : "",
             opts_text_high_priority: $j('#live-phone3-opts-text-high-priority').is(':checked') ? "1" : "",
             opts_text_general: $j('#live-phone3-opts-text-general').is(':checked') ? "1" : "",
             opts_text_attendance: $j('#live-phone3-opts-text-attendance').is(':checked') ? "1" : "",
@@ -572,6 +585,7 @@
      */
     function fillFormStagingEmail(stagingEmailData) {
         $j('#staging-email').val(stagingEmailData.email_address);
+        if (stagingEmailData.opts_emergency === "1") $j('#staging-email-opts-emergency').attr({'checked': 'checked'});
         if (stagingEmailData.opts_high_priority === "1") $j('#staging-email-opts-high-priority').attr({'checked': 'checked'});
         if (stagingEmailData.opts_general === "1") $j('#staging-email-opts-general').attr({'checked': 'checked'});
         if (stagingEmailData.opts_attendance === "1") $j('#staging-email-opts-attendance').attr({'checked': 'checked'});
@@ -584,6 +598,7 @@
      */
     function fillFormLiveEmail(liveEmailData) {
         $j('#live-email').val(liveEmailData.email_address);
+        if (liveEmailData.opts_emergency === "1") $j('#live-email-opts-emergency').attr({'checked': 'checked'});
         if (liveEmailData.opts_high_priority === "1") $j('#live-email-opts-high-priority').attr({'checked': 'checked'});
         if (liveEmailData.opts_general === "1") $j('#live-email-opts-general').attr({'checked': 'checked'});
         if (liveEmailData.opts_attendance === "1") $j('#live-email-opts-attendance').attr({'checked': 'checked'});
@@ -599,10 +614,12 @@
         $j('#staging-phone-' + priority + '-type').val(stagingPhoneData.phone_type);
         $j('#staging-phone-' + priority + '-number').val(stagingPhoneData.phone_number);
         $j('#staging-phone-' + priority + '-extension').val(stagingPhoneData.phone_extension);
+        if (stagingPhoneData.opts_voice_emergency === "1") $j('#staging-phone' + priority + '-opts-voice-emergency').attr({'checked': 'checked'});
         if (stagingPhoneData.opts_voice_high_priority === "1") $j('#staging-phone' + priority + '-opts-voice-high-priority').attr({'checked': 'checked'});
         if (stagingPhoneData.opts_voice_general === "1") $j('#staging-phone' + priority + '-opts-voice-general').attr({'checked': 'checked'});
         if (stagingPhoneData.opts_voice_attendance === "1") $j('#staging-phone' + priority + '-opts-voice-attendance').attr({'checked': 'checked'});
         if (stagingPhoneData.opts_voice_survey === "1") $j('#staging-phone' + priority + '-opts-voice-survey').attr({'checked': 'checked'});
+        if (stagingPhoneData.opts_text_emergency === "1") $j('#staging-phone' + priority + '-opts-text-emergency').attr({'checked': 'checked'});
         if (stagingPhoneData.opts_text_high_priority === "1") $j('#staging-phone' + priority + '-opts-text-high-priority').attr({'checked': 'checked'});
         if (stagingPhoneData.opts_text_general === "1") $j('#staging-phone' + priority + '-opts-text-general').attr({'checked': 'checked'});
         if (stagingPhoneData.opts_text_attendance === "1") $j('#staging-phone' + priority + '-opts-text-attendance').attr({'checked': 'checked'});
@@ -618,10 +635,12 @@
         $j('#live-phone-' + priority + '-type').val(livePhoneData.phone_type);
         $j('#live-phone-' + priority + '-number').val(livePhoneData.phone_number);
         $j('#live-phone-' + priority + '-extension').val(livePhoneData.phone_extension);
+        if (livePhoneData.opts_voice_emergency === "1") $j('#live-phone' + priority + '-opts-voice-emergency').attr({'checked': 'checked'});
         if (livePhoneData.opts_voice_high_priority === "1") $j('#live-phone' + priority + '-opts-voice-high-priority').attr({'checked': 'checked'});
         if (livePhoneData.opts_voice_general === "1") $j('#live-phone' + priority + '-opts-voice-general').attr({'checked': 'checked'});
         if (livePhoneData.opts_voice_attendance === "1") $j('#live-phone' + priority + '-opts-voice-attendance').attr({'checked': 'checked'});
         if (livePhoneData.opts_voice_survey === "1") $j('#live-phone' + priority + '-opts-voice-survey').attr({'checked': 'checked'});
+        if (livePhoneData.opts_text_emergency === "1") $j('#live-phone' + priority + '-opts-text-emergency').attr({'checked': 'checked'});
         if (livePhoneData.opts_text_high_priority === "1") $j('#live-phone' + priority + '-opts-text-high-priority').attr({'checked': 'checked'});
         if (livePhoneData.opts_text_general === "1") $j('#live-phone' + priority + '-opts-text-general').attr({'checked': 'checked'});
         if (livePhoneData.opts_text_attendance === "1") $j('#live-phone' + priority + '-opts-text-attendance').attr({'checked': 'checked'});
