@@ -342,7 +342,6 @@
     function getLiveEmailRecordId(contactdcid) {
         return $j.ajax({
             url: '/ws/schema/table/' + config.contactsEmailTable + '?q=contactdcid==' + contactdcid + '&projection=id',
-            data: JSON.stringify(contactDcidData),
             dataType: 'json',
             contentType: "application/json; charset=utf-8",
             type: 'GET'
