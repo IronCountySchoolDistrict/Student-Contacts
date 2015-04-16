@@ -961,7 +961,7 @@
                                 tlcEmail.ac = 'prim';
 
                                 // Enable new email operation
-                                $j.get('/admin/students/contacts/massimport/emailTlcForm.html?frn=001' + studentsdcid, function (emailFormResp) {
+                                $j.get('/admin/students/contacts/scchange/emailTlcForm.html?frn=001' + studentsdcid, function (emailFormResp) {
                                     //Create new email
                                     $j.ajax({
                                         type: 'POST',
