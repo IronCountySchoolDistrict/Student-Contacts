@@ -1197,7 +1197,7 @@
             $.get("/admin/students/contacts/contactdata.html?action=enable.edit.demo&frn=001" + psData.studentdcid, function() {
                 $.getJSON("/admin/students/contacts/contactdata.html?action=get.demo.data&studentsdcid=" + psData.studentdcid, function(demoData) {
                     if (demoData[studentField] !== "") {
-                        var overwrite = window.confirm("Are you sure you want to overwrite the contents of " + studentField + "? The Demographics value (" + demoData[studentField] + ") will be replaced by (" + inputVal + ")");
+                        var overwrite = window.confirm("Are you sure you want to overwrite the contents of " + studentField + "? The Demographics value \"" + demoData[studentField] + "\") will be replaced by \"" + inputVal + "\")");
                         if (overwrite) {
                             saveDemoData();
                         }
