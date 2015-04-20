@@ -884,7 +884,7 @@
                         // Create a new live email record
                     } else {
                         liveEmailFormData.studentsdcid = studentsdcid;
-                        liveEmailFormData.contactdcid = contactData.liveContact.contactdcid;
+                        liveEmailFormData.contactdcid = contactData.liveContact.record_id;
                         var tlcEmail = emailObjToTlc(liveEmailFormData);
                         tlcEmail.ac = 'prim';
                         newEmail(tlcEmail, studentsdcid).then(function (newEmailResp) {

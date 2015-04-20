@@ -582,7 +582,6 @@
                                value="~[tlist_sql; select OPTS_EMERGENCY from u_sc_email where contactdcid=~[gpv:contactdcid]]~(OPTS_EMERGENCY)[/tlist_sql]"
                                data-parsley-excluded
                                data-parsley-ui-enabled="false"
-                               checked
                                onclick="this.checked=!this.checked;"
                                style="opacity: 0.5; box-shadow: none;">
                     </td>
@@ -705,7 +704,6 @@
                            id="phone1-opts-voice-emergency"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           checked
                            onclick="this.checked=!this.checked;"
                            style="opacity: 0.5; box-shadow: none;"
                            ~[tlist_sql;select CASE WHEN OPTS_VOICE_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
@@ -718,7 +716,6 @@
                            id="phone1-opts-text-emergency"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           checked
                            onclick="this.checked=!this.checked;"
                            style="opacity: 0.5; box-shadow: none;"
                            ~[tlist_sql;select CASE WHEN OPTS_TEXT_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
@@ -895,7 +892,6 @@
                            id="phone2-opts-voice-emergency"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           checked
                            onclick="this.checked=!this.checked;"
                            style="opacity: 0.5; box-shadow: none;"
                            ~[tlist_sql;select CASE WHEN OPTS_VOICE_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
@@ -908,7 +904,6 @@
                            id="phone2-opts-text-emergency"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           checked
                            onclick="this.checked=!this.checked;"
                            style="opacity: 0.5; box-shadow: none;"
                            ~[tlist_sql;select CASE WHEN OPTS_TEXT_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
@@ -1081,7 +1076,6 @@
                            id="phone3-opts-voice-emergency"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           checked
                            onclick="this.checked=!this.checked;"
                            style="opacity: 0.5; box-shadow: none;"
                            ~[tlist_sql;select CASE WHEN OPTS_VOICE_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
@@ -1094,7 +1088,6 @@
                            id="phone3-opts-text-emergency"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           checked
                            onclick="this.checked=!this.checked;"
                            style="opacity: 0.5; box-shadow: none;"
                            ~[tlist_sql;select CASE WHEN OPTS_TEXT_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
