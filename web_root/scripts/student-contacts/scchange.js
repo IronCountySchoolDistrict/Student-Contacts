@@ -884,7 +884,7 @@
                         // Create a new live email record
                     } else {
                         liveEmailFormData.studentsdcid = studentsdcid;
-                        liveEmailFormData.contactdcid = contactData.liveContact.contactdcid;
+                        liveEmailFormData.contactdcid = contactData.liveContact.record_id;
                         var tlcEmail = emailObjToTlc(liveEmailFormData);
                         tlcEmail.ac = 'prim';
                         newEmail(tlcEmail, studentsdcid).then(function (newEmailResp) {
@@ -961,7 +961,7 @@
                                 tlcEmail.ac = 'prim';
 
                                 // Enable new email operation
-                                $j.get('/admin/students/contacts/massimport/emailTlcForm.html?frn=001' + studentsdcid, function (emailFormResp) {
+                                $j.get('/admin/students/contacts/scchange/emailTlcForm.html?frn=001' + studentsdcid, function (emailFormResp) {
                                     //Create new email
                                     $j.ajax({
                                         type: 'POST',

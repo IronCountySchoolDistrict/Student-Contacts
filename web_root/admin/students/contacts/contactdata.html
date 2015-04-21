@@ -152,8 +152,9 @@
 [/if#req]
 ~[if#req.~[gpv:action]=enable.edit.demo]
     <form action="/admin/changesrecorded.white.html" method="POST" id="delete-form">
-        <input name="[01]father_employer" type="hidden" value="on">
-        <input name="[01]mother_employer" type="hidden" value="on">
+        <input type="text" name="[01]father_employer" type="hidden">
+        <input type="text" name="[01]mother_employer" type="hidden">
+        <input type="text" name="[01]guardianemail" type="hidden">
         <input type="hidden" name="ac" value="prim"/>
     </form>
 [/if#req]
@@ -557,8 +558,8 @@
                value="~[tlist_sql; select email_address from u_sc_email where contactdcid=~[gpv:contactdcid]]~(email)[/tlist_sql]"
                id="email"/>
                <span class="mini">
-            <a class="copy-demo" data-field-name="father_employer" data-input-id="employer">[Ad]</a>
-            <a class="copy-demo" data-field-name="mother_employer" data-input-id="employer">[Copy to Mother Employer]</a>
+            <a class="copy-demo" data-field-name="father_employer" data-input-id="employer">[Add to Guardian Email]</a>
+            <a class="copy-demo" data-field-name="mother_employer" data-input-id="employer">[Set as Guardian Email]</a>
         </span>
     </td>
     <td class="bold">
@@ -580,7 +581,9 @@
                                id="email-opts-emergency"
                                value="~[tlist_sql; select OPTS_EMERGENCY from u_sc_email where contactdcid=~[gpv:contactdcid]]~(OPTS_EMERGENCY)[/tlist_sql]"
                                data-parsley-excluded
-                               data-parsley-ui-enabled="false">
+                               data-parsley-ui-enabled="false"
+                               onclick="this.checked=!this.checked;"
+                               style="opacity: 0.5; box-shadow: none;">
                     </td>
                 </tr>
                 <tr>
@@ -701,6 +704,8 @@
                            id="phone1-opts-voice-emergency"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
+                           onclick="this.checked=!this.checked;"
+                           style="opacity: 0.5; box-shadow: none;"
                            ~[tlist_sql;select CASE WHEN OPTS_VOICE_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
                     ~(checked)
                     [/tlist_sql]
@@ -711,6 +716,8 @@
                            id="phone1-opts-text-emergency"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
+                           onclick="this.checked=!this.checked;"
+                           style="opacity: 0.5; box-shadow: none;"
                            ~[tlist_sql;select CASE WHEN OPTS_TEXT_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
                     ~(checked)
                     [/tlist_sql]
@@ -885,6 +892,8 @@
                            id="phone2-opts-voice-emergency"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
+                           onclick="this.checked=!this.checked;"
+                           style="opacity: 0.5; box-shadow: none;"
                            ~[tlist_sql;select CASE WHEN OPTS_VOICE_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
                     ~(checked)
                     [/tlist_sql]
@@ -895,6 +904,8 @@
                            id="phone2-opts-text-emergency"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
+                           onclick="this.checked=!this.checked;"
+                           style="opacity: 0.5; box-shadow: none;"
                            ~[tlist_sql;select CASE WHEN OPTS_TEXT_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
                     ~(checked)
                     [/tlist_sql]
@@ -1065,6 +1076,8 @@
                            id="phone3-opts-voice-emergency"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
+                           onclick="this.checked=!this.checked;"
+                           style="opacity: 0.5; box-shadow: none;"
                            ~[tlist_sql;select CASE WHEN OPTS_VOICE_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
                     ~(checked)
                     [/tlist_sql]
@@ -1075,6 +1088,8 @@
                            id="phone3-opts-text-emergency"
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
+                           onclick="this.checked=!this.checked;"
+                           style="opacity: 0.5; box-shadow: none;"
                            ~[tlist_sql;select CASE WHEN OPTS_TEXT_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
                     ~(checked)
                     [/tlist_sql]
@@ -1525,7 +1540,10 @@
                                    id="email-opts-emergency"
                                    checked
                                    data-parsley-excluded
-                                   data-parsley-ui-enabled="false">
+                                   data-parsley-ui-enabled="false"
+                                   checked
+                                   onclick="this.checked=!this.checked;"
+                                   style="opacity: 0.5; box-shadow: none;">
                         </td>
                     </tr>
                     <tr>
@@ -1628,14 +1646,20 @@
                            id="phone1-opts-voice-emergency"
                            checked
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"/>
+                           data-parsley-ui-enabled="false"
+                           checked
+                           onclick="this.checked=!this.checked;"
+                           style="opacity: 0.5; box-shadow: none;"/>
                 </td>
                 <td>
                     <input type="checkbox"
                            id="phone1-opts-text-emergency"
                            checked
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"/>
+                           data-parsley-ui-enabled="false"
+                           checked
+                           onclick="this.checked=!this.checked;"
+                           style="opacity: 0.5; box-shadow: none;"/>
                 </td>
             </tr>
             <tr>
@@ -1760,14 +1784,20 @@
                            id="phone2-opts-voice-emergency"
                            checked
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"/>
+                           data-parsley-ui-enabled="false"
+                           checked
+                           onclick="this.checked=!this.checked;"
+                           style="opacity: 0.5; box-shadow: none;"/>
                 </td>
                 <td>
                     <input type="checkbox"
                            id="phone2-opts-text-emergency"
                            checked
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"/>
+                           data-parsley-ui-enabled="false"
+                           checked
+                           onclick="this.checked=!this.checked;"
+                           style="opacity: 0.5; box-shadow: none;"/>
                 </td>
             </tr>
             <tr>
@@ -1891,14 +1921,20 @@
                            id="phone3-opts-voice-emergency"
                            checked
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"/>
+                           data-parsley-ui-enabled="false"
+                           checked
+                           onclick="this.checked=!this.checked;"
+                           style="opacity: 0.5; box-shadow: none;"/>
                 </td>
                 <td>
                     <input type="checkbox"
                            id="phone3-opts-text-emergency"
                            checked
                            data-parsley-excluded
-                           data-parsley-ui-enabled="false"/>
+                           data-parsley-ui-enabled="false"
+                           checked
+                           onclick="this.checked=!this.checked;"
+                           style="opacity: 0.5; box-shadow: none;"/>
                 </td>
             </tr>
             <tr>
