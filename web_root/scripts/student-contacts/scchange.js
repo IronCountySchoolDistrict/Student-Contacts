@@ -728,6 +728,7 @@
     function bindDoSubmit() {
         $j('#btnSubmit').on('click', function (e) {
             e.preventDefault();
+            loadingDialogInstance.open();
             // If the liveContact property exists, this is an update operation
             doSubmit();
         });
