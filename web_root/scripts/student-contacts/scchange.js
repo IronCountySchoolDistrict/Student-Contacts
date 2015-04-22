@@ -437,8 +437,10 @@
         });
 
         if (phoneAjaxCalls.length > 0) {
-            $j.when.apply($j, phoneAjaxCalls).then(function () {
-                returnToStudentContacts();
+            $j.get('/admin/students/contacts/scchange/phoneTlcForm.html?frn=001' + studentsdcid, function () {
+                $j.when.apply($j, phoneAjaxCalls).done(function () {
+                    returnToStudentContacts();
+                });
             });
         } else {
             returnToStudentContacts();
@@ -524,13 +526,11 @@
     }
 
     function newPhone(tlcPhone, studentsdcid) {
-        return $j.get('/admin/students/contacts/scchange/phoneTlcForm.html?frn=001' + studentsdcid, function () {
-            //Create new email
-            return $j.ajax({
-                type: 'POST',
-                url: '/admin/changesrecorded.white.html',
-                data: tlcPhone
-            });
+        //Create new email
+        return $j.ajax({
+            type: 'POST',
+            url: '/admin/changesrecorded.white.html',
+            data: tlcPhone
         });
     }
 
@@ -897,7 +897,7 @@
                                 });
                             });
                             
-                        });
+                        });g
                     }
                 });
             });
