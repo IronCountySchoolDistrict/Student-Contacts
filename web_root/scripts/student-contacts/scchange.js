@@ -976,7 +976,9 @@
                                                 migratePhones(livePhonesFormData, contactRecordId.id, studentsdcid);
                                             });
                                         } else {
-                                            migratePhones(livePhonesFormData, contactRecordId.id, studentsdcid);
+                                            setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
+                                                migratePhones(livePhonesFormData, contactRecordId.id, studentsdcid);
+                                            });
                                         }
                                     });
                                 });
