@@ -1,131 +1,132 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Student Contacts</title>
-<link href="/images/css/screen.css" rel="stylesheet" media="screen">
-<link href="/images/css/print.css" rel="stylesheet" media="print">
-<link rel="stylesheet" href="/images/student-contacts/css/theme/crm-css/jquery-ui.custom.css" type="text/css">
-<link rel="stylesheet" href="/images/student-contacts/css/datatable_jui.css" type="text/css">
+    <title>Student Contacts</title>
+    <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+    <link href="/images/css/print.css" rel="stylesheet" media="print">
+    <link rel="stylesheet" href="/images/student-contacts/css/theme/crm-css/jquery-ui.custom.css" type="text/css">
+    <link rel="stylesheet" href="/images/student-contacts/css/datatable_jui.css" type="text/css">
 
-~[x:insertfile;/scripts/student-contacts/custom-jquery-1.0.html]
-<script src="//cdnjs.cloudflare.com/ajax/libs/parsley.js/2.0.5/parsley.js"></script>
-~[x:insertfile;/scripts/student-contacts/custom-datatables-1.0.html]
-~[x:insertfile;/scripts/student-contacts/customscripts.html]
-
-
-<script src="https://cdn.rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
-
-<script>
-    var psData = {};
-
-    // Render these ids as strings so if there are leading 0s
-    // so they don't get removed (as they are when parsed as Numbers).
-    psData.curstudid = "~(curstudid)";
-    psData.frn = "~(frn)";
-    psData.studentdcid = "~(studentfrn)".slice(3);
-</script>
-
-<script type="text/template" id="staging-contact-template">
-    <li>
-        <a href="/admin/students/contacts/scchangeframe.html?frn=001<%= contact.studentsdcid %>&stagingcontactdcid=<%= contact.record_id %>" target="_top">
-            <%= contact.first_name %> <%= contact.last_name %>
-        </a>
-    </li>
-</script>
+    ~[x:insertfile;/scripts/student-contacts/custom-jquery-1.0.html]
+    <script src="//cdnjs.cloudflare.com/ajax/libs/parsley.js/2.0.5/parsley.js"></script>
+    ~[x:insertfile;/scripts/student-contacts/custom-datatables-1.0.html]
+    ~[x:insertfile;/scripts/student-contacts/customscripts.html]
 
 
-<style type="text/css">
-    body, td, p, ul, div {
-        color: inherit;
-    }
+    <script src="https://cdn.rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
 
-    #maincontent td, #maincontent tr, #maincontent th {
-        border: 1px solid;
-        font-size: 9pt;
-    }
+    <script>
+        var psData = {};
 
-    #holder td, #holder p {
-        font-size: 9pt;
-    }
+        // Render these ids as strings so if there are leading 0s
+        // so they don't get removed (as they are when parsed as Numbers).
+        psData.curstudid = "~(curstudid)";
+        psData.frn = "~(frn)";
+        psData.studentdcid = "~(studentfrn)".slice(3);
+    </script>
 
-    #holder tr.odd {
-        background-color: #EDF3FE;
-    }
+    <script type="text/template" id="staging-contact-template">
+        <li>
+            <a href="/admin/students/contacts/scchangeframe.html?frn=001<%= contact.studentsdcid %>&stagingcontactdcid=<%= contact.record_id %>"
+               target="_top">
+                <%= contact.first_name %> <%= contact.last_name %>
+            </a>
+        </li>
+    </script>
 
-    .hidden {
-        display: none;
-    }
 
-    #successmsg {
-        font-size: 11pt;
-        background-color: lightblue;
-        text-align: center;
-    }
+    <style type="text/css">
+        body, td, p, ul, div {
+            color: inherit;
+        }
 
-    #maincontent table {
-        border-collapse: collapse;
-    }
+        #maincontent td, #maincontent tr, #maincontent th {
+            border: 1px solid;
+            font-size: 9pt;
+        }
 
-    #holder_wrapper {
-        width: 750px;
-    }
+        #holder td, #holder p {
+            font-size: 9pt;
+        }
 
-    div.contactinfo {
-        margin-left: 20px;
-        margin-right: 20px;
-        border-bottom: 1px solid black;
-    }
+        #holder tr.odd {
+            background-color: #EDF3FE;
+        }
 
-    .infoheader {
-        font-weight: bold;
-    }
+        .hidden {
+            display: none;
+        }
 
-    .inforow {
-        background-image: url(/images/blue_grad.png);
-    }
+        #successmsg {
+            font-size: 11pt;
+            background-color: lightblue;
+            text-align: center;
+        }
 
-    .datatable {
-        background-color: #edf3fe;
-        width: 750px !important;
-    }
+        #maincontent table {
+            border-collapse: collapse;
+        }
 
-    div.address {
-        float: left;
-        margin-left: 15px;
-    }
+        #holder_wrapper {
+            width: 750px;
+        }
 
-    .mini {
-        color: #339900;
-        font-size: 7pt;
-    }
+        div.contactinfo {
+            margin-left: 20px;
+            margin-right: 20px;
+            border-bottom: 1px solid black;
+        }
 
-    .mini .title {
-        color: #000000;
-        text-decoration: underline;
-    }
+        .infoheader {
+            font-weight: bold;
+        }
 
-    .mini .data {
-        color: #339900;
-    }
+        .inforow {
+            background-image: url(/images/blue_grad.png);
+        }
 
-    .editcontact, .deletecontact, .inactivatecontact {
-        color: #ffffff !important;
-        margin-bottom: 10px !important;
-    }
+        .datatable {
+            background-color: #edf3fe;
+            width: 750px !important;
+        }
 
-    .inactive-contact {
-        background-color: #DEDEDE;
-        display: none;
-    }
+        div.address {
+            float: left;
+            margin-left: 15px;
+        }
 
-    ul > li {
-        list-style-type: none !important;
-    }
+        .mini {
+            color: #339900;
+            font-size: 7pt;
+        }
 
-</style>
+        .mini .title {
+            color: #000000;
+            text-decoration: underline;
+        }
 
-<script src="/scripts/student-contacts/studentcontacts.js"></script>
-<script src="/scripts/student-contacts/pending-contacts.js"></script>
+        .mini .data {
+            color: #339900;
+        }
+
+        .editcontact, .deletecontact, .inactivatecontact {
+            color: #ffffff !important;
+            margin-bottom: 10px !important;
+        }
+
+        .inactive-contact {
+            background-color: #DEDEDE;
+            display: none;
+        }
+
+        ul > li {
+            list-style-type: none !important;
+        }
+
+    </style>
+
+    <script src="/scripts/student-contacts/studentcontacts.js?1231654987"></script>
+    <script src="/scripts/student-contacts/pending-contacts.js"></script>
 
 </head>
 
@@ -164,6 +165,7 @@
     <!-- END Student Contacts Content list-->
 
     <h1>Contacts With Pending Changes</h1>
+
     <div class="box-round" style="width: 750px;">
         <ul id="staging-contacts-list">
 

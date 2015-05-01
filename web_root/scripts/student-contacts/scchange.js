@@ -359,13 +359,15 @@
             status: "-99"
         };
 
-        return $j.ajax({
-            url: '/ws/schema/table/' + config.contactPhoneStagingTable + '/' + phoneRecordId,
-            data: JSON.stringify(contactDcidData),
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8",
-            type: 'PUT'
-        });
+        return function(){
+            return $j.ajax({
+                url: '/ws/schema/table/' + config.contactPhoneStagingTable + '/' + phoneRecordId,
+                data: JSON.stringify(contactDcidData),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                type: 'PUT'
+            });
+        };
     }
 
     /**
@@ -437,8 +439,14 @@
         });
 
         if (phoneAjaxCalls.length > 0) {
-            $j.get('/admin/students/contacts/scchange/phoneTlcForm.html?frn=001' + studentsdcid, function () {
-                $j.when.apply($j, phoneAjaxCalls).done(function () {
+            $j.get('/admin/students/contacts/scchange/phoneTlcForm.html?frn=001' + studentsdcid, function (getResp) {
+                // By mapping the phoneAjaxCalls and calling each function, the AJAX requests are initiated.
+                var phoneAjaxCallsPromises = $j.map(phoneAjaxCalls, function(c){
+                    return c();
+                });
+                console.log('get callback reached');
+                $j.when.apply($j, phoneAjaxCallsPromises).done(function (r1,r2,r3,r4,r5,r6) {
+                    console.log('phoneAjaxCalls promises resolved');
                     returnToStudentContacts();
                 });
             });
@@ -505,13 +513,15 @@
 
         phoneUpdateData.tables[config.contactsPhoneTable] = phoneData;
 
-        return $j.ajax({
-            url: '/ws/schema/table/' + config.contactsPhoneTable + '/' + phoneRecordId,
-            data: JSON.stringify(phoneUpdateData),
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8",
-            type: 'PUT'
-        });
+        return function(){
+            return $j.ajax({
+                url: '/ws/schema/table/' + config.contactsPhoneTable + '/' + phoneRecordId,
+                data: JSON.stringify(phoneUpdateData),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                type: 'PUT'
+            });
+        };
     }
 
     function newEmail(tlcEmail, studentsdcid) {
@@ -526,12 +536,14 @@
     }
 
     function newPhone(tlcPhone, studentsdcid) {
-        //Create new email
-        return $j.ajax({
-            type: 'POST',
-            url: '/admin/changesrecorded.white.html',
-            data: tlcPhone
-        });
+        //Create new phone
+        return function() {
+            return $j.ajax({
+                type: 'POST',
+                url: '/admin/changesrecorded.white.html',
+                data: tlcPhone
+            });    
+        };
     }
 
     /**
@@ -788,7 +800,7 @@
                     if (highestPriority.priority) {
                         safeHighestPriority = highestPriority.priority;
                     } else {
-                        safeHighestPriority = 1;
+0                        safeHighestPriority = 1;
                     }
                     createOptionsForStagingPriority(safeHighestPriority);
 
@@ -976,9 +988,7 @@
                                                 migratePhones(livePhonesFormData, contactRecordId.id, studentsdcid);
                                             });
                                         } else {
-                                            setEmailStatusToMigrated(contactData.stagingEmail.id).done(function () {
-                                                migratePhones(livePhonesFormData, contactRecordId.id, studentsdcid);
-                                            });
+                                            migratePhones(livePhonesFormData, contactRecordId.id, studentsdcid);
                                         }
                                     });
                                 });
