@@ -584,7 +584,8 @@
                                data-parsley-excluded
                                data-parsley-ui-enabled="false"
                                onclick="this.checked=!this.checked;"
-                               style="opacity: 0.5; box-shadow: none;">
+                               style="opacity: 0.5; box-shadow: none;"
+                               checked>
                     </td>
                 </tr>
                 <tr>
@@ -895,9 +896,7 @@
                            data-parsley-ui-enabled="false"
                            onclick="this.checked=!this.checked;"
                            style="opacity: 0.5; box-shadow: none;"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
-                    ~(checked)
-                    [/tlist_sql]
+                           checked
                     >
                 </td>
                 <td>
@@ -907,9 +906,7 @@
                            data-parsley-ui-enabled="false"
                            onclick="this.checked=!this.checked;"
                            style="opacity: 0.5; box-shadow: none;"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]
-                    ~(checked)
-                    [/tlist_sql]
+                           checked
                     >
                 </td>
             </tr>
@@ -1079,9 +1076,7 @@
                            data-parsley-ui-enabled="false"
                            onclick="this.checked=!this.checked;"
                            style="opacity: 0.5; box-shadow: none;"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
-                    ~(checked)
-                    [/tlist_sql]
+                           checked
                     >
                 </td>
                 <td>
@@ -1091,9 +1086,7 @@
                            data-parsley-ui-enabled="false"
                            onclick="this.checked=!this.checked;"
                            style="opacity: 0.5; box-shadow: none;"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]
-                    ~(checked)
-                    [/tlist_sql]
+                           checked
                     >
                 </td>
             </tr>
@@ -1803,24 +1796,20 @@
             <tr>
                 <td>Emergency</td>
                 <td>
-                    <input type="checkbox"
+                    <input type="checkbox" checked
                            name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_sc_phone:-1]opts_voice_emergency"
                            id="phone2-opts-voice-emergency"
-                           checked
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           checked
                            onclick="this.checked=!this.checked;"
                            style="opacity: 0.5; box-shadow: none;"/>
                 </td>
                 <td>
-                    <input type="checkbox"
+                    <input type="checkbox" checked
                            name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_sc_phone:-1]opts_text_emergency"
                            id="phone2-opts-text-emergency"
-                           checked
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           checked
                            onclick="this.checked=!this.checked;"
                            style="opacity: 0.5; box-shadow: none;"/>
                 </td>
@@ -1956,7 +1945,6 @@
                            checked
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           checked
                            onclick="this.checked=!this.checked;"
                            style="opacity: 0.5; box-shadow: none;"/>
                 </td>
@@ -1964,10 +1952,9 @@
                     <input type="checkbox"
                            name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_sc_phone:-1]opts_text_emergency"
                            id="phone3-opts-text-emergency"
-                           checked
+                            checked
                            data-parsley-excluded
                            data-parsley-ui-enabled="false"
-                           checked
                            onclick="this.checked=!this.checked;"
                            style="opacity: 0.5; box-shadow: none;"/>
                 </td>

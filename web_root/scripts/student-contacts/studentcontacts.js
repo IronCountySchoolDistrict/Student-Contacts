@@ -411,6 +411,170 @@
             });
         }
 
+        /**
+         * Gathers core contact data from the HTML form, and returns the field names in tlist child format
+         * @returns {{}}
+         */
+        function getDomCoreDataTlc(contactNumber) {
+
+            var contactCoreData = {};
+            var keyName = toTlcFieldName('contact_id', -1, psData.studentdcid, null, true);
+            contactCoreData[keyName] = contactNumber.toString();
+            keyName = toTlcFieldName('first_name', -1, psData.studentdcid);
+            contactCoreData[keyName] = $('#first-name').val();
+            keyName = toTlcFieldName('last_name', -1, psData.studentdcid);
+            contactCoreData[keyName] = $('#last-name').val();
+            keyName = toTlcFieldName('priority', -1, psData.studentdcid, null, true);
+            contactCoreData[keyName] = $('#priority').val();
+            keyName = toTlcFieldName('legal_guardian', -1, psData.studentdcid);
+            contactCoreData[keyName] = $('#legal-guardian').val();
+            keyName = toTlcFieldName('relationship', -1, psData.studentdcid);
+            contactCoreData[keyName] = $('#relationship').val();
+            keyName = toTlcFieldName('residence_street', -1, psData.studentdcid);
+            contactCoreData[keyName] = $('#residence-street').val();
+            keyName = toTlcFieldName('residence_city', -1, psData.studentdcid);
+            contactCoreData[keyName] = $('#residence-city').val();
+            keyName = toTlcFieldName('residence_state', -1, psData.studentdcid);
+            contactCoreData[keyName] = $('#residence-state').val();
+            keyName = toTlcFieldName('residence_zip', -1, psData.studentdcid);
+            contactCoreData[keyName] = $('#residence-zip').val();
+            keyName = toTlcFieldName('mailing_street', -1, psData.studentdcid);
+            contactCoreData[keyName] = $('#mailing-street').val();
+            keyName = toTlcFieldName('mailing_city', -1, psData.studentdcid);
+            contactCoreData[keyName] = $('#mailing-city').val();
+            keyName = toTlcFieldName('mailing_state', -1, psData.studentdcid);
+            contactCoreData[keyName] = $('#mailing-state').val();
+            keyName = toTlcFieldName('mailing_zip', -1, psData.studentdcid);
+            contactCoreData[keyName] = $('#mailing-zip').val();
+            keyName = toTlcFieldName('employer', -1, psData.studentdcid);
+            contactCoreData[keyName] = $('#employer').val();
+            keyName = toTlcFieldName('notes', -1, psData.studentdcid);
+            contactCoreData[keyName] = $('#notes').val();
+            keyName = toTlcFieldName('corres_lang', -1, psData.studentdcid);
+            contactCoreData[keyName] = $('#corres-lang').val();
+            keyName = toTlcFieldName('status', -1, psData.studentdcid, null, true);
+            contactCoreData[keyName] = "0";
+            return contactCoreData;
+        }
+
+        /**
+         * Gathers email data from the HTML form, and returns the field names in tlist child format
+         * @returns {{}}
+         */
+        function getDomEmailDataTlc(contactDcid) {
+            var emailData = {};
+            var tableName = 'U_SC_EMAIL';
+            var keyName = toTlcFieldName('email_address', -1, psData.studentdcid, tableName);
+            emailData[keyName] = $('#email').val();
+            keyName = toTlcFieldName('contactdcid', -1, psData.studentdcid, tableName);
+            emailData[keyName] = contactDcid;
+            keyName = toTlcFieldName('opts_emergency', -1, psData.studentdcid, tableName);
+            emailData[keyName] = $('#email-opts-emergency').is(':checked') ? "1" : "";
+            keyName = toTlcFieldName('opts_high_priority', -1, psData.studentdcid, tableName);
+            emailData[keyName] = $('#email-opts-high-priority').is(':checked') ? "1" : "";
+            keyName = toTlcFieldName('opts_general', -1, psData.studentdcid, tableName);
+            emailData[keyName] = $('#email-opts-general').is(':checked') ? "1" : "";
+            keyName = toTlcFieldName('opts_attendance', -1, psData.studentdcid, tableName);
+            emailData[keyName] = $('#email-opts-attendance').is(':checked') ? "1" : "";
+            keyName = toTlcFieldName('opts_survey', -1, psData.studentdcid, tableName);
+            emailData[keyName] = $('#email-opts-survey').is(':checked') ? "1" : "";
+            keyName = toTlcFieldName('status', -1, psData.studentdcid, tableName, true);
+            emailData[keyName] = "0";
+            return emailData;
+        }
+
+        /**
+         * Gathers phone data from the HTML form, and returns the field names in tlist child format
+         * @returns {{}}
+         */
+        function getDomPhoneDataTlc(phoneIndex, contactDcid) {
+            var phoneData = {};
+            var tableName = 'U_SC_PHONE';
+            var keyName = toTlcFieldName('phone_type', -1, psData.studentdcid, tableName);
+            phoneData[keyName] = $('#phone' + phoneIndex + 'type').val();
+
+            keyName = toTlcFieldName('contactdcid', -1, psData.studentdcid, tableName);
+            phoneData[keyName] = contactDcid;
+
+            keyName = toTlcFieldName('phone_number', -1, psData.studentdcid, tableName);
+            phoneData[keyName] = $('#phone' + phoneIndex).val();
+
+            keyName = toTlcFieldName('phone_priority', -1, psData.studentdcid, tableName);
+            phoneData[keyName] = phoneIndex;
+
+            keyName = toTlcFieldName('opts_voice_emergency', -1, psData.studentdcid, tableName);
+            phoneData[keyName] = $('#phone' + phoneIndex + '-opts-voice-emergency').is(':checked') ? "1" : "";
+
+            keyName = toTlcFieldName('opts_text_emergency', -1, psData.studentdcid, tableName);
+            phoneData[keyName] = $('#phone' + phoneIndex + '-opts-text-emergency').is(':checked') ? "1" : "";
+
+            keyName = toTlcFieldName('opts_voice_high_priority', -1, psData.studentdcid, tableName);
+            phoneData[keyName] = $('#phone' + phoneIndex + '-opts-voice-high-priority').is(':checked') ? "1" : "";
+
+            keyName = toTlcFieldName('opts_text_high_priority', -1, psData.studentdcid, tableName);
+            phoneData[keyName] = $('#phone' + phoneIndex + '-opts-text-high-priority').is(':checked') ? "1" : "";
+
+            keyName = toTlcFieldName('opts_voice_general', -1, psData.studentdcid, tableName);
+            phoneData[keyName] = $('#phone' + phoneIndex + '-opts-voice-general').is(':checked') ? "1" : "";
+
+            keyName = toTlcFieldName('opts_text_general', -1, psData.studentdcid, tableName);
+            phoneData[keyName] = $('#phone' + phoneIndex + '-opts-text-general').is(':checked') ? "1" : "";
+
+            keyName = toTlcFieldName('opts_voice_attendance', -1, psData.studentdcid, tableName);
+            phoneData[keyName] = $('#phone' + phoneIndex + '-opts-voice-attendance').is(':checked') ? "1" : "";
+
+            keyName = toTlcFieldName('opts_text_attendance', -1, psData.studentdcid, tableName);
+            phoneData[keyName] = $('#phone' + phoneIndex + '-opts-text-attendance').is(':checked') ? "1" : "";
+
+            keyName = toTlcFieldName('opts_voice_survey', -1, psData.studentdcid, tableName);
+            phoneData[keyName] = $('#phone' + phoneIndex + '-opts-voice-survey').is(':checked') ? "1" : "";
+
+            keyName = toTlcFieldName('opts_text_survey', -1, psData.studentdcid, tableName);
+            phoneData[keyName] = $('#phone' + phoneIndex + '-opts-text-survey').is(':checked') ? "1" : "";
+
+            keyName = toTlcFieldName('status', -1, psData.studentdcid, tableName, true);
+            phoneData[keyName] = "0";
+            return phoneData;
+        }
+
+
+        /**
+         * Takes a field name and converts it to tlist child (tlc) formatting
+         * If creating a new record, pass in recordId=-1
+         * @param fieldName
+         * @param recordId
+         * @param foreignKey
+         * @param [isInteger] {Boolean} - if field is an INTEGER
+         * @returns {string}
+         */
+        function toTlcFieldName(fieldName, recordId, foreignKey, tableName, isInteger) {
+            // Set tableName to default value if it was not passed in.
+            tableName || (tableName = 'U_STUDENT_CONTACTS');
+
+            var tlcFieldName = 'CF-[STUDENTS:' + foreignKey + '.U_STUDENT_CONTACTS.' + tableName + ':' + recordId + ']' + fieldName;
+
+            if (isInteger) {
+                tlcFieldName += '$format=numeric';
+            }
+            return tlcFieldName;
+        }
+
+        /**
+         * Saves a contact using the same method that a tlist child tag uses:
+         * By sending a POST to changesrecorded.white.html with the form fields formatted
+         * using the CF-... format.
+         * This function will add the ac=prim key value pair
+         * @param contactCoreData {Object} all form fields that will saved, in tlist child form.
+         */
+        function saveDataUsingTlc(contactCoreData) {
+            contactCoreData.ac = 'prim';
+            return $.ajax({
+                type: 'POST',
+                url: '/admin/changesrecorded.white.html',
+                data: contactCoreData
+            });
+        }
+
         $(document).on('click', '.addcontact', function() {
             var _this = this;
             $('.addcontact').hide();
@@ -469,6 +633,9 @@
                                     });
                                 });
 
+
+
+
                                 $('form', editrow).one('submit', function(event) {
                                     $(this).find('[type=submit]').attr('disabled', 'disabled');
                                     event.preventDefault();
@@ -493,170 +660,6 @@
                                                 };
                                                 saveContact(postData, config.contactsTable, contact[1].record_id);
                                             }
-                                        });
-                                    }
-
-
-                                    /**
-                                     * Gathers core contact data from the HTML form, and returns the field names in tlist child format
-                                     * @returns {{}}
-                                     */
-                                    function getDomCoreDataTlc() {
-
-                                        var contactCoreData = {};
-                                        var keyName = toTlcFieldName('contact_id', -1, psData.studentdcid, null, true);
-                                        contactCoreData[keyName] = addContactResp.contactnumber.toString();
-                                        keyName = toTlcFieldName('first_name', -1, psData.studentdcid);
-                                        contactCoreData[keyName] = $('#first-name').val();
-                                        keyName = toTlcFieldName('last_name', -1, psData.studentdcid);
-                                        contactCoreData[keyName] = $('#last-name').val();
-                                        keyName = toTlcFieldName('priority', -1, psData.studentdcid, null, true);
-                                        contactCoreData[keyName] = $('#priority').val();
-                                        keyName = toTlcFieldName('legal_guardian', -1, psData.studentdcid);
-                                        contactCoreData[keyName] = $('#legal-guardian').val();
-                                        keyName = toTlcFieldName('relationship', -1, psData.studentdcid);
-                                        contactCoreData[keyName] = $('#relationship').val();
-                                        keyName = toTlcFieldName('residence_street', -1, psData.studentdcid);
-                                        contactCoreData[keyName] = $('#residence-street').val();
-                                        keyName = toTlcFieldName('residence_city', -1, psData.studentdcid);
-                                        contactCoreData[keyName] = $('#residence-city').val();
-                                        keyName = toTlcFieldName('residence_state', -1, psData.studentdcid);
-                                        contactCoreData[keyName] = $('#residence-state').val();
-                                        keyName = toTlcFieldName('residence_zip', -1, psData.studentdcid);
-                                        contactCoreData[keyName] = $('#residence-zip').val();
-                                        keyName = toTlcFieldName('mailing_street', -1, psData.studentdcid);
-                                        contactCoreData[keyName] = $('#mailing-street').val();
-                                        keyName = toTlcFieldName('mailing_city', -1, psData.studentdcid);
-                                        contactCoreData[keyName] = $('#mailing-city').val();
-                                        keyName = toTlcFieldName('mailing_state', -1, psData.studentdcid);
-                                        contactCoreData[keyName] = $('#mailing-state').val();
-                                        keyName = toTlcFieldName('mailing_zip', -1, psData.studentdcid);
-                                        contactCoreData[keyName] = $('#mailing-zip').val();
-                                        keyName = toTlcFieldName('employer', -1, psData.studentdcid);
-                                        contactCoreData[keyName] = $('#employer').val();
-                                        keyName = toTlcFieldName('notes', -1, psData.studentdcid);
-                                        contactCoreData[keyName] = $('#notes').val();
-                                        keyName = toTlcFieldName('corres_lang', -1, psData.studentdcid);
-                                        contactCoreData[keyName] = $('#corres-lang').val();
-                                        keyName = toTlcFieldName('status', -1, psData.studentdcid, null, true);
-                                        contactCoreData[keyName] = "0";
-                                        return contactCoreData;
-                                    }
-
-                                    /**
-                                     * Gathers email data from the HTML form, and returns the field names in tlist child format
-                                     * @returns {{}}
-                                     */
-                                    function getDomEmailDataTlc(contactDcid) {
-                                        var emailData = {};
-                                        var tableName = 'U_SC_EMAIL';
-                                        var keyName = toTlcFieldName('email_address', -1, psData.studentdcid, tableName);
-                                        emailData[keyName] = $('#email').val();
-                                        keyName = toTlcFieldName('contactdcid', -1, psData.studentdcid, tableName);
-                                        emailData[keyName] = contactDcid;
-                                        keyName = toTlcFieldName('opts_emergency', -1, psData.studentdcid, tableName);
-                                        emailData[keyName] = $('#email-opts-emergency').is(':checked') ? "1" : "";
-                                        keyName = toTlcFieldName('opts_high_priority', -1, psData.studentdcid, tableName);
-                                        emailData[keyName] = $('#email-opts-high-priority').is(':checked') ? "1" : "";
-                                        keyName = toTlcFieldName('opts_general', -1, psData.studentdcid, tableName);
-                                        emailData[keyName] = $('#email-opts-general').is(':checked') ? "1" : "";
-                                        keyName = toTlcFieldName('opts_attendance', -1, psData.studentdcid, tableName);
-                                        emailData[keyName] = $('#email-opts-attendance').is(':checked') ? "1" : "";
-                                        keyName = toTlcFieldName('opts_survey', -1, psData.studentdcid, tableName);
-                                        emailData[keyName] = $('#email-opts-survey').is(':checked') ? "1" : "";
-                                        keyName = toTlcFieldName('status', -1, psData.studentdcid, tableName, true);
-                                        emailData[keyName] = "0";
-                                        return emailData;
-                                    }
-
-                                    /**
-                                     * Gathers phone data from the HTML form, and returns the field names in tlist child format
-                                     * @returns {{}}
-                                     */
-                                    function getDomPhoneDataTlc(phoneIndex, contactDcid) {
-                                        var phoneData = {};
-                                        var tableName = 'U_SC_PHONE';
-                                        var keyName = toTlcFieldName('phone_type', -1, psData.studentdcid, tableName);
-                                        phoneData[keyName] = $('#phone' + phoneIndex + 'type').val();
-
-                                        keyName = toTlcFieldName('contactdcid', -1, psData.studentdcid, tableName);
-                                        phoneData[keyName] = contactDcid;
-
-                                        keyName = toTlcFieldName('phone_number', -1, psData.studentdcid, tableName);
-                                        phoneData[keyName] = $('#phone' + phoneIndex).val();
-
-                                        keyName = toTlcFieldName('phone_priority', -1, psData.studentdcid, tableName);
-                                        phoneData[keyName] = phoneIndex;
-
-                                        keyName = toTlcFieldName('opts_voice_emergency', -1, psData.studentdcid, tableName);
-                                        phoneData[keyName] = $('#phone' + phoneIndex + '-opts-voice-emergency').is(':checked') ? "1" : "";
-
-                                        keyName = toTlcFieldName('opts_text_emergency', -1, psData.studentdcid, tableName);
-                                        phoneData[keyName] = $('#phone' + phoneIndex + '-opts-text-emergency').is(':checked') ? "1" : "";
-
-                                        keyName = toTlcFieldName('opts_voice_high_priority', -1, psData.studentdcid, tableName);
-                                        phoneData[keyName] = $('#phone' + phoneIndex + '-opts-voice-high-priority').is(':checked') ? "1" : "";
-
-                                        keyName = toTlcFieldName('opts_text_high_priority', -1, psData.studentdcid, tableName);
-                                        phoneData[keyName] = $('#phone' + phoneIndex + '-opts-text-high-priority').is(':checked') ? "1" : "";
-
-                                        keyName = toTlcFieldName('opts_voice_general', -1, psData.studentdcid, tableName);
-                                        phoneData[keyName] = $('#phone' + phoneIndex + '-opts-voice-general').is(':checked') ? "1" : "";
-
-                                        keyName = toTlcFieldName('opts_text_general', -1, psData.studentdcid, tableName);
-                                        phoneData[keyName] = $('#phone' + phoneIndex + '-opts-text-general').is(':checked') ? "1" : "";
-
-                                        keyName = toTlcFieldName('opts_voice_attendance', -1, psData.studentdcid, tableName);
-                                        phoneData[keyName] = $('#phone' + phoneIndex + '-opts-voice-attendance').is(':checked') ? "1" : "";
-
-                                        keyName = toTlcFieldName('opts_text_attendance', -1, psData.studentdcid, tableName);
-                                        phoneData[keyName] = $('#phone' + phoneIndex + '-opts-text-attendance').is(':checked') ? "1" : "";
-
-                                        keyName = toTlcFieldName('opts_voice_survey', -1, psData.studentdcid, tableName);
-                                        phoneData[keyName] = $('#phone' + phoneIndex + '-opts-voice-survey').is(':checked') ? "1" : "";
-
-                                        keyName = toTlcFieldName('opts_text_survey', -1, psData.studentdcid, tableName);
-                                        phoneData[keyName] = $('#phone' + phoneIndex + '-opts-text-survey').is(':checked') ? "1" : "";
-
-                                        keyName = toTlcFieldName('status', -1, psData.studentdcid, tableName, true);
-                                        phoneData[keyName] = "0";
-                                        return phoneData;
-                                    }
-
-                                    /**
-                                     * Takes a field name and converts it to tlist child (tlc) formatting
-                                     * If creating a new record, pass in recordId=-1
-                                     * @param fieldName
-                                     * @param recordId
-                                     * @param foreignKey
-                                     * @param [isInteger] {Boolean} - if field is an INTEGER
-                                     * @returns {string}
-                                     */
-                                    function toTlcFieldName(fieldName, recordId, foreignKey, tableName, isInteger) {
-                                        // Set tableName to default value if it was not passed in.
-                                        tableName || (tableName = 'U_STUDENT_CONTACTS');
-
-                                        var tlcFieldName = 'CF-[STUDENTS:' + foreignKey + '.U_STUDENT_CONTACTS.' + tableName + ':' + recordId + ']' + fieldName;
-
-                                        if (isInteger) {
-                                            tlcFieldName += '$format=numeric';
-                                        }
-                                        return tlcFieldName;
-                                    }
-
-                                    /**
-                                     * Saves a contact using the same method that a tlist child tag uses:
-                                     * By sending a POST to changesrecorded.white.html with the form fields formatted
-                                     * using the CF-... format.
-                                     * This function will add the ac=prim key value pair
-                                     * @param contactCoreData {Object} all form fields that will saved, in tlist child form.
-                                     */
-                                    function saveDataUsingTlc(contactCoreData) {
-                                        contactCoreData.ac = 'prim';
-                                        return $.ajax({
-                                            type: 'POST',
-                                            url: '/admin/changesrecorded.white.html',
-                                            data: contactCoreData
                                         });
                                     }
 
@@ -709,7 +712,7 @@
                                         });
                                     }
 
-                                    var contactCoreDataTlc = getDomCoreDataTlc();
+                                    var contactCoreDataTlc = getDomCoreDataTlc(addContactResp.contactnumber);
                                     saveDataUsingTlc(contactCoreDataTlc).done(function(contactCoreResp) {
                                         var contactId = addContactResp.contactnumber.toString();
                                         var studentDcid = psData.studentdcid;
@@ -990,6 +993,8 @@
                                 function savePhones() {
                                     var contCollPhones = contactsCollection[contactId][3].phone;
 
+                                    var ajaxCalls = [];
+
                                     $.each([1, 2, 3], function(index, i) {
                                         // Find the contact in the contactsCollection that matches the current priority (@param i)
                                         var saveContactPhoneArgs = [];
@@ -1003,6 +1008,7 @@
                                         var phoneTypeElem = $('#' + phoneTypeNameId);
                                         var phoneNumberElem = $('#' + phoneNumberId);
 
+
                                         // A contact with a matching priority to "i" exists, so this phone record must already exist
                                         if (contCollPhoneWithThisPriority.length !== 0) {
 
@@ -1012,8 +1018,7 @@
                                             };
 
                                             contactPhoneData.tables[config.contactsPhoneTable] = {
-                                                "studentsdcid": psData.studentdcid,
-                                                "contactdcid": contactdcid,
+                                                "contactdcid": contactDcid,
                                                 "phone_number": phoneNumberElem.val(),
                                                 "phone_type": phoneTypeElem.val(),
                                                 "phone_priority": i.toString(),
@@ -1040,64 +1045,54 @@
                                                 saveContactPhoneArgs.push(true);
                                             }
 
-
                                             if (saveContactPhoneArgs.length !== 0) {
-                                                saveContact.apply(this, saveContactPhoneArgs).done(function () {
-                                                    $.noop();
-                                                });
+                                                ajaxCalls.push(saveContact.apply(this, saveContactPhoneArgs));
                                             }
                                         } else {
                                             // No contact in the contactsCollection array was found to match the phone with the current priority,
                                             // so, check if any data was entered for this phone number, and if that is true, create a new phone number+data
                                             // for this phone priority.
                                             if (phoneTypeElem.val() && phoneNumberElem.val()) {
-                                                // A new record must have the foreign key (studentsdcid) passed in.
-                                                contactPhoneData.tables[config.contactsPhoneTable].studentsdcid = psData.studentdcid;
-                                                saveContactPhoneArgs.push(contactPhoneData);
-                                                saveContactPhoneArgs.push(config.contactsPhoneTable);
-                                                // Record ID is not needed here since it's a new record
-                                                saveContactPhoneArgs.push(null);
-                                                // Force the ajax call to be synchronous
-                                                saveContactPhoneArgs.push(true);
+                                                var phoneDataTlc = getDomPhoneDataTlc(i, contactDcid);
+
+                                                // Fire requests here
+                                                ajaxCalls.push(saveDataUsingTlc(phoneDataTlc));
                                             }
                                         }
-
-
-
-
-                                        if (i === 3) {
-                                            m_table.fnClose(sourcerow);
-                                            $('.addcontact').show();
-                                            refreshContact(contactId, sourcerow);
-                                        }
+                                    });
+                                    $.when.apply($, ajaxCalls).done(function() {
+                                        m_table.fnClose(sourcerow);
+                                        $('.addcontact').show();
+                                        refreshContact(contactId, sourcerow);
                                     });
                                 }
 
                                 var contCollEmail = contactsCollection[contactId][3].email;
                                 // If contact had email when page was loaded
-                                var saveContactEmailArgs = [];
+                                var emailAjaxCall = [];
                                 if (contCollEmail.hasOwnProperty('email_address')) {
                                     // If this is a new contact, use the dcid of the new contact (given in "data" response obj)
+                                    var saveContactEmailArgs = [];
                                     if (!contactEmailData.tables[config.contactsEmailTable].contactdcid) {
                                         contactEmailData.tables[config.contactsEmailTable].contactdcid = data.id;
                                     }
                                     saveContactEmailArgs.push(contactEmailData);
                                     saveContactEmailArgs.push(config.contactsEmailTable);
                                     saveContactEmailArgs.push(contCollEmail.id);
+                                    emailAjaxCall.push(saveContact.apply(this, saveContactEmailArgs));
+
                                     // User didn't have email when page was loaded
                                 } else {
                                     // If contact is creating new email
                                     if ($('#email').val() !== "") {
-                                        contactEmailData.tables[config.contactsEmailTable].studentsdcid = psData.studentdcid;
-                                        saveContactEmailArgs.push(contactEmailData);
-                                        saveContactEmailArgs.push(config.contactsEmailTable);
+                                        var emailDataTlc = getDomEmailDataTlc(contactsCollection[contactId][1].record_id);
+                                        emailAjaxCall.push(saveDataUsingTlc(emailDataTlc));
                                     }
                                 }
 
                                 // If any email options were input to the page
-                                if (saveContactEmailArgs.length !== 0) {
-                                    saveContact.apply(this, saveContactEmailArgs).done(function() {
-
+                                if (emailAjaxCall.length !== 0) {
+                                    $.when.apply($, emailAjaxCall).done(function() {
                                         savePhones();
                                         m_table.fnClose(sourcerow);
                                         $('.addcontact').show();
