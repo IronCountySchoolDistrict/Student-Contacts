@@ -518,6 +518,7 @@
             <a class="copy-demo" data-field-name="father_employer" data-input-id="employer">[Copy to Father Employer]</a>
             <a class="copy-demo" data-field-name="mother_employer" data-input-id="employer">[Copy to Mother Employer]</a>
         </span>
+        <span class="copied">Copied!</span>
     </td>
     <td class="bold">Notes:</td>
     <td><textarea type="text"
@@ -554,10 +555,7 @@
         Email:
     </td>
     <td valign="top">
-        <input type="text"
-               name="CF-[STUDENTS:~(rn;t).u_student_contacts.u_sc_email:-1]email_address"
-               value="~[tlist_sql; select email_address from u_sc_email where contactdcid=~[gpv:contactdcid]]~(email)[/tlist_sql]"
-               id="email"/>
+        <input type="text" id="email" name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.U_SC_EMAIL:~[tlist_sql; select id from u_sc_email where contactdcid=~[gpv:contactdcid];nonemessage=-1]~(id)[/tlist_sql]]email_address" value="~[tlist_sql; SELECT EMAIL_ADDRESS FROM u_sc_email WHERE contactdcid=~[gpv:contactdcid]]~(EMAIL_ADDRESS)[/tlist_sql]"/>
                <span class="mini">
             <a class="copy-demo" data-field-name="father_employer" data-input-id="employer">[Add to Guardian Email]</a>
             <a class="copy-demo" data-field-name="mother_employer" data-input-id="employer">[Set as Guardian Email]</a>
@@ -580,6 +578,7 @@
                     <td>
                         <input type="checkbox"
                                id="email-opts-emergency"
+                               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.U_SC_EMAIL:~[tlist_sql; select id from u_sc_email where contactdcid=~[gpv:contactdcid];nonemessage=-1]~(id)[/tlist_sql]]OPTS_EMERGENCY"
                                value="~[tlist_sql; select OPTS_EMERGENCY from u_sc_email where contactdcid=~[gpv:contactdcid]]~(OPTS_EMERGENCY)[/tlist_sql]"
                                data-parsley-excluded
                                data-parsley-ui-enabled="false"
@@ -593,6 +592,7 @@
                     <td>
                         <input type="checkbox"
                             id="email-opts-high-priority"
+                            name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.U_SC_EMAIL:~[tlist_sql; select id from u_sc_email where contactdcid=~[gpv:contactdcid];nonemessage=-1]~(id)[/tlist_sql]]OPTS_HIGH_PRIORITY"
                             value="~[tlist_sql; select OPTS_HIGH_PRIORITY from u_sc_email where contactdcid=~[gpv:contactdcid]]~(OPTS_HIGH_PRIORITY)[/tlist_sql]"
                             data-parsley-excluded
                             data-parsley-ui-enabled="false">
@@ -602,6 +602,7 @@
                     <td>General</td>
                     <td><input type="checkbox"
                                id="email-opts-general"
+                               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.U_SC_EMAIL:~[tlist_sql; select id from u_sc_email where contactdcid=~[gpv:contactdcid];nonemessage=-1]~(id)[/tlist_sql]]OPTS_GENERAL"
                                value="~[tlist_sql; select OPTS_GENERAL from u_sc_email where contactdcid=~[gpv:contactdcid]]~(OPTS_GENERAL)[/tlist_sql]"
                                data-parsley-excluded
                                data-parsley-ui-enabled="false">
@@ -611,6 +612,7 @@
                     <td>Attendance</td>
                     <td><input type="checkbox"
                                id="email-opts-attendance"
+                               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.U_SC_EMAIL:~[tlist_sql; select id from u_sc_email where contactdcid=~[gpv:contactdcid];nonemessage=-1]~(id)[/tlist_sql]]OPTS_ATTENDANCE"
                                value="~[tlist_sql; select OPTS_ATTENDANCE from u_sc_email where contactdcid=~[gpv:contactdcid]]~(OPTS_ATTENDANCE)[/tlist_sql]"
                                data-parsley-excluded
                                data-parsley-ui-enabled="false">
@@ -620,7 +622,8 @@
                     <td>Survey</td>
                     <td><input type="checkbox"
                                id="email-opts-survey"
-                               value="~[tlist_sql; select OPTS_SURVEY from u_sc_email where contactdcid=~[gpv:contactdcid]]~(email)[/tlist_sql]"
+                               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.U_SC_EMAIL:~[tlist_sql; select id from u_sc_email where contactdcid=~[gpv:contactdcid];nonemessage=-1]~(id)[/tlist_sql]]OPTS_SURVEY"
+                               value="~[tlist_sql; select OPTS_SURVEY from u_sc_email where contactdcid=~[gpv:contactdcid]]~(OPTS_SURVEY)[/tlist_sql]"
                                data-parsley-excluded
                                data-parsley-ui-enabled="false">
                     </td>
@@ -644,7 +647,6 @@
     </td>
     <td valign="top" style="padding-bottom: 10px;">
         <select
-                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1type"
                 id="phone1type"
                 data-value="~[tlist_sql;select phone_type from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]~(phone_type)[/tlist_sql]"
                 style="margin-right:125px;margin-bottom: 40px;"
@@ -658,7 +660,6 @@
             <option value="Work">Work</option>
         </select>
         <input size="17" type="text"
-               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1"
                value="~[tlist_sql; select phone_number from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]~(phone_number)[/tlist_sql]"
                style="margin-right:125px;margin-bottom: 20px;"
                id="phone1"
@@ -672,8 +673,7 @@
         <input type="text"
                size="6"
                maxlength="6"
-               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone1"
-               value="~[tlist_sql; select phone_extension from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]~(phone_number)[/tlist_sql]"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_sc_phone:~[tlist_sql; select id from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1;nonemessage=-1]~(id)[/tlist_sql]]phone_extension"
                id="phone1ext"
                data-parsley-onephonereq
                data-parsley-phone1ext
@@ -708,9 +708,7 @@
                            data-parsley-ui-enabled="false"
                            onclick="this.checked=!this.checked;"
                            style="opacity: 0.5; box-shadow: none;"
-                           ~[tlist_sql;select CASE WHEN OPTS_VOICE_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
-                    ~(checked)
-                    [/tlist_sql]
+                           checked
                     >
                 </td>
                 <td>
@@ -720,9 +718,7 @@
                            data-parsley-ui-enabled="false"
                            onclick="this.checked=!this.checked;"
                            style="opacity: 0.5; box-shadow: none;"
-                           ~[tlist_sql;select CASE WHEN OPTS_TEXT_EMERGENCY=1 THEN 'checked' ELSE '' END from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]
-                    ~(checked)
-                    [/tlist_sql]
+                           checked
                     >
                 </td>
             </tr>
@@ -836,7 +832,6 @@
     </td>
     <td valign="top" style="padding-bottom: 10px;">
         <select
-                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone2type"
                 id="phone2type"
                 data-value="~[tlist_sql;select phone_type from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]~(phone_type)[/tlist_sql]"
                 style="margin-right:125px;margin-bottom: 40px;"
@@ -1015,7 +1010,6 @@
     </td>
     <td valign="top" style="padding-bottom: 10px;">
         <select
-                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone3type"
                 id="phone3type"
                 data-value="~[tlist_sql;select phone_type from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]~(phone_type)[/tlist_sql]"
                 style="margin-right:125px;margin-bottom: 40px;"
@@ -1028,7 +1022,6 @@
             <option value="Work">Work</option>
         </select>
         <input type="text" size="17"
-               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]phone3"
                value="~[tlist_sql; select phone_number from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]~(phone_number)[/tlist_sql]"
                id="phone3"
                class="phone"
@@ -1041,6 +1034,7 @@
         <input type="text"
                size="6"
                maxlength="6"
+               phone_priority=3;nonemessage=-1]~(id)[/tlist_sql]]phone_extension"
                value="~[tlist_sql; select phone_extension from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]~(phone_extension)[/tlist_sql]"
                id="phone3ext"
                data-parsley-onephonereq
