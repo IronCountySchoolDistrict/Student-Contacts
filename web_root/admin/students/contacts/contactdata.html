@@ -515,10 +515,10 @@
                size="25"
                id="employer"/>
         <span class="mini">
-            <a class="copy-demo" data-field-name="father_employer" data-input-id="employer">[Copy to Father Employer]</a>
-            <a class="copy-demo" data-field-name="mother_employer" data-input-id="employer">[Copy to Mother Employer]</a>
+            <a class="copy-demo" data-field-name="father_employer" data-input-id="employer" data-core-field="true">[Copy to Father Employer]</a>
+            <a class="copy-demo" data-field-name="mother_employer" data-input-id="employer" data-core-field="true">[Copy to Mother Employer]</a>
         </span>
-        <span class="copied">Copied!</span>
+        <span class="mini copied">Copied!</span>
     </td>
     <td class="bold">Notes:</td>
     <td><textarea type="text"
@@ -557,8 +557,8 @@
     <td valign="top">
         <input type="text" id="email" name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.U_SC_EMAIL:~[tlist_sql; select id from u_sc_email where contactdcid=~[gpv:contactdcid];nonemessage=-1]~(id)[/tlist_sql]]email_address" value="~[tlist_sql; SELECT EMAIL_ADDRESS FROM u_sc_email WHERE contactdcid=~[gpv:contactdcid]]~(EMAIL_ADDRESS)[/tlist_sql]"/>
                <span class="mini">
-            <a class="copy-demo" data-field-name="father_employer" data-input-id="employer">[Add to Guardian Email]</a>
-            <a class="copy-demo" data-field-name="mother_employer" data-input-id="employer">[Set as Guardian Email]</a>
+            <a class="copy-demo" data-input-id="email" data-field-name="guardianemail" data-op="append">[Add to Guardian Email]</a>
+            <a class="copy-demo" data-input-id="email" data-field-name="guardianemail" >[Set as Guardian Email]</a>
         </span>
     </td>
     <td class="bold">

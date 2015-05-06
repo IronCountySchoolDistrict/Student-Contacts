@@ -1217,14 +1217,49 @@
         });
 
         $(document).on("click", ".copy-demo", function(event) {
+            /**
+             *
+             * @return {[object]} [description]
+             */
+            function createExtDataObj(fieldName, fieldValue) {
+                return {
+                    "_table_extension": {
+                        "name": "studentcorefields",
+                        "_field": [{
+                            "name": fieldName,
+                            "value": fieldValue
+                        }]
+                    }
+                };
+            }
 
             function saveDemoData(target) {
-                var keyName = "EF-001" + psData.studentdcid + "-StudentCoreFields." + studentField;
-                var postData = {};
-                postData[keyName] = inputVal;
-                postData.ac = "prim";
-                $.post("/admin/changesrecorded.white.html", postData, function(changesResp) {
-                    target.siblings(".copied")
+                var studentsObj = {
+                    students: {
+                        student: {
+                            client_uid: 1,
+                            action: "UPDATE",
+                            id: psData.studentdcid
+                        }
+                    }
+                };
+                if (inputId === "email") {
+                    studentsObj.students.student.contact = {
+                        guardian_email: inputVal
+                    };
+                } else if (studentField === "mother_employer" ||
+                    studentField === "father_employer") {
+                    studentsObj.students.student._extension_data = createExtDataObj(studentField, inputVal);
+                }
+
+                $.ajax({
+                    "type": "POST",
+                    "url": "https://pats.irondistrict.org/api/student",
+                    "dataType": "json",
+                    "data": JSON.stringify(studentsObj),
+                    "contentType": "application/json"
+                }).then(function() {
+                    target.parents('.mini').siblings('.copied')
                         .fadeIn('slow')
                         .animate({
                             opacity: 1.0
@@ -1234,18 +1269,27 @@
                 });
             }
 
+            function addToVal(oldVal, addedVal) {
+                return oldVal + "," + addedVal;
+            }
+
             var $target = $(event.target);
             var studentField = $target.data("field-name");
             var inputId = $target.data("input-id");
             var inputVal = $("#" + inputId).val();
             $.get("/admin/students/contacts/contactdata.html?action=enable.edit.demo&frn=001" + psData.studentdcid, function() {
                 $.getJSON("/admin/students/contacts/contactdata.html?action=get.demo.data&studentsdcid=" + psData.studentdcid, function(demoData) {
+                    var msg;
                     if (demoData[studentField] !== "") {
-                        var overwrite = window.confirm("Are you sure you want to overwrite the contents of " + studentField + "? The Demographics value \"" + demoData[studentField] + "\") will be replaced by \"" + inputVal + "\")");
-                        if (overwrite) {
-                            saveDemoData($target);
-                        }
+                        msg = "Are you sure you want to overwrite the contents of " + studentField + "? The Demographics value \"" + demoData[studentField] + "\" will be replaced by \"" + inputVal + "\"";
                     } else {
+                        msg = "Are you sure you want to set the contents of " + studentField + " to \"" + inputVal + "\"?";
+                    }
+                    var confirmed = window.confirm(msg);
+                    if (confirmed) {
+                        if ($target.data("op") === "append") {
+                            inputVal = addToVal(demoData[studentField], inputVal)
+                        }
                         saveDemoData($target);
                     }
                 });
