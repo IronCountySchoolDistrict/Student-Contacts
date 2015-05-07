@@ -1043,18 +1043,16 @@
                                                     "opts_text_survey": $('#phone' + i + '-opts-text-survey').is(':checked') ? "1" : ""
                                                 };
 
-                                                if (phoneTypeElem.val() && phoneNumberElem.val()) {
-                                                    saveContactPhoneArgs.push(contactPhoneData);
-                                                    saveContactPhoneArgs.push(config.contactsPhoneTable);
+                                                saveContactPhoneArgs.push(contactPhoneData);
+                                                saveContactPhoneArgs.push(config.contactsPhoneTable);
 
-                                                    // The api expects the db record id for this phone record
-                                                    // not to be confused with the contactdcid, which is the foreign key that ties this number
-                                                    // to its corresponding contact
-                                                    saveContactPhoneArgs.push(contCollPhoneWithThisPriority[0].id);
+                                                // The api expects the db record id for this phone record
+                                                // not to be confused with the contactdcid, which is the foreign key that ties this number
+                                                // to its corresponding contact
+                                                saveContactPhoneArgs.push(contCollPhoneWithThisPriority[0].id);
 
-                                                    // Force the ajax call to be synchronous
-                                                    saveContactPhoneArgs.push(true);
-                                                }
+                                                // Force the ajax call to be synchronous
+                                                saveContactPhoneArgs.push(true);
 
                                                 if (saveContactPhoneArgs.length !== 0) {
                                                     ajaxCalls.push(saveContact.apply(this, saveContactPhoneArgs));
