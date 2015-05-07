@@ -90,6 +90,7 @@
                 "fnRender": function(oObj) {
                     var result = '';
                     var info = oObj.aData[1];
+                    var notes = oObj.aData[3].notes;
                     if ($.isEmptyObject(info) || info === "") {
                         return "";
                     }
@@ -103,6 +104,9 @@
                     }
                     if (info.corres_lang !== "") {
                         result += '<span style="font-size:8pt; display: block;">(' + info.corres_lang + ')</span>';
+                    }
+                    if (notes) {
+                        result += '<p style="margin-bottom: 0; margin-left: 0;"><span class="infoheader">Notes: </span>' + notes + '</p>';
                     }
                     return result;
                 },
