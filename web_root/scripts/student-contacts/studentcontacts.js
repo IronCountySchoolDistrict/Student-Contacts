@@ -74,6 +74,7 @@
             "sDom": '<"H"lfr<"addcontact"><"showinactive">>t<"F"ip>',
             "aaSorting": [
                 [5, 'desc'],
+                [8, 'desc'],
                 [6, 'asc'],
                 [7, 'asc']
             ],
@@ -82,7 +83,7 @@
                 "aTargets": ['_all']
             }, {
                 "bVisible": false,
-                "aTargets": [m_keyindex, 5, 6]
+                "aTargets": [m_keyindex, 5, 6, 7, 8]
             }, {
                 "sWidth": "100px",
                 "aTargets": [4]
@@ -159,7 +160,9 @@
                     if (info.employer) {
                         result += '<span class="infoheader">Employer: </span>' + info.employer + '<br />';
                     }
-                    result += '<p style="font-size:7pt; display: block;"><span class="infoheader">Modified: </span>' + info.whenmodified + ' by ' + info.whomodified + '</p>';
+                    if (info.whenmodified && info.whomodified) {
+                        result += '<p style="font-size:7pt; display: block;"><span class="infoheader">Modified: </span>' + info.whenmodified + ' by ' + info.whomodified + '</p>';
+                    }
                     result += '</p>';
                     return result;
                 },
