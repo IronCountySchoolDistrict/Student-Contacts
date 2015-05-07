@@ -1243,12 +1243,24 @@
                         }
                     }
                 };
-                if (inputId === "email") {
+                if (studentField === "guardianemail") {
                     studentsObj.students.student.contact = {
                         guardian_email: inputVal
                     };
+                } else if (studentField === "father") {
+                    studentsObj.students.student.contact = {
+                        father: inputVal
+                    };
+                } else if (studentField === "mother") {
+                    studentsObj.students.student.contact = {
+                        mother: inputVal
+                    };
                 } else if (studentField === "mother_employer" ||
-                    studentField === "father_employer") {
+                    studentField === "father_employer" ||
+                    studentField === "fatherdayphone" ||
+                    studentField === "father_home_phone" ||
+                    studentField === "motherdayphone" ||
+                    studentField === "mother_home_phone") {
                     studentsObj.students.student._extension_data = createExtDataObj(studentField, inputVal);
                 }
 
@@ -1259,7 +1271,15 @@
                     "data": JSON.stringify(studentsObj),
                     "contentType": "application/json"
                 }).then(function() {
-                    target.parents('.mini').siblings('.copied')
+                    var elem;
+                    if (op === "append") {
+                        elem = target.parents('.mini').siblings('.added');
+                    } else {
+                        elem = target.parents('.mini').siblings('.copied');
+                    }
+                    elem.css({
+                        display: "block"
+                    })
                         .fadeIn('slow')
                         .animate({
                             opacity: 1.0
@@ -1276,11 +1296,19 @@
             var $target = $(event.target);
             var studentField = $target.data("field-name");
             var inputId = $target.data("input-id");
-            var inputVal = $("#" + inputId).val();
+            var op = $target.data("op");
+            var inputVal;
+            if (studentField === "father" || studentField === "mother") {
+                inputVal = $(inputId).eq(1).val() + ", " + $(inputId).eq(0).val();
+            } else {
+                inputVal = $(inputId).val();
+            }
             $.get("/admin/students/contacts/contactdata.html?action=enable.edit.demo&frn=001" + psData.studentdcid, function() {
                 $.getJSON("/admin/students/contacts/contactdata.html?action=get.demo.data&studentsdcid=" + psData.studentdcid, function(demoData) {
                     var msg;
-                    if (demoData[studentField] !== "") {
+                    if (op === "append") {
+                        msg = "Are you sure you want to add to " + studentField + "? The value entered here \"" + inputVal + "\" will be added to the Demographics value \"" + demoData[studentField] + "\"";
+                    } else if (demoData[studentField] !== "") {
                         msg = "Are you sure you want to overwrite the contents of " + studentField + "? The Demographics value \"" + demoData[studentField] + "\" will be replaced by \"" + inputVal + "\"";
                     } else {
                         msg = "Are you sure you want to set the contents of " + studentField + " to \"" + inputVal + "\"?";
@@ -1288,7 +1316,7 @@
                     var confirmed = window.confirm(msg);
                     if (confirmed) {
                         if ($target.data("op") === "append") {
-                            inputVal = addToVal(demoData[studentField], inputVal)
+                            inputVal = addToVal(demoData[studentField], inputVal);
                         }
                         saveDemoData($target);
                     }

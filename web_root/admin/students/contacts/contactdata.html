@@ -201,9 +201,11 @@
 
 ~[if#req.~[gpv:action]=get.demo.data]
     ~[tlist_sql;
-        SELECT motherdayphone,
+        SELECT mother,
+               motherdayphone,
                mother_employer,
                mother_home_phone,
+               father,
                fatherdayphone,
                father_employer,
                father_home_phone,
@@ -213,9 +215,11 @@
         WHERE s.dcid=~[gpv:studentsdcid]
     ]
         {
+            "mother": "~(mother)",
             "motherdayphone": "~(motherdayphone)",
             "mother_employer": "~(mother_employer)",
             "mother_home_phone": "~(mother_home_phone)",
+            "father": "~(father)",
             "fatherdayphone": "~(fatherdayphone)",
             "father_employer": "~(father_employer)",
             "father_home_phone": "~(father_home_phone)",
@@ -238,12 +242,17 @@
         First Name
     </td>
     <td class="bold">
-            <input type="text"
-                   name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]first_name"
-                   id="first-name"
-                   value="~[tlist_sql; select first_name from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(first_name)[/tlist_sql]"
-                   size="25"
-                   required/>
+        <input type="text"
+               name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_student_contacts:~[tlist_sql; select id from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(id)[/tlist_sql]]first_name"
+               id="first-name"
+               value="~[tlist_sql; select first_name from u_student_contacts where studentsdcid=~(rn) and contact_id=~[gpv:gidx]]~(first_name)[/tlist_sql]"
+               size="25"
+               required/>
+        <span class="mini">
+            <a class="copy-demo" data-field-name="father" data-input-id="#first-name,#last-name">[Copy to Father's Name]</a>
+            <a class="copy-demo" data-field-name="mother" data-input-id="#first-name,#last-name">[Copy to Mother's Name]</a>
+        </span>
+        <span class="mini copied">Copied!</span>
     </td>
     <td class="bold">
         Last Name
@@ -515,8 +524,8 @@
                size="25"
                id="employer"/>
         <span class="mini">
-            <a class="copy-demo" data-field-name="father_employer" data-input-id="employer" data-core-field="true">[Copy to Father Employer]</a>
-            <a class="copy-demo" data-field-name="mother_employer" data-input-id="employer" data-core-field="true">[Copy to Mother Employer]</a>
+            <a class="copy-demo" data-field-name="father_employer" data-input-id="#employer">[Copy to Father Employer]</a>
+            <a class="copy-demo" data-field-name="mother_employer" data-input-id="#employer">[Copy to Mother Employer]</a>
         </span>
         <span class="mini copied">Copied!</span>
     </td>
@@ -556,10 +565,12 @@
     </td>
     <td valign="top">
         <input type="text" id="email" name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.U_SC_EMAIL:~[tlist_sql; select id from u_sc_email where contactdcid=~[gpv:contactdcid];nonemessage=-1]~(id)[/tlist_sql]]email_address" value="~[tlist_sql; SELECT EMAIL_ADDRESS FROM u_sc_email WHERE contactdcid=~[gpv:contactdcid]]~(EMAIL_ADDRESS)[/tlist_sql]"/>
-               <span class="mini">
-            <a class="copy-demo" data-input-id="email" data-field-name="guardianemail" data-op="append">[Add to Guardian Email]</a>
-            <a class="copy-demo" data-input-id="email" data-field-name="guardianemail" >[Set as Guardian Email]</a>
+        <span class="mini">
+            <a class="copy-demo" data-input-id="#email" data-field-name="guardianemail" data-op="append">[Add to Guardian Email]</a>
+            <a class="copy-demo" data-input-id="#email" data-field-name="guardianemail" >[Set as Guardian Email]</a>
         </span>
+        <span class="mini copied">Copied!</span>
+        <span class="mini added">Added!</span>
     </td>
     <td class="bold">
         Contact Options:
@@ -688,6 +699,13 @@
             <a class="copy-home-phone" data-field-id="phone1">[Copy]</a>
         </span>
         [/if]
+        <div class="mini">
+          <a class="copy-demo" data-input-id="#phone1" data-field-name="fatherdayphone">[Copy to Father Day Phone]</a>
+          <a class="copy-demo" data-input-id="#phone1" data-field-name="father_home_phone">[Copy to Father Home Phone]</a>
+          <a class="copy-demo" data-input-id="#phone1" data-field-name="motherdayphone">[Copy to Mother Day Phone]</a>
+          <a class="copy-demo" data-input-id="#phone1" data-field-name="mother_home_phone">[Copy to Mother Home Phone]</a>
+        </div>
+        <span class="mini copied">Copied!</span>
     </td>
     <td class="bold">
         Contact Options:
@@ -871,6 +889,13 @@
             <a class="copy-home-phone" data-field-id="phone2">[Copy]</a>
         </span>
         [/if]
+        <div class="mini">
+          <a class="copy-demo" data-input-id="#phone2" data-field-name="fatherdayphone">[Copy to Father Day Phone]</a>
+          <a class="copy-demo" data-input-id="#phone2" data-field-name="father_home_phone">[Copy to Father Home Phone]</a>
+          <a class="copy-demo" data-input-id="#phone2" data-field-name="motherdayphone">[Copy to Mother Day Phone]</a>
+          <a class="copy-demo" data-input-id="#phone2" data-field-name="mother_home_phone">[Copy to Mother Home Phone]</a>
+        </div>
+        <span class="mini copied">Copied!</span>
     </td>
     <td class="bold">
         Contact Options:
@@ -1034,7 +1059,6 @@
         <input type="text"
                size="6"
                maxlength="6"
-               phone_priority=3;nonemessage=-1]~(id)[/tlist_sql]]phone_extension"
                value="~[tlist_sql; select phone_extension from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]~(phone_extension)[/tlist_sql]"
                id="phone3ext"
                data-parsley-onephonereq
@@ -1050,6 +1074,13 @@
             <a class="copy-home-phone" data-field-id="phone3">[Copy]</a>
         </span>
         [/if]
+        <div class="mini">
+          <a class="copy-demo" data-input-id="#phone3" data-field-name="fatherdayphone">[Copy to Father Day Phone]</a>
+          <a class="copy-demo" data-input-id="#phone3" data-field-name="father_home_phone">[Copy to Father Home Phone]</a>
+          <a class="copy-demo" data-input-id="#phone3" data-field-name="motherdayphone">[Copy to Mother Day Phone]</a>
+          <a class="copy-demo" data-input-id="#phone3" data-field-name="mother_home_phone">[Copy to Mother Home Phone]</a>
+        </div>
+        <span class="mini copied">Copied!</span>
     </td>
     <td class="bold">
         Contact Options:
