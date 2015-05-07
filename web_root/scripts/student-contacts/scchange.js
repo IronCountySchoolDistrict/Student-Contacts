@@ -732,8 +732,8 @@
     }
 
     function bindApproveAll() {
-        $j('#approve-all').on('click', function (event) {
-            $j('input[type="button"]').not('#approve-all').not('[approved="true"]').trigger('click');
+        $j('.approve-all').on('click', function (event) {
+            $j('input[type="button"]').not('.approve-all').not('[approved="true"]').trigger('click');
         });
     }
 
@@ -800,7 +800,7 @@
                     if (highestPriority.priority) {
                         safeHighestPriority = highestPriority.priority;
                     } else {
-0                        safeHighestPriority = 1;
+                        safeHighestPriority = 1;
                     }
                     createOptionsForStagingPriority(safeHighestPriority);
 

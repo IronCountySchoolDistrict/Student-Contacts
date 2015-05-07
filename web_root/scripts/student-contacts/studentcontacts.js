@@ -159,6 +159,7 @@
                     if (info.employer) {
                         result += '<span class="infoheader">Employer: </span>' + info.employer + '<br />';
                     }
+                    result += '<p style="font-size:7pt; display: block;"><span class="infoheader">Modified: </span>' + info.whenmodified + ' by ' + info.whomodified + '</p>';
                     result += '</p>';
                     return result;
                 },

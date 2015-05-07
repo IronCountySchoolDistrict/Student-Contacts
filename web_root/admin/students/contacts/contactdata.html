@@ -100,7 +100,9 @@
         mailing_zip,
         employer,
         notes,
-        status
+        status,
+        TO_CHAR(whenmodified,'Month DD, YYYY'),
+        whomodified
     FROM u_student_contacts
     WHERE contact_id=~[gpv:gidx]
     AND studentsdcid=~[gpv:sdcid]]
@@ -130,7 +132,9 @@
             {
                 "employer":"~(employer;js)",
                 "notes":"~(notes;js)",
-                "status":"~(status;js)"
+                "status":"~(status;js)",
+                "whenmodified":"~(whenmodified;js)",
+                "whomodified":"~(whomodified;js)"
             },
             "<button class='editcontact'>Edit</button><br/><button class='inactivatecontact'>Inactivate</button><br/><button class='deletecontact'>Delete</button>",
             "~(status;js)",
