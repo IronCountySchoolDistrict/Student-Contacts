@@ -3,7 +3,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         description="Student Contacts Manager for PowerSchool."
         name="Student Contacts"
-        version="3.1.1"
+        version="3.2"
         xsi:schemaLocation="http://plugin.powerschool.pearson.com plugin.xsd">
 
     <access_request>
