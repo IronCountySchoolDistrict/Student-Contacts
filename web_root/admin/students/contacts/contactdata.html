@@ -37,7 +37,6 @@
 ~[if#req.~[gpv:action]=getphone]
     [
         ~[tlist_sql;
-
             SELECT id,
                    contactdcid,
                    phone_number,
@@ -99,7 +98,7 @@
         mailing_state,
         mailing_zip,
         employer,
-        notes,
+        trim(notes),
         status,
         TO_CHAR(whenmodified,'Month DD, YYYY'),
         whomodified
