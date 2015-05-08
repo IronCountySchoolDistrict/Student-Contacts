@@ -1277,6 +1277,7 @@
                     "data": JSON.stringify(studentsObj),
                     "contentType": "application/json"
                 }).then(function() {
+                    loadingDialogInstance.forceClose();
                     var elem;
                     if (op === "append") {
                         elem = target.parents('.mini').siblings('.added');
@@ -1320,6 +1321,7 @@
                         msg = "Are you sure you want to set the contents of " + studentField + " to \"" + inputVal + "\"?";
                     }
                     var confirmed = window.confirm(msg);
+                    loadingDialogInstance.open();
                     if (confirmed) {
                         if ($target.data("op") === "append") {
                             inputVal = addToVal(demoData[studentField], inputVal);
