@@ -213,7 +213,15 @@
                fatherdayphone,
                father_employer,
                father_home_phone,
-               guardianemail
+               guardianemail,
+               street,
+               city,
+               state,
+               zip,
+               mailing_street,
+               mailing_city,
+               mailing_state,
+               mailing_zip
         FROM students s
         INNER JOIN studentcorefields scf ON scf.studentsdcid=s.dcid
         WHERE s.dcid=~[gpv:studentsdcid]
@@ -227,7 +235,9 @@
             "fatherdayphone": "~(fatherdayphone)",
             "father_employer": "~(father_employer)",
             "father_home_phone": "~(father_home_phone)",
-            "guardianemail": "~(guardianemail)"
+            "guardianemail": "~(guardianemail)",
+            "home_address": "~(street) ~(city) ~(state), ~(zip)",
+            "mailing_address": "~(mailing_street) ~(mailing_city) ~(mailing_state), ~(mailing_zip)"
         }
     [/tlist_sql]
 [/if#req]
@@ -321,6 +331,9 @@
 <tr>
     <td class="bold">
         Residence Address
+        <span class="mini" style="display:block;">
+            <a class="form-copy" href="#" id="copy-from-mail">Copy From Mailing Address</a>
+        </span>
     </td>
     <td>
         Street<br/>
@@ -417,10 +430,18 @@
                data-parsley-resaddress
                data-parsley-trigger="change"
                data-parsley-validate-if-empty/>
+        <span class="mini">
+            <a class="copy-demo" data-field-name="home_address" data-input-id="#residence-street,#residence-city,#residence-state,#residence-zip">[Copy to Home Address]</a>
+            <a class="copy-demo" data-field-name="mailing_address" data-input-id="#residence-street,#residence-city,#residence-state,#residence-zip">[Copy to Mailing Address]</a>
+        </span>
+        <span class="mini copied">Copied!</span>
     </td>
 
     <td class="bold">
         Mailing Address
+        <span class="mini">
+            <a class="form-copy" href="#" id="copy-from-res">Copy From Residence Address</a>
+        </span>
     </td>
     <td colspan="3">
         Street<br/>

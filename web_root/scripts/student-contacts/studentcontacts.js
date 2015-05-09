@@ -1133,6 +1133,24 @@
                                 });
                             });
                         });
+
+                        $(".form-copy").on("click", function(event) {
+                            event.preventDefault();
+                            if ($(event.target).attr("id") === "copy-from-res") {
+                                $("#mailing-street").val($("#residence-street").val());
+                                $("#mailing-city").val($("#residence-city").val());
+                                $("#mailing-state").val($("#residence-state").val());
+                                $("#mailing-zip").val($("#residence-zip").val());
+                            }
+
+                            if ($(event.target).attr("id") === "copy-from-mail") {
+                                $("#residence-street").val($("#mailing-street").val());
+                                $("#residence-city").val($("#mailing-city").val());
+                                $("#residence-state").val($("#mailing-state").val());
+                                $("#residence-zip").val($("#mailing-zip").val());
+                            }
+                        });
+
                         $('.edit_cancel', editrow).click(function() {
                             $('.addcontact').show();
                             m_table.fnClose(sourcerow);
@@ -1268,6 +1286,24 @@
                     studentField === "motherdayphone" ||
                     studentField === "mother_home_phone") {
                     studentsObj.students.student._extension_data = createExtDataObj(studentField, inputVal);
+                } else if (studentField === "home_address") {
+                    studentsObj.students.student.addresses = {
+                        physical: {
+                            street: inputVal.street,
+                            city: inputVal.city,
+                            state_province: inputVal.state,
+                            postal_code: inputVal.zip
+                        }
+                    };
+                } else if (studentField === "mailing_address") {
+                    studentsObj.students.student.addresses = {
+                        mailing: {
+                            street: inputVal.street,
+                            city: inputVal.city,
+                            state_province: inputVal.state,
+                            postal_code: inputVal.zip
+                        }
+                    };
                 }
 
                 $.ajax({
@@ -1307,6 +1343,13 @@
             var inputVal;
             if (studentField === "father" || studentField === "mother") {
                 inputVal = $(inputId).eq(1).val() + ", " + $(inputId).eq(0).val();
+            } else if (studentField === "home_address" || studentField === "mailing_address") {
+                inputVal = {
+                    street: $(inputId).eq(0).val(),
+                    city: $(inputId).eq(1).val(),
+                    state: $(inputId).eq(2).val(),
+                    zip: $(inputId).eq(3).val()
+                };
             } else {
                 inputVal = $(inputId).val();
             }
@@ -1316,13 +1359,19 @@
                     if (op === "append") {
                         msg = "Are you sure you want to add to " + studentField + "? The value entered here \"" + inputVal + "\" will be added to the Demographics value \"" + demoData[studentField] + "\"";
                     } else if (demoData[studentField] !== "") {
-                        msg = "Are you sure you want to overwrite the contents of " + studentField + "? The Demographics value \"" + demoData[studentField] + "\" will be replaced by \"" + inputVal + "\"";
+                        // If overwriting an address field, the inputVal needs to be stringified in a specific way.
+                        if (studentField === "home_address" || studentField === "mailing_address") {
+                            msg = "Are you sure you want to overwrite the contents of " + studentField + "? The Demographics value \"" + demoData[studentField] + "\" will be replaced by \"" + inputVal.street + " " + inputVal.city + " " + inputVal.state + ", " + inputVal.zip + "\"";
+                        } else {
+                            // Fields other than address fields, inputVal can be printed by just concating it to a string.
+                            msg = "Are you sure you want to overwrite the contents of " + studentField + "? The Demographics value \"" + demoData[studentField] + "\" will be replaced by \"" + inputVal + "\"";
+                        }
                     } else {
                         msg = "Are you sure you want to set the contents of " + studentField + " to \"" + inputVal + "\"?";
                     }
                     var confirmed = window.confirm(msg);
-                    loadingDialogInstance.open();
                     if (confirmed) {
+                        loadingDialogInstance.open();
                         if ($target.data("op") === "append") {
                             inputVal = addToVal(demoData[studentField], inputVal);
                         }
@@ -1331,6 +1380,8 @@
                 });
             });
         });
+
+
 
         //Fetch contact listing
         $.get(m_requestURL, {
