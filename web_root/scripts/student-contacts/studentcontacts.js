@@ -1,6 +1,6 @@
 /*global jQuery,psData,confirm,loadingDialogInstance, console, require*/
 
-(function() {
+(function () {
     'use strict';
 
     /**
@@ -53,18 +53,18 @@
     var m_table;
     var m_keyindex = 0;
     var m_requestURL = '/admin/students/contacts/contactdata.html';
-    $(document).ready(function() {
+    $(document).ready(function () {
         loadingDialogInstance.open();
 
         $.ajaxSetup({
             url: m_requestURL
         });
         /*
-             $('#error_container').ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
-             clearError();
-             displayError("AJAX Error.  Page=" + settings.url + " Error=" + jqxhr.statusText);
-             });
-             */
+         $('#error_container').ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
+         clearError();
+         displayError("AJAX Error.  Page=" + settings.url + " Error=" + jqxhr.statusText);
+         });
+         */
 
 
         m_table = $('#holder').addClass('display').dataTable({
@@ -88,7 +88,7 @@
                 "sWidth": "100px",
                 "aTargets": [4]
             }, {
-                "fnRender": function(oObj) {
+                "fnRender": function (oObj) {
                     var result = '';
                     var info = oObj.aData[1];
                     var notes = oObj.aData[3].notes;
@@ -113,7 +113,7 @@
                 },
                 "aTargets": [1]
             }, {
-                "fnRender": function(oObj) {
+                "fnRender": function (oObj) {
                     var result = '';
                     var info = oObj.aData[2];
                     if ($.isEmptyObject(info) || info === "") {
@@ -137,7 +137,7 @@
                 },
                 "aTargets": [2]
             }, {
-                "fnRender": function(oObj) {
+                "fnRender": function (oObj) {
                     var result = '';
                     var info = oObj.aData[3];
                     if ($.isEmptyObject(info) || info === "") {
@@ -147,7 +147,7 @@
                     if (info.email.email_address) {
                         result += '<span class="infoheader">Email: </span><a href="mailto:' + info.email.email_address + '">' + info.email.email_address + '</a><br />';
                     }
-                    $.each([1, 2, 3], function(index) {
+                    $.each([1, 2, 3], function (index) {
                         if (info.phone[index]) {
                             if (info.phone[index].phone_type) {
                                 result += '<span class="infoheader">' + info.phone[index].phone_type + ': </span>';
@@ -168,10 +168,10 @@
                 },
                 "aTargets": [3]
             }],
-            "fnDrawCallback": function(oSettings) {
-                $('#holder td').removeClass('sorting_1 sorting_2 sorting_3');
+            "fnDrawCallback": function (oSettings) {
+                $('#holder').find('td').removeClass('sorting_1 sorting_2 sorting_3');
             },
-            "fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+            "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                 var $row = $(nRow);
                 var contactIsActive = aData[5] === "0";
                 setInactiveDisplay($row, contactIsActive);
@@ -222,7 +222,7 @@
             'display': 'inline'
         });
 
-        $(document).on('click', '.showinactive', function(event) {
+        $(document).on('click', '.showinactive', function (event) {
 
             var inactiveButton = $(event.target).parents('button');
             var inactiveButtonText = inactiveButton.find('.ui-button-text');
@@ -273,7 +273,7 @@
 
         function setupParsley() {
             window.ParsleyValidator
-                .addValidator('resaddress', function(value) {
+                .addValidator('resaddress', function (value) {
                     /**
                      *
                      * @type {boolean}
@@ -292,7 +292,7 @@
                 .addMessage('en', 'resaddress', 'All address fields must be filled in');
 
             window.ParsleyValidator
-                .addValidator('mailaddress', function(value) {
+                .addValidator('mailaddress', function (value) {
                     /**
                      *
                      * @type {boolean}
@@ -311,7 +311,7 @@
                 .addMessage('en', 'mailaddress', 'All address fields must be filled in');
 
             window.ParsleyValidator
-                .addValidator('onephonereq', function(value) {
+                .addValidator('onephonereq', function (value) {
                     /**
                      *
                      * @type {boolean}
@@ -323,17 +323,13 @@
                         $('#phone3type').val() === "" &&
                         $('#phone3').val() === "";
 
-                    if (allPhonesEmpty) {
-                        return false;
-                    } else {
-                        return true;
-                    }
+                    return !allPhonesEmpty;
 
                 }, 100)
                 .addMessage('en', 'onephonereq', 'At least one phone number is required.');
 
             window.ParsleyValidator
-                .addValidator('phone1num', function(value) {
+                .addValidator('phone1num', function (value) {
                     if ($('#phone1type').val() === "" && $('#phone1').val() === "") {
                         return true;
                     } else if ($('#phone1type').val() !== "" && $('#phone1').val() === "") {
@@ -345,7 +341,7 @@
                 .addMessage('en', 'phone1num', 'Phone type was given, number is required.');
 
             window.ParsleyValidator
-                .addValidator('phone1type', function(value) {
+                .addValidator('phone1type', function (value) {
                     if ($('#phone1type').val() === "" && $('#phone1').val() === "") {
                         return true;
                     } else if ($('#phone1').val() !== "" && $('#phone1type').val() === "") {
@@ -357,7 +353,7 @@
                 .addMessage('en', 'phone1type', 'Phone number was given, type is required.');
 
             window.ParsleyValidator
-                .addValidator('phone2num', function(value) {
+                .addValidator('phone2num', function (value) {
                     if ($('#phone2type').val() === "" && $('#phone2').val() === "") {
                         return true;
                     } else if ($('#phone2type').val() !== "" && $('#phone2').val() === "") {
@@ -369,7 +365,7 @@
                 .addMessage('en', 'phone2num', 'Phone type was given, number is required.');
 
             window.ParsleyValidator
-                .addValidator('phone2type', function(value) {
+                .addValidator('phone2type', function (value) {
                     if ($('#phone2type').val() === "" && $('#phone2').val() === "") {
                         return true;
                     } else if ($('#phone2').val() !== "" && $('#phone2type').val() === "") {
@@ -381,7 +377,7 @@
                 .addMessage('en', 'phone2type', 'Phone number was given, type is required.');
 
             window.ParsleyValidator
-                .addValidator('phone3num', function(value) {
+                .addValidator('phone3num', function (value) {
                     if ($('#phone3type').val() === "" && $('#phone3').val() === "") {
                         return true;
                     } else if ($('#phone3type').val() !== "" && $('#phone3').val() === "") {
@@ -393,7 +389,7 @@
                 .addMessage('en', 'phone3num', 'Phone type was given, number is required.');
 
             window.ParsleyValidator
-                .addValidator('phone3type', function(value) {
+                .addValidator('phone3type', function (value) {
                     if ($('#phone3type').val() === "" && $('#phone3').val() === "") {
                         return true;
                     } else if ($('#phone3').val() !== "" && $('#phone3type').val() === "") {
@@ -405,7 +401,7 @@
                 .addMessage('en', 'phone3type', 'Phone number was given, type is required.');
 
             window.ParsleyValidator
-                .addValidator('phonelength', function(value) {
+                .addValidator('phonelength', function (value) {
                     var valLength = value.split("_").join("").length;
                     return valLength === 12 || valLength === 0;
                 }, 100)
@@ -562,7 +558,9 @@
          */
         function toTlcFieldName(fieldName, recordId, foreignKey, tableName, isInteger) {
             // Set tableName to default value if it was not passed in.
-            tableName || (tableName = 'U_STUDENT_CONTACTS');
+            if (tableName === undefined) {
+                tableName = 'U_STUDENT_CONTACTS';
+            }
 
             var tlcFieldName = 'CF-[STUDENTS:' + foreignKey + '.U_STUDENT_CONTACTS.' + tableName + ':' + recordId + ']' + fieldName;
 
@@ -588,7 +586,7 @@
             });
         }
 
-        $(document).on('click', '.addcontact', function() {
+        $(document).on('click', '.addcontact', function () {
             var _this = this;
             $('.addcontact').hide();
             $.getJSON(m_requestURL, {
@@ -596,7 +594,7 @@
                 "action": "addcontact",
                 "sdcid": psData.studentdcid
             })
-                .success(function(addContactResp) {
+                .success(function (addContactResp) {
                     if (addContactResp.contactnumber > 0) {
                         var n = addContactResp.contactnumber;
                         var ridx = m_table.fnAddData([n, "", "", "", "", "", ""]);
@@ -606,7 +604,7 @@
                             "gidx": n,
                             "action": "getcreateform"
                         })
-                            .success(function(editform) {
+                            .success(function (editform) {
                                 var editrow = m_table.fnOpen(sourcerow, editform, "edit_row");
                                 var $editRow = $(editrow);
 
@@ -619,19 +617,19 @@
                                     'alias': 'email'
                                 });
 
-                                $editRow.find('#copy-email').on('click', function(event) {
+                                $editRow.find('#copy-email').on('click', function (event) {
                                     var $target = $(event.target);
                                     var $emailField = $target.parents('td').find('#email');
                                     copyGuardianEmail($emailField, $target.siblings('.data').text());
                                 });
 
-                                $editRow.find('.copy-home-phone').on('click', function(event) {
+                                $editRow.find('.copy-home-phone').on('click', function (event) {
                                     var $target = $(event.target);
                                     var $phoneField = $('#' + $target.data().fieldId);
                                     copyPhone($phoneField, $target.siblings('.data').text());
                                 });
 
-                                $editRow.find('.copy-home-phone').on('click', function(event) {
+                                $editRow.find('.copy-home-phone').on('click', function (event) {
                                     var $target = $(event.target);
                                     var $phoneField = $('#' + $target.data().fieldId);
                                     copyPhone($phoneField, $target.siblings('.data').text());
@@ -642,8 +640,8 @@
                                 var optionTemplate = $('#option-template').html();
                                 var numberOfContacts = Object.keys(contactsCollection).length;
 
-                                require(['underscore'], function(_) {
-                                    $.each(_.range(1, numberOfContacts + 2), function(index, priority) {
+                                require(['underscore'], function (_) {
+                                    $.each(_.range(1, numberOfContacts + 2), function (index, priority) {
                                         var renderedOptTemplate = _.template(optionTemplate, {
                                             value: priority,
                                             label: priority
@@ -652,7 +650,7 @@
                                     });
                                 });
 
-                                $('form', editrow).one('submit', function(event) {
+                                $('form', editrow).one('submit', function (event) {
                                     $(this).find('[type=submit]').attr('disabled', 'disabled');
                                     event.preventDefault();
                                     loadingDialogInstance.open();
@@ -663,7 +661,7 @@
                                     if (newPriority !== $('#priority').find('option').last().val()) {
                                         // Get all contacts with greater than or equal to priority
                                         // of the new contact
-                                        $.each(contactsCollection, function(index, contact) {
+                                        $.each(contactsCollection, function (index, contact) {
                                             if (parseInt(contact[1].priority) >= parseInt(newPriority)) {
 
                                                 var postData = {
@@ -704,7 +702,7 @@
 
                                     function savePhones(contactdcid) {
                                         var ajaxCalls = [];
-                                        $.each([1, 2, 3], function(index, i) {
+                                        $.each([1, 2, 3], function (index, i) {
                                             var phoneTypeNameId = 'phone' + i + 'type';
                                             var phoneNumberId = 'phone' + i;
 
@@ -720,7 +718,7 @@
                                         });
 
                                         // Callback fires when all responses are recieved
-                                        $.when.apply($, ajaxCalls).done(function() {
+                                        $.when.apply($, ajaxCalls).done(function () {
                                             m_table.fnClose(sourcerow);
                                             loadingDialogInstance.forceClose();
                                             $('.addcontact').show();
@@ -729,14 +727,14 @@
                                     }
 
                                     var contactCoreDataTlc = getDomCoreDataTlc(addContactResp.contactnumber);
-                                    saveDataUsingTlc(contactCoreDataTlc).done(function(contactCoreResp) {
+                                    saveDataUsingTlc(contactCoreDataTlc).done(function (contactCoreResp) {
                                         var contactId = addContactResp.contactnumber.toString();
                                         var studentDcid = psData.studentdcid;
-                                        $.getJSON('/admin/students/contacts/getContactRecordId.json.html?contactid=' + contactId + '&studentsdcid=' + studentDcid, function(contactRecordResp) {
-                                            setContactDcid(contactRecordResp.id).done(function(setContactDcidResp) {
+                                        $.getJSON('/admin/students/contacts/getContactRecordId.json.html?contactid=' + contactId + '&studentsdcid=' + studentDcid, function (contactRecordResp) {
+                                            setContactDcid(contactRecordResp.id).done(function (setContactDcidResp) {
                                                 if ($('#email').val() !== "") {
                                                     var emailDataTlc = getDomEmailDataTlc(contactRecordResp.id);
-                                                    saveDataUsingTlc(emailDataTlc).done(function() {
+                                                    saveDataUsingTlc(emailDataTlc).done(function () {
                                                         savePhones(contactRecordResp.id);
                                                     });
                                                 } else {
@@ -746,7 +744,7 @@
                                         });
                                     });
                                 });
-                                $('.edit_cancel', editrow).click(function() {
+                                $('.edit_cancel', editrow).click(function () {
                                     m_table.fnClose(sourcerow);
                                     m_table.fnDeleteRow(sourcerow);
                                     $('.addcontact').show();
@@ -757,7 +755,7 @@
         });
 
 
-        $(document).on('click', '.editcontact', function() {
+        $(document).on('click', '.editcontact', function () {
             var _this = this;
             $('.addcontact').hide();
             var row = $(this).parents('tr')[0];
@@ -771,7 +769,7 @@
                     "gidx": contactId,
                     "action": "geteditform"
                 })
-                    .success(function(editform) {
+                    .success(function (editform) {
 
                         var editrow = m_table.fnOpen(row, editform, "edit_row");
                         var $editRow = $(editrow);
@@ -790,22 +788,22 @@
                             });
                         }
 
-                        $editRow.find('#copy-email').on('click', function(event) {
+                        $editRow.find('#copy-email').on('click', function (event) {
                             var $target = $(event.target);
                             var $emailField = $target.parents('td').find('#email');
                             copyGuardianEmail($emailField, $target.siblings('.data').text());
                         });
 
-                        $editRow.find('.copy-home-phone').on('click', function(event) {
+                        $editRow.find('.copy-home-phone').on('click', function (event) {
                             var $target = $(event.target);
                             var $phoneField = $('#' + $target.data().fieldId);
                             copyPhone($phoneField, $target.siblings('.data').text());
                         });
 
-                        require(['underscore'], function(_) {
+                        require(['underscore'], function (_) {
                             var prioritySelect = $editRow.find('#priority');
 
-                            $.each(_.range(1, numberOfContacts + 1), function(index, priority) {
+                            $.each(_.range(1, numberOfContacts + 1), function (index, priority) {
                                 var renderedOptTemplate = _.template(optionTemplate, {
                                     value: priority,
                                     label: priority
@@ -816,7 +814,7 @@
                             // Set the right option of the priority dropdown
                             var priority = prioritySelect.data().value;
                             var priorityOptions = prioritySelect.find('option');
-                            $.each(priorityOptions, function(index, option) {
+                            $.each(priorityOptions, function (index, option) {
                                 if (parseInt($(option).val()) === priority) {
                                     $(option).attr('selected', 'selected');
                                 }
@@ -890,7 +888,7 @@
                             $('#email-opts-survey').attr('checked', 'checked');
                         }
 
-                        $('form', editrow).submit(function(event) {
+                        $('form', editrow).submit(function (event) {
                             $(this).find('[type=submit]').attr('disabled', 'disabled');
                             event.preventDefault();
                             loadingDialogInstance.open();
@@ -899,7 +897,7 @@
                             if (newPriority !== oldPriority) {
                                 // First priority contact is getting changed.
                                 if (newPriority > oldPriority) {
-                                    $.each(contactsCollection, function(index, contact) {
+                                    $.each(contactsCollection, function (index, contact) {
                                         if (parseInt(contact[1].priority) > parseInt(oldPriority) && parseInt(contact[1].priority) <= parseInt(newPriority)) {
                                             var postData = {
                                                 name: config.contactsTable,
@@ -908,12 +906,12 @@
                                             postData.tables[config.contactsTable] = {
                                                 priority: (parseInt(contact[1].priority) - 1).toString()
                                             };
-                                            saveContact(postData, config.contactsTable, contact[1].record_id).done(function() {
+                                            saveContact(postData, config.contactsTable, contact[1].record_id).done(function () {
                                                 // Find the rows that were updated and refresh them
                                                 // Get all rows that contain a td with a p element (only contact rows have this)
                                                 var tableRows = $('tr:has("td p")');
                                                 var updatedRow;
-                                                $.each(tableRows, function(index, tableRow) {
+                                                $.each(tableRows, function (index, tableRow) {
                                                     var rowContactId = m_table.fnGetData(tableRow)[m_keyindex];
                                                     if (rowContactId === contact[0]) {
                                                         updatedRow = tableRow;
@@ -929,7 +927,7 @@
 
                                     });
                                 } else if (newPriority < oldPriority) {
-                                    $.each(contactsCollection, function(index, contact) {
+                                    $.each(contactsCollection, function (index, contact) {
                                         if (parseInt(contact[1].priority) < parseInt(oldPriority) && parseInt(contact[1].priority) >= parseInt(newPriority)) {
                                             var postData = {
                                                 name: config.contactsTable,
@@ -938,12 +936,12 @@
                                             postData.tables[config.contactsTable] = {
                                                 priority: (parseInt(contact[1].priority) + 1).toString()
                                             };
-                                            saveContact(postData, config.contactsTable, contact[1].record_id).done(function() {
+                                            saveContact(postData, config.contactsTable, contact[1].record_id).done(function () {
                                                 // Find the rows that were updated and refresh them
                                                 // Get all rows that contain a td with a p element (only contact rows have this)
                                                 var tableRows = $('tr:has("td p")');
                                                 var updatedRow;
-                                                $.each(tableRows, function(index, tableRow) {
+                                                $.each(tableRows, function (index, tableRow) {
                                                     var rowContactId = m_table.fnGetData(tableRow)[m_keyindex];
                                                     if (rowContactId === contact[0]) {
                                                         updatedRow = tableRow;
@@ -1004,7 +1002,7 @@
                                 contactEmailData.tables[config.contactsEmailTable].contactdcid = contactsCollection[contactId][1].contactdcid;
                             }
 
-                            saveContact(contactCoreData, config.contactsTable, contactsCollection[contactId][1].record_id).done(function(data) {
+                            saveContact(contactCoreData, config.contactsTable, contactsCollection[contactId][1].record_id).done(function (data) {
                                 /**
                                  *
                                  */
@@ -1013,11 +1011,11 @@
 
                                     var ajaxCalls = [];
 
-                                    $.get('/admin/students/contacts/scchange/phoneTlcForm.html?frn=' + psData.frn, function() {
-                                        $.each([1, 2, 3], function(index, i) {
+                                    $.get('/admin/students/contacts/scchange/phoneTlcForm.html?frn=' + psData.frn, function () {
+                                        $.each([1, 2, 3], function (index, i) {
                                             // Find the contact in the contactsCollection that matches the current priority (@param i)
                                             var saveContactPhoneArgs = [];
-                                            var contCollPhoneWithThisPriority = $.grep(contCollPhones, function(elem) {
+                                            var contCollPhoneWithThisPriority = $.grep(contCollPhones, function (elem) {
                                                 return elem.phone_priority === i.toString();
                                             });
 
@@ -1088,7 +1086,7 @@
 
                                         if (ajaxCalls.length > 0) {
                                             // Handle POST responses here.
-                                            $.when.apply($, ajaxCalls).done(function() {
+                                            $.when.apply($, ajaxCalls).done(function () {
                                                 doRefresh();
                                             });
                                         } else {
@@ -1097,7 +1095,7 @@
                                     });
                                 }
 
-                                $.get('/admin/students/contacts/scchange/emailTlcForm.html?frn=' + psData.frn, function() {
+                                $.get('/admin/students/contacts/scchange/emailTlcForm.html?frn=' + psData.frn, function () {
                                     var contCollEmail = contactsCollection[contactId][3].email;
                                     // If contact had email when page was loaded
                                     var emailAjaxCall = [];
@@ -1123,7 +1121,7 @@
 
                                     // If any email options were input to the page
                                     if (emailAjaxCall.length !== 0) {
-                                        $.when.apply($, emailAjaxCall).done(function() {
+                                        $.when.apply($, emailAjaxCall).done(function () {
                                             savePhones();
                                         });
 
@@ -1134,7 +1132,7 @@
                             });
                         });
 
-                        $(".form-copy").on("click", function(event) {
+                        $(".form-copy").on("click", function (event) {
                             event.preventDefault();
                             if ($(event.target).attr("id") === "copy-from-res") {
                                 $("#mailing-street").val($("#residence-street").val());
@@ -1151,7 +1149,7 @@
                             }
                         });
 
-                        $('.edit_cancel', editrow).click(function() {
+                        $('.edit_cancel', editrow).click(function () {
                             $('.addcontact').show();
                             m_table.fnClose(sourcerow);
                         });
@@ -1159,7 +1157,7 @@
             }
         });
 
-        $(document).on('click', '.inactivatecontact', function(event) {
+        $(document).on('click', '.inactivatecontact', function (event) {
             var row = $(this).parents('tr')[0];
             if (row) {
                 var rowData = m_table.fnGetData(row);
@@ -1181,26 +1179,26 @@
                         dataType: "json",
                         contentType: 'application/json; charset=utf-8'
                     })
-                        .success(function() {
+                        .success(function () {
                             refreshContact(contactId, row);
                         })
-                        .error(function(jqxhr) {
+                        .error(function (jqxhr) {
                             displayError(jqxhr.statusText);
                         });
                 }
             }
         });
 
-        $(document).on('click', '.deletecontact', function(event) {
+        $(document).on('click', '.deletecontact', function (event) {
             var row = $(this).parents('tr')[0];
             if (row) {
                 var rowData = m_table.fnGetData(row);
                 var contactId = rowData[m_keyindex];
                 var contactName = $(row).find('td').eq(0).find('p').eq(0).text();
                 if (window.confirm("Delete contact, \"" + contactName + "\"?")) {
-                    $.get("/admin/students/contacts/contactdata.html?action=deletecontact&gidx=" + contactId + "&frn=001" + psData.studentdcid, function(resp) {
+                    $.get("/admin/students/contacts/contactdata.html?action=deletecontact&gidx=" + contactId + "&frn=001" + psData.studentdcid, function (resp) {
                         $("body").append(resp);
-                        $.post($("#delete-form").attr("action"), $("#delete-form").serialize(), function(resp) {
+                        $.post($("#delete-form").attr("action"), $("#delete-form").serialize(), function (resp) {
                             row.remove();
                         });
                     });
@@ -1208,7 +1206,7 @@
             }
         });
 
-        $(document).on('click', '.activatecontact', function(event) {
+        $(document).on('click', '.activatecontact', function (event) {
             var row = $(this).parents('tr')[0];
             if (row) {
                 var rowData = m_table.fnGetData(row);
@@ -1230,17 +1228,17 @@
                         dataType: "json",
                         contentType: 'application/json; charset=utf-8'
                     })
-                        .success(function() {
+                        .success(function () {
                             refreshContact(contactId, row);
                         })
-                        .error(function(jqxhr) {
+                        .error(function (jqxhr) {
                             displayError(jqxhr.statusText);
                         });
                 }
             }
         });
 
-        $(document).on("click", ".copy-demo", function(event) {
+        $(document).on("click", ".copy-demo", function (event) {
             /**
              *
              * @return {[object]} [description]
@@ -1312,7 +1310,7 @@
                     "dataType": "json",
                     "data": JSON.stringify(studentsObj),
                     "contentType": "application/json"
-                }).then(function() {
+                }).then(function () {
                     loadingDialogInstance.forceClose();
                     var elem;
                     if (op === "append") {
@@ -1353,8 +1351,8 @@
             } else {
                 inputVal = $(inputId).val();
             }
-            $.get("/admin/students/contacts/contactdata.html?action=enable.edit.demo&frn=001" + psData.studentdcid, function() {
-                $.getJSON("/admin/students/contacts/contactdata.html?action=get.demo.data&studentsdcid=" + psData.studentdcid, function(demoData) {
+            $.get("/admin/students/contacts/contactdata.html?action=enable.edit.demo&frn=001" + psData.studentdcid, function () {
+                $.getJSON("/admin/students/contacts/contactdata.html?action=get.demo.data&studentsdcid=" + psData.studentdcid, function (demoData) {
                     var msg;
                     if (op === "append") {
                         msg = "Are you sure you want to add to " + studentField + "? The value entered here \"" + inputVal + "\" will be added to the Demographics value \"" + demoData[studentField] + "\"";
@@ -1382,20 +1380,20 @@
         });
 
 
-
         //Fetch contact listing
         $.get(m_requestURL, {
             "sdcid": psData.studentdcid,
             "action": "newfetchcontacts"
-        }, function() {}, "json")
-            .done(function(data) {
+        }, function () {
+        }, "json")
+            .done(function (data) {
 
                 // In order to be valid JSON, an empty element has to be added to the array after the tlist_sql.
                 // Remove that empty element here.
                 data.pop();
 
                 if (data.length > 0) {
-                    $.each(data, function(index, contactId) {
+                    $.each(data, function (index, contactId) {
                         refreshContact(contactId);
                     });
                 } else {
@@ -1406,8 +1404,7 @@
     });
 
     function loadContactData(contactId) {
-
-        var contactAjax = $.ajax({
+        return $.ajax({
             url: m_requestURL,
             type: 'GET',
             data: {
@@ -1417,8 +1414,6 @@
             },
             dataType: "json"
         });
-
-        return contactAjax;
     }
 
     function loadEmailPhoneData(contactDcid) {
@@ -1456,15 +1451,15 @@
      */
     function refreshContact(contactId, row) {
 
-        loadContactData(contactId).done(function(contactsData) {
+        loadContactData(contactId).done(function (contactsData) {
             contactsCollection[contactId] = contactsData;
             var emailPhoneAjax = loadEmailPhoneData(contactsData[1].record_id);
             $.when.apply($, emailPhoneAjax)
-                .done(function(contactEmailData, contactPhoneData) {
-                    $.get('/admin/students/contacts/studentcontacts.html?frn=' + psData.frn, function() {
-                        contactsCollection[contactId][3]['email'] = contactEmailData[0];
-                        contactsCollection[contactId][3]['phone'] = contactPhoneData[0];
-                        contactsCollection[contactId][3]['phone'].pop();
+                .done(function (contactEmailData, contactPhoneData) {
+                    $.get('/admin/students/contacts/studentcontacts.html?frn=' + psData.frn, function () {
+                        contactsCollection[contactId][3].email = contactEmailData[0];
+                        contactsCollection[contactId][3].phone = contactPhoneData[0];
+                        contactsCollection[contactId][3].phone.pop();
 
                         var contactData = contactsCollection[contactId];
 
@@ -1504,7 +1499,6 @@
                             }
                         });
                     });
-
                 });
         });
     }

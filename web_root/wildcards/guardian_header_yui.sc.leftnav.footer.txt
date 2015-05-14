@@ -1,0 +1,22 @@
+
+
+<style type="text/css">
+    #btn-student-contacts a {
+        background: url(/images/student-contacts/iconStudentContacts.png) no-repeat;
+        background-size: 35px;
+    }
+</style>
+
+<script type="text/template" id="sc-link-template">
+    <!-- Start Student Contact Link -->
+    ~[if#isstudent.isstudent]
+      [else#isstudent]
+      <li id="btn-student-contacts">
+          <a href="student-contacts.html">Student Contacts</a>
+      </li>
+    [/if#isstudent]
+    
+    <!-- End Student Contact Link -->
+</script>
+
+<script src="/scripts/sc-link.js"></script>
