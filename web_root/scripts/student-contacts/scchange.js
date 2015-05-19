@@ -359,13 +359,15 @@
             status: "-99"
         };
 
-        return $j.ajax({
-            url: '/ws/schema/table/' + config.contactPhoneStagingTable + '/' + phoneRecordId,
-            data: JSON.stringify(contactDcidData),
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8",
-            type: 'PUT'
-        });
+        return function(){
+            return $j.ajax({
+                url: '/ws/schema/table/' + config.contactPhoneStagingTable + '/' + phoneRecordId,
+                data: JSON.stringify(contactDcidData),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                type: 'PUT'
+            });
+        };
     }
 
     /**
@@ -437,8 +439,16 @@
         });
 
         if (phoneAjaxCalls.length > 0) {
-            $j.when.apply($j, phoneAjaxCalls).then(function () {
-                returnToStudentContacts();
+            $j.get('/admin/students/contacts/scchange/phoneTlcForm.html?frn=001' + studentsdcid, function (getResp) {
+                // By mapping the phoneAjaxCalls and calling each function, the AJAX requests are initiated.
+                var phoneAjaxCallsPromises = $j.map(phoneAjaxCalls, function(c){
+                    return c();
+                });
+                console.log('get callback reached');
+                $j.when.apply($j, phoneAjaxCallsPromises).done(function (r1,r2,r3,r4,r5,r6) {
+                    console.log('phoneAjaxCalls promises resolved');
+                    returnToStudentContacts();
+                });
             });
         } else {
             returnToStudentContacts();
@@ -503,13 +513,15 @@
 
         phoneUpdateData.tables[config.contactsPhoneTable] = phoneData;
 
-        return $j.ajax({
-            url: '/ws/schema/table/' + config.contactsPhoneTable + '/' + phoneRecordId,
-            data: JSON.stringify(phoneUpdateData),
-            dataType: 'json',
-            contentType: "application/json; charset=utf-8",
-            type: 'PUT'
-        });
+        return function(){
+            return $j.ajax({
+                url: '/ws/schema/table/' + config.contactsPhoneTable + '/' + phoneRecordId,
+                data: JSON.stringify(phoneUpdateData),
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                type: 'PUT'
+            });
+        };
     }
 
     function newEmail(tlcEmail, studentsdcid) {
@@ -524,14 +536,14 @@
     }
 
     function newPhone(tlcPhone, studentsdcid) {
-        return $j.get('/admin/students/contacts/scchange/phoneTlcForm.html?frn=001' + studentsdcid, function () {
-            //Create new email
+        //Create new phone
+        return function() {
             return $j.ajax({
                 type: 'POST',
                 url: '/admin/changesrecorded.white.html',
                 data: tlcPhone
-            });
-        });
+            });    
+        };
     }
 
     /**
@@ -720,14 +732,15 @@
     }
 
     function bindApproveAll() {
-        $j('#approve-all').on('click', function (event) {
-            $j('input[type="button"]').not('#approve-all').not('[approved="true"]').trigger('click');
+        $j('.approve-all').on('click', function (event) {
+            $j('input[type="button"]').not('.approve-all').not('[approved="true"]').trigger('click');
         });
     }
 
     function bindDoSubmit() {
         $j('#btnSubmit').on('click', function (e) {
             e.preventDefault();
+            loadingDialogInstance.open();
             // If the liveContact property exists, this is an update operation
             doSubmit();
         });
@@ -896,7 +909,7 @@
                                 });
                             });
                             
-                        });
+                        });g
                     }
                 });
             });
