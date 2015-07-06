@@ -2,7 +2,7 @@
 <psExtension xmlns="http://www.powerschool.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://www.powerschool.com psextension.xsd">
     <extensionname>u_student_contacts</extensionname>
-    <extendedTable coreTable="Students" dbTableName="u_student_contacts_staging" childName="u_student_contacts_staging" comment="">
+    <extendedTable coreTable="STUDENTS" dbTableName="U_STUDENT_CONTACTS_STAGING" childName="U_STUDENT_CONTACTS_STAGING" comment="">
         <field name="PRIORITY" type="Integer"/>
         <field name="LEGAL_GUARDIAN" type="Boolean"/>
         <field name="LAST_NAME" type="String" length="40"/>
@@ -24,7 +24,7 @@
         <field name="CONTACTDCID" type="Integer"/>
     </extendedTable>
 
-    <extendedTable coreTable="Students" dbTableName="u_sc_phone_staging" childName="u_sc_phone_staging" comment="">
+    <extendedTable coreTable="STUDENTS" dbTableName="U_SC_PHONE_STAGING" childName="U_SC_PHONE_STAGING" comment="">
         <field name="CONTACTDCID" type="Integer" description="Contact_staging's ID field that is used as the foreign key, not to be confused with CONTACT_ID."/>
         <field name="PHONE_NUMBER" type="String" length="40"/>
         <field name="PHONE_TYPE" type="String" length="10"/>
@@ -43,7 +43,7 @@
         <field name="STATUS" type="Integer" description="Determines if this contact's has been migrated to the live side (-99 if migration has occured)."/>
     </extendedTable>
 
-    <extendedTable coreTable="Students" dbTableName="u_sc_email_staging" childName="u_sc_email_staging" comment="">
+    <extendedTable coreTable="STUDENTS" dbTableName="U_SC_EMAIL_STAGING" childName="U_SC_EMAIL_STAGING" comment="">
         <field name="CONTACTDCID" type="String" length="40" description="Contact_staging's ID field that is used as the foreign key, not to be confused with CONTACT_ID."/>
         <field name="EMAIL_ADDRESS" type="String" length="60"/>
         <field name="OPTS_EMERGENCY" type="Boolean"/>
@@ -54,7 +54,7 @@
         <field name="STATUS" type="Integer" description="Determines if this contact's has been migrated to the live side (-99 if migration has occured)."/>
     </extendedTable>
 
-    <extendedTable coreTable="Students" dbTableName="u_student_contacts" childName="u_student_contacts" comment="">
+    <extendedTable coreTable="STUDENTS" dbTableName="U_STUDENT_CONTACTS" childName="U_STUDENT_CONTACTS" comment="">
         <field name="PRIORITY" type="Integer"/>
         <field name="LEGAL_GUARDIAN" type="Boolean"/>
         <field name="LAST_NAME" type="String" length="40"/>
@@ -76,7 +76,7 @@
         <field name="CONTACTDCID" type="Integer"/>
     </extendedTable>
 
-    <extendedTable coreTable="Students" dbTableName="u_sc_phone" childName="u_sc_phone" comment="">
+    <extendedTable coreTable="STUDENTS" dbTableName="U_SC_PHONE" childName="U_SC_PHONE" comment="">
         <field name="CONTACTDCID" type="Integer"/>
         <field name="PHONE_NUMBER" type="String" length="40"/>
         <field name="PHONE_TYPE" type="String" length="10"/>
@@ -94,7 +94,7 @@
         <field name="OPTS_TEXT_GENERAL" type="Boolean"/>
     </extendedTable>
 
-    <extendedTable coreTable="Students" dbTableName="u_sc_email" childName="u_sc_email" comment="">
+    <extendedTable coreTable="STUDENTS" dbTableName="U_SC_EMAIL" childName="U_SC_EMAIL" comment="">
         <field name="CONTACTDCID" type="String" length="40" description="Contact's ID field that is used as the foreign key, not to be confused with CONTACT_ID."/>
         <field name="EMAIL_ADDRESS" type="String" length="60"/>
         <field name="OPTS_EMERGENCY" type="Boolean"/>

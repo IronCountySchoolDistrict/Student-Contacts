@@ -3,21 +3,35 @@
 <head>
     <title>Student Contacts</title>
     ~[wc:commonscripts]
-    <link href="/images/css/screen.css" rel="stylesheet" media="screen">
-    <link href="/images/css/print.css" rel="stylesheet" media="print">
-    <link rel="stylesheet" href="/images/student-contacts/css/theme/crm-css/jquery-ui.custom.css" type="text/css">
-    <link rel="stylesheet" href="/images/student-contacts/css/datatable_jui.css" type="text/css">
+    <link href="<!-- @echo IMAGE_SERVER_URL -->/images/css/screen.css" rel="stylesheet" media="screen">
+    <link href="<!-- @echo IMAGE_SERVER_URL -->/images/css/print.css" rel="stylesheet" media="print">
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/json2/20121008/json2.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/parsley.js/2.0.5/parsley.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/datatables-tabletools/2.1.5/js/TableTools.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/zeroclipboard/1.2.1/ZeroClipboard.min.js"></script>
-    <link rel="stylesheet" href="/scripts/student-contacts/tabletools/css/TableTools.css" type="text/css">
-    <link rel="stylesheet" href="/scripts/student-contacts/tabletools/css/TableTools_JUI.css" type="text/css">
+    <link rel="stylesheet" href="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/css/theme/crm-css/jquery-ui.custom.css" type="text/css">
+    <link rel="stylesheet" href="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/css/datatable_jui.css" type="text/css">
+
+    <link rel="stylesheet" href="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/js/student-contacts/tabletools/css/TableTools.css" type="text/css">
+    <link rel="stylesheet" href="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/js/student-contacts/tabletools/css/TableTools_JUI.css" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/css/demo_table_jui.css" type="text/css">
+
+    <script type="text/javascript">
+        require.config({
+            paths: {
+                "datatables": "//cdn.datatables.net/1.10.7/js/jquery.dataTables",
+                "datatables.jqueryui": "//cdn.datatables.net/plug-ins/1.10.7/integration/jqueryui/dataTables.jqueryui",
+                "parsley": "https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.1.2/parsley"
+            },
+            shim: {
+                "datatables": {
+                    deps: ["jquery"],
+                    exports: "jQuery.fn.dataTable"
+                },
+                "datatables.jqueryui": {
+                    deps: ["datatables"]
+                }
+            }
+        });
+    </script>
+    
     
     <script src="https://cdn.rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
 
@@ -134,8 +148,8 @@
 
     </style>
 
-    <script src="/scripts/student-contacts/studentcontacts.js?v=3.2"></script>
-    <script src="/scripts/student-contacts/pending-contacts.js"></script>
+    <script src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/js/student-contacts/studentcontacts.js"></script>
+    <script src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/js/student-contacts/pending-contacts.js"></script>
 
 </head>
 
