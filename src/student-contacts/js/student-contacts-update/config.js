@@ -2,7 +2,7 @@
 define(function() {
     'use strict';
     return {
-        'psApi': 'https://pats.irondistrict.org',
+        'psApi': '/* @echo API_URL */',
 
         'studentContactsTable': 'u_student_contacts',
         'studentContactsEmailTable': 'u_sc_email',

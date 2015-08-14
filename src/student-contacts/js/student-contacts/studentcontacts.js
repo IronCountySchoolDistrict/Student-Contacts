@@ -1302,7 +1302,7 @@ require(["jquery", "datatables", "parsley"], function($) {
 
                 $.ajax({
                     "type": "POST",
-                    "url": "https://pats.irondistrict.org/api/student",
+                    "url": "/* @echo API_URL *//api/student",
                     "dataType": "json",
                     "data": JSON.stringify(studentsObj),
                     "contentType": "application/json"
