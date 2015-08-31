@@ -3,14 +3,14 @@
 <head>
     <title>Student Contacts</title>
     ~[wc:commonscripts]
-    <link href="<!-- @echo IMAGE_SERVER_URL -->/images/css/screen.css" rel="stylesheet" media="screen">
-    <link href="<!-- @echo IMAGE_SERVER_URL -->/images/css/print.css" rel="stylesheet" media="print">
+    <link href="/images/css/screen.css" rel="stylesheet" media="screen">
+    <link href="/images/css/print.css" rel="stylesheet" media="print">
 
-    <link rel="stylesheet" href="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/css/theme/crm-css/jquery-ui.custom.css" type="text/css">
-    <link rel="stylesheet" href="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/css/datatable_jui.css" type="text/css">
+    <link rel="stylesheet" href="/scripts/student-contacts/css/theme/crm-css/jquery-ui.custom.css" type="text/css">
+    <link rel="stylesheet" href="/scripts/student-contacts/css/datatable_jui.css" type="text/css">
 
-    <link rel="stylesheet" href="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/js/student-contacts/tabletools/css/TableTools.css" type="text/css">
-    <link rel="stylesheet" href="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/js/student-contacts/tabletools/css/TableTools_JUI.css" type="text/css">
+    <link rel="stylesheet" href="/scripts/student-contacts/js/student-contacts/tabletools/css/TableTools.css" type="text/css">
+    <link rel="stylesheet" href="/scripts/student-contacts/js/student-contacts/tabletools/css/TableTools_JUI.css" type="text/css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.9.4/css/demo_table_jui.css" type="text/css">
 
     <script type="text/javascript">
@@ -18,7 +18,8 @@
             paths: {
                 "datatables": "//cdn.datatables.net/1.10.7/js/jquery.dataTables",
                 "datatables.jqueryui": "//cdn.datatables.net/plug-ins/1.10.7/integration/jqueryui/dataTables.jqueryui",
-                "parsley": "https://cdnjs.cloudflare.com/ajax/libs/parsley.js/2.1.2/parsley"
+                "parsley": "//cdnjs.cloudflare.com/ajax/libs/parsley.js/2.1.2/parsley",
+                "jquery.inputmask": "//cdn.rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle"
             },
             shim: {
                 "datatables": {
@@ -27,13 +28,13 @@
                 },
                 "datatables.jqueryui": {
                     deps: ["datatables"]
+                },
+                "jquery.inputmask": {
+                    exports: "jQuery.fn.inputmask"
                 }
             }
         });
     </script>
-
-
-    <script src="https://cdn.rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
 
     <script>
         var psData = {};
@@ -149,8 +150,8 @@
 
     </style>
 
-    <script src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/js/student-contacts/studentcontacts.js"></script>
-    <script src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/js/student-contacts/pending-contacts.js"></script>
+    <script src="/scripts/student-contacts/js/student-contacts/studentcontacts.js"></script>
+    <script src="/scripts/student-contacts/js/student-contacts/pending-contacts.js"></script>
 
 </head>
 

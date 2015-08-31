@@ -1,5 +1,5 @@
 /*global jQuery,psData,confirm,loadingDialogInstance, console, require*/
-require(["jquery", "datatables", "parsley"], function($) {
+require(["jquery", "datatables", "parsley", "jquery.inputmask"], function($) {
     'use strict';
 
     /**
