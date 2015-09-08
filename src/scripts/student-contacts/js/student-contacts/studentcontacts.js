@@ -1,5 +1,5 @@
 /*global jQuery,psData,confirm,loadingDialogInstance, console, require*/
-require(["jquery", "datatables", "parsley", "jquery.inputmask"], function($) {
+require(["jquery", "jquery.inputmask", "datatables", "parsley", "inputmask.extensions"], function($) {
     'use strict';
 
     /**
@@ -48,7 +48,7 @@ require(["jquery", "datatables", "parsley", "jquery.inputmask"], function($) {
         target.val(phone);
     }
 
-    var $ = jQuery.noConflict();
+    //var $ = jQuery.noConflict();
     var m_table;
     var m_keyindex = 0;
     var m_requestURL = '/admin/students/contacts/contactdata.html';
@@ -1347,7 +1347,8 @@ require(["jquery", "datatables", "parsley", "jquery.inputmask"], function($) {
             } else {
                 inputVal = $(inputId).val();
             }
-            $.get("/admin/students/contacts/contactdata.html?action=enable.edit.demo&frn=001" + psData.studentdcid, function () {
+
+            $.get(`/admin/students/contacts/contactdata.html?action=enable.edit.demo&frn=001${psData.studentdcid}`, function () {
                 $.getJSON("/admin/students/contacts/contactdata.html?action=get.demo.data&studentsdcid=" + psData.studentdcid, function (demoData) {
                     var msg;
                     if (op === "append") {

@@ -2,14 +2,18 @@
 require.config({
     paths: {
         // app modules
-        tableModule: '/* @echo IMAGE_SERVER_URL *//student-contacts/js/student-contacts-update/table-module',
-        service: '/* @echo IMAGE_SERVER_URL *//student-contacts/js/student-contacts-update/service',
-        actions: '/* @echo IMAGE_SERVER_URL *//student-contacts/js/student-contacts-update/actions',
-        config: '/* @echo IMAGE_SERVER_URL *//student-contacts/js/student-contacts-update/config',
-        tooltip: '/* @echo IMAGE_SERVER_URL *//student-contacts/js/student-contacts-update/tooltip',
+        'tableModule': '/scripts/student-contacts/js/student-contacts-update/table-module',
+        'service': '/scripts/student-contacts/js/student-contacts-update/service',
+        'actions': '/scripts/student-contacts/js/student-contacts-update/actions',
+        'config': '/scripts/student-contacts/js/student-contacts-update/config',
+        'tooltip': '/scripts/student-contacts/js/student-contacts-update/tooltip',
+        'jquery.inputmask': '/scripts/student-contacts/lib/jquery.inputmask',
+        'inputmask': '/scripts/student-contacts/lib/inputmask',
+        'dependencyLib': '/scripts/student-contacts/lib/dependencyLib',
+        'inputmask.extensions': '/scripts/student-contacts/lib/inputmask.extensions',
 
-        parsley: '//cdnjs.cloudflare.com/ajax/libs/parsley.js/2.0.5/parsley',
-        underscore: 'underscore/underscore'
+        'parsley': '//cdnjs.cloudflare.com/ajax/libs/parsley.js/2.0.5/parsley',
+        'underscore': 'underscore/underscore'
     }
 });
 

@@ -19,7 +19,10 @@
                 "datatables": "//cdn.datatables.net/1.10.7/js/jquery.dataTables",
                 "datatables.jqueryui": "//cdn.datatables.net/plug-ins/1.10.7/integration/jqueryui/dataTables.jqueryui",
                 "parsley": "//cdnjs.cloudflare.com/ajax/libs/parsley.js/2.1.2/parsley",
-                "jquery.inputmask": "//cdn.rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle"
+                "jquery.inputmask": "/scripts/student-contacts/lib/jquery.inputmask",
+                "inputmask": "/scripts/student-contacts/lib/inputmask",
+                "dependencyLib": "/scripts/student-contacts/lib/dependencyLib",
+                "inputmask.extensions": "/scripts/student-contacts/lib/inputmask.extensions"
             },
             shim: {
                 "datatables": {
@@ -28,9 +31,6 @@
                 },
                 "datatables.jqueryui": {
                     deps: ["datatables"]
-                },
-                "jquery.inputmask": {
-                    exports: "jQuery.fn.inputmask"
                 }
             }
         });
@@ -149,6 +149,8 @@
         }
 
     </style>
+
+    <!--<script src="//cdn.rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle"></script>-->
 
     <script src="/scripts/student-contacts/js/student-contacts/studentcontacts.js"></script>
     <script src="/scripts/student-contacts/js/student-contacts/pending-contacts.js"></script>

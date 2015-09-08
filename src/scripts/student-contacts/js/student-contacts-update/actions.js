@@ -1,6 +1,6 @@
 /*global define, $j, psData, loadingDialogInstance, jQuery*/
 
-define(['service', 'underscore', 'config', 'parsley'], function (service, _, config, parsley) {
+define(['service', 'underscore', 'config', 'parsley', 'jquery.inputmask'], function (service, _, config, parsley) {
     'use strict';
     return {
         main: function () {
