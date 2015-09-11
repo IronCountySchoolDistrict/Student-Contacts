@@ -120,7 +120,17 @@
         </style>
         <link rel="stylesheet" href="/scripts/student-contacts/css/contactform.css" type="text/css">
 
-        <script src="/scripts/student-contacts/js/student-contacts-update/main.js"></script>
+        <script>
+          require.config({
+            paths: {
+              'student-contacts-update': '/scripts/student-contacts/js/student-contacts-update/main'
+            }
+          });
+
+          require(['student-contacts-update'], function(scu) {
+            scu.main();
+          });
+        </script>
 
         <h1>Legal Parents/Guardians</h1>
 
@@ -251,7 +261,7 @@
                 <label>Name: </label>
                 <br/>
                 <label id="first-name-label" for="first-name">First Name: </label><img id="first-name-qmark" class="qmark"
-                                                                                       src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                                                                       src=/images/student-contacts/qmark.png
                                                                                        title="Contact's First Name">
                 <input type="text"
                        id="first-name"
@@ -261,7 +271,7 @@
                        required/>
                 <br/>
                 <label id="last-name-label" for="last-name">Last Name: </label><img id="last-name-qmark" class="qmark"
-                                                                                    src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                                                                    src=/images/student-contacts/qmark.png
                                                                                     title="Contact's Last Name">
                 <input type="text"
                        id="last-name"
@@ -271,7 +281,7 @@
                        required/>
                 <br/>
                 <br/>
-                <label id="priority-label" for="priority">Priority: <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png" class="qmark"
+                <label id="priority-label" for="priority">Priority: <img src=/images/student-contacts/qmark.png class="qmark"
                                                                          title="In what order do you want us to try to contact this student's parents/legal guardians?"></label>
                 <select id="priority">
                     <%
@@ -285,7 +295,7 @@
                 </select>
                 <br/>
                 <br/>
-                <label for="relationship">Relationship: <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png" class="qmark"
+                <label for="relationship">Relationship: <img src=/images/student-contacts/qmark.png class="qmark"
                                                              title="How is this contact related to the student?"></label>
                 <select id="relationship" required>
                     <option></option>
@@ -314,14 +324,14 @@
                 </select>
                 <br/>
                 <br/>
-                <label id="employer-label">Employer: <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                <label id="employer-label">Employer: <img src=/images/student-contacts/qmark.png
                                                           class="qmark"
                                                           title="Name of the contact's place of employment. Please note that this is NOT the title/position of this contact's job."></label>
                 <input class="info-input" id="employer" type="text" placeholder="<%= contact.employer %>"
                        value="<%= contact.employer %>"/>
                 <br/>
                 <br/>
-                <label id="corres-lang-label">Language of Correspondence: <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                <label id="corres-lang-label">Language of Correspondence: <img src=/images/student-contacts/qmark.png
                                                                                class="qmark"
                                                                                title="In what language would you like to receive correspondence?"></label>
                 <select class="info-input" id="corres-lang">
@@ -330,7 +340,7 @@
                 </select>
             </td>
             <td>
-                <label>Residence Address: <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png" class="qmark"
+                <label>Residence Address: <img src=/images/student-contacts/qmark.png class="qmark"
                                                title="Contact's address of residence"></label>
                 <br/>
                 <label class="street-label">Street: </label>
@@ -425,7 +435,7 @@
                 <br/>
                 <br/>
 
-                <label>Mailing Address: <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                <label>Mailing Address: <img src=/images/student-contacts/qmark.png
                                              class="qmark"
                                              title="Contact's mailing address.
                                                  Please fill out the mailing address fields only if this contact
@@ -522,7 +532,7 @@
             </td>
             <td>
                 <label id="email-label">Email:
-                    <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                    <img src=/images/student-contacts/qmark.png
                          class="qmark"
                          title="Email address of contact for this student; if specifying for a Parent or Legal Guardian, Report Cards will be sent to this email address for this specific student.">
                 </label>
@@ -530,7 +540,7 @@
                        data-parsley-type="email"/>
                     <span>
                         <label style="display: block; padding-bottom: 5px;">Contact Options: <img
-                                src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                src=/images/student-contacts/qmark.png
                                 class="qmark"
                                 title="This email address will automatically be enrolled in our parent notification
                                 system with the options you provide below. We strongly recommend that you enable Emergency alerts and
@@ -545,7 +555,7 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td>Emergency <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Emergency <img src=/images/student-contacts/qmark.png
                                                    class="qmark"
                                                    title="Emergency notifications are considered most urgent and are often associated with a potential threat, a school lockdown, or a disaster with possible student safety concerns">
                                 </td>
@@ -562,7 +572,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>High Priority <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>High Priority <img src=/images/student-contacts/qmark.png
                                                        class="qmark"
                                                        title="Notifications that are NOT emergency but are higher in priority">
                                 </td>
@@ -584,7 +594,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>General <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>General <img src=/images/student-contacts/qmark.png
                                                  class="qmark"
                                                  title="Notifications about events and activities occurring at school/district">
                                 </td>
@@ -606,7 +616,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Attendance <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Attendance <img src=/images/student-contacts/qmark.png
                                                     class="qmark"
                                                     title="Notifications for when a student is absent or tardy but is not excused">
                                 </td>
@@ -627,7 +637,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Survey <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Survey <img src=/images/student-contacts/qmark.png
                                                 class="qmark"
                                                 title="Notifications used by school/district for parent feedback and surveys">
                                 </td>
@@ -694,7 +704,7 @@
                     </span>
                     <span style="display: inline-block;">
                         <label style="display: block; padding-bottom: 5px;">Contact Options: <img
-                                src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                src=/images/student-contacts/qmark.png
                                 class="qmark"
                                 title="The phone number you fill in here will automatically be enrolled in our parent notification
                                           system with the options you provide below. We strongly recommend that you enable Emergency alerts and
@@ -707,7 +717,7 @@
                                 <th>Text</th>
                             </tr>
                             <tr>
-                                <td>Emergency <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Emergency <img src=/images/student-contacts/qmark.png
                                                    class="qmark"
                                                    title="Emergency notifications are considered most urgent and are often associated with a potential threat, a school lockdown, or a disaster with possible student safety concerns">
                                 </td>
@@ -735,7 +745,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>High Priority <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>High Priority <img src=/images/student-contacts/qmark.png
                                                        class="qmark"
                                                        title="Notifications that are NOT emergency but are higher in priority">
                                 </td>
@@ -772,7 +782,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>General <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>General <img src=/images/student-contacts/qmark.png
                                                  class="qmark"
                                                  title="Notifications about events and activities occurring at school/district">
                                 </td>
@@ -810,7 +820,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Attendance <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Attendance <img src=/images/student-contacts/qmark.png
                                                     class="qmark"
                                                     title="Notifications for when a student is absent or tardy but is not excused">
                                 </td>
@@ -848,7 +858,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Survey <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Survey <img src=/images/student-contacts/qmark.png
                                                 class="qmark"
                                                 title="Notifications used by school/district for parent feedback and surveys">
                                 </td>
@@ -924,7 +934,7 @@
                     </span>
                     <span style="display: inline-block;">
                         <label style="display: block; padding-bottom: 5px;">Contact Options:
-                            <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                            <img src=/images/student-contacts/qmark.png
                                 class="qmark"
                                 title="The phone number you fill in here will automatically be enrolled in our parent notification
                                           system with the options you provide below. We strongly recommend that you enable Emergency alerts and
@@ -937,7 +947,7 @@
                                 <th>Text</th>
                             </tr>
                             <tr>
-                                <td>Emergency <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Emergency <img src=/images/student-contacts/qmark.png
                                                    class="qmark"
                                                    title="Emergency notifications are considered most urgent and are often associated with a potential threat, a school lockdown, or a disaster with possible student safety concerns">
                                 </td>
@@ -963,7 +973,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>High Priority <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>High Priority <img src=/images/student-contacts/qmark.png
                                                        class="qmark"
                                                        title="Notifications that are NOT emergency but are higher in priority">
                                 </td>
@@ -1000,7 +1010,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>General <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>General <img src=/images/student-contacts/qmark.png
                                                  class="qmark"
                                                  title="Notifications about events and activities occurring at school/district">
                                 </td>
@@ -1038,7 +1048,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Attendance <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Attendance <img src=/images/student-contacts/qmark.png
                                                     class="qmark"
                                                     title="Notifications for when a student is absent or tardy but is not excused">
                                 </td>
@@ -1076,7 +1086,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Survey <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Survey <img src=/images/student-contacts/qmark.png
                                                 class="qmark"
                                                 title="Notifications used by school/district for parent feedback and surveys">
                                 </td>
@@ -1153,7 +1163,7 @@
                     </span>
                     <span style="display: inline-block;">
                         <label style="display: block; padding-bottom: 5px;">Contact Options:
-                            <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                            <img src=/images/student-contacts/qmark.png
                                 class="qmark"
                                 title="The phone number you fill in here will automatically be enrolled in our parent notification
                                 system with the options you provide below. We strongly recommend that you enable Emergency alerts and
@@ -1166,7 +1176,7 @@
                                 <th>Text</th>
                             </tr>
                             <tr>
-                                <td>Emergency <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Emergency <img src=/images/student-contacts/qmark.png
                                                    class="qmark"
                                                    title="Emergency notifications are considered most urgent and are often associated with a potential threat, a school lockdown, or a disaster with possible student safety concerns">
                                 </td>
@@ -1191,7 +1201,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>High Priority <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>High Priority <img src=/images/student-contacts/qmark.png
                                                        class="qmark"
                                                        title="Notifications that are NOT emergency but are higher in priority">
                                 </td>
@@ -1228,7 +1238,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>General <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>General <img src=/images/student-contacts/qmark.png
                                                  class="qmark"
                                                  title="Notifications about events and activities occurring at school/district">
                                 </td>
@@ -1266,7 +1276,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Attendance <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Attendance <img src=/images/student-contacts/qmark.png
                                                     class="qmark"
                                                     title="Notifications for when a student is absent or tardy but is not excused">
                                 </td>
@@ -1304,7 +1314,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Survey <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Survey <img src=/images/student-contacts/qmark.png
                                                 class="qmark"
                                                 title="Notifications used by school/district for parent feedback and surveys">
                                 </td>
@@ -1358,7 +1368,7 @@
                 <label>Name: </label>
                 <br/>
                 <label id="first-name-label" for="first-name">First Name: </label> <img id="first-name-qmark" class="qmark"
-                                                                                        src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                                                                        src=/images/student-contacts/qmark.png
                                                                                         title="Contact's First Name">
                 <input type="text"
                        id="first-name"
@@ -1367,7 +1377,7 @@
                        required/>
                 <br/>
                 <label id="last-name-label" for="first-name">Last Name: </label> <img id="first-name-qmark" class="qmark"
-                                                                                      src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                                                                      src=/images/student-contacts/qmark.png
                                                                                       title="Contact's Last Name">
                 <input type="text"
                        id="last-name"
@@ -1376,7 +1386,7 @@
                        required/>
                 <br/>
                 <br/>
-                <label id="priority-label" for="priority">Priority: <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png" class="qmark"
+                <label id="priority-label" for="priority">Priority: <img src=/images/student-contacts/qmark.png class="qmark"
                                                                          title="In what order do you want us to try to contact this student's parents/legal guardians?"></label>
                 <select id="priority">
                     <option></option>
@@ -1390,7 +1400,7 @@
                 </select>
                 <br/>
                 <br/>
-                <label for="relationship">Relationship: <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png" class="qmark"
+                <label for="relationship">Relationship: <img src=/images/student-contacts/qmark.png class="qmark"
                                                              title="How is this contact related to the student?"></label>
                 <select id="relationship" required>
                     <option></option>
@@ -1419,13 +1429,13 @@
                 </select>
                 <br/>
                 <br/>
-                <label id="employer-label">Employer: <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                <label id="employer-label">Employer: <img src=/images/student-contacts/qmark.png
                                                           class="qmark"
                                                           title="Name of the contact's place of employment. Please note that this is NOT the title/position of this contact's job."></label>
                 <input class="info-input" id="employer" type="text"/>
                 <br/>
                 <br/>
-                <label id="corres-lang-label">Language of Correspondence: <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                <label id="corres-lang-label">Language of Correspondence: <img src=/images/student-contacts/qmark.png
                                                                                class="qmark"
                                                                                title="In what language would you like to receive correspondence?"></label>
                 <select class="info-input" id="corres-lang">
@@ -1434,7 +1444,7 @@
                 </select>
             </td>
             <td>
-                <label>Residence Address: <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png" class="qmark"
+                <label>Residence Address: <img src=/images/student-contacts/qmark.png class="qmark"
                                                title="Contact's address of residence"></label>
                 <br/>
                 <label class="street-label">Street: </label>
@@ -1526,7 +1536,7 @@
                 <br/>
                 <br/>
 
-                <label>Mailing Address: <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                <label>Mailing Address: <img src=/images/student-contacts/qmark.png
                                              class="qmark"
                                              title="Contact's mailing address.
                                                  Please fill out the mailing address fields only if this contact
@@ -1620,7 +1630,7 @@
             </td>
             <td>
                 <label id="email-label">Email:
-                    <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                    <img src=/images/student-contacts/qmark.png
                          class="qmark"
                          title="Email address of contact for this student; if specifying for a Parent or Legal Guardian, Report Cards will be sent to this email address for this specific student.">
                 </label>
@@ -1628,7 +1638,7 @@
                        data-parsley-type="email"/>
                     <span>
                         <label style="display: block; padding-bottom: 5px;">Contact Options:
-                            <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                            <img src=/images/student-contacts/qmark.png
                                  class="qmark"
                                  title="This email address will automatically be enrolled in our parent notification
                                 system with the options you provide below. We strongly recommend that you enable Emergency alerts and
@@ -1643,7 +1653,7 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td>Emergency <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Emergency <img src=/images/student-contacts/qmark.png
                                                    class="qmark"
                                                    title="Emergency notifications are considered most urgent and are often associated with a potential threat, a school lockdown, or a disaster with possible student safety concerns">
                                 </td>
@@ -1659,7 +1669,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>High Priority <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>High Priority <img src=/images/student-contacts/qmark.png
                                                        class="qmark"
                                                        title="Notifications that are NOT emergency but are higher in priority"></td>
                                 <td>
@@ -1670,7 +1680,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>General <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>General <img src=/images/student-contacts/qmark.png
                                                  class="qmark"
                                                  title="Notifications about events and activities occurring at school/district"></td>
                                 <td>
@@ -1681,7 +1691,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Attendance <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Attendance <img src=/images/student-contacts/qmark.png
                                                     class="qmark"
                                                     title="Notifications for when a student is absent or tardy but is not excused"></td>
                                 <td><input type="checkbox"
@@ -1691,7 +1701,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Survey <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Survey <img src=/images/student-contacts/qmark.png
                                                 class="qmark"
                                                 title="Notifications used by school/district for parent feedback and surveys"></td>
                                 <td><input type="checkbox"
@@ -1743,7 +1753,7 @@
                                 <th>Text</th>
                             </tr>
                             <tr>
-                                <td>Emergency <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Emergency <img src=/images/student-contacts/qmark.png
                                                    class="qmark"
                                                    title="Emergency notifications are considered most urgent and are often associated with a potential threat, a school lockdown, or a disaster with possible student safety concerns"></td>
                                 <td><input type="checkbox"
@@ -1764,7 +1774,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>High Priority <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>High Priority <img src=/images/student-contacts/qmark.png
                                                        class="qmark"
                                                        title="Notifications that are NOT emergency but are higher in priority"></td>
                                 <td><input type="checkbox"
@@ -1777,7 +1787,7 @@
                                            data-parsley-ui-enabled="false"></td>
                             </tr>
                             <tr>
-                                <td>General <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>General <img src=/images/student-contacts/qmark.png
                                                  class="qmark"
                                                  title="Notifications about events and activities occurring at school/district"></td>
                                 <td>
@@ -1794,7 +1804,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Attendance <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Attendance <img src=/images/student-contacts/qmark.png
                                                     class="qmark"
                                                     title="Notifications for when a student is absent or tardy but is not excused"></td>
                                 <td>
@@ -1811,7 +1821,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Survey <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Survey <img src=/images/student-contacts/qmark.png
                                                 class="qmark"
                                                 title="Notifications used by school/district for parent feedback and surveys"></td>
                                 <td>
@@ -1866,7 +1876,7 @@
                                 <th>Text</th>
                             </tr>
                             <tr>
-                                <td>Emergency <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Emergency <img src=/images/student-contacts/qmark.png
                                                    class="qmark"
                                                    title="Emergency notifications are considered most urgent and are often associated with a potential threat, a school lockdown, or a disaster with possible student safety concerns">
                                 </td>
@@ -1888,7 +1898,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>High Priority <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>High Priority <img src=/images/student-contacts/qmark.png
                                                        class="qmark"
                                                        title="Notifications that are NOT emergency but are higher in priority">
                                 </td>
@@ -1902,7 +1912,7 @@
                                            data-parsley-ui-enabled="false"></td>
                             </tr>
                             <tr>
-                                <td>General <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>General <img src=/images/student-contacts/qmark.png
                                                  class="qmark"
                                                  title="Notifications about events and activities occurring at school/district">
                                 </td>
@@ -1920,7 +1930,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Attendance <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Attendance <img src=/images/student-contacts/qmark.png
                                                     class="qmark"
                                                     title="Notifications for when a student is absent or tardy but is not excused">
                                 </td>
@@ -1938,7 +1948,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Survey <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Survey <img src=/images/student-contacts/qmark.png
                                                 class="qmark"
                                                 title="Notifications used by school/district for parent feedback and surveys">
                                 </td>
@@ -1992,7 +2002,7 @@
                                 <th>Text</th>
                             </tr>
                             <tr>
-                                <td>Emergency <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Emergency <img src=/images/student-contacts/qmark.png
                                                    class="qmark"
                                                    title="Emergency notifications are considered most urgent and are often associated with a potential threat, a school lockdown, or a disaster with possible student safety concerns"></td>
                                 <td><input type="checkbox"
@@ -2013,7 +2023,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>High Priority <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>High Priority <img src=/images/student-contacts/qmark.png
                                                        class="qmark"
                                                        title="Notifications that are NOT emergency but are higher in priority"></td>
                                 <td><input type="checkbox"
@@ -2026,7 +2036,7 @@
                                            data-parsley-ui-enabled="false"></td>
                             </tr>
                             <tr>
-                                <td>General <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>General <img src=/images/student-contacts/qmark.png
                                                  class="qmark"
                                                  title="Notifications about events and activities occurring at school/district"></td>
                                 <td>
@@ -2043,7 +2053,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Attendance <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Attendance <img src=/images/student-contacts/qmark.png
                                                     class="qmark"
                                                     title="Notifications for when a student is absent or tardy but is not excused"></td>
                                 <td>
@@ -2060,7 +2070,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Survey <img src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/qmark.png"
+                                <td>Survey <img src=/images/student-contacts/qmark.png
                                                 class="qmark"
                                                 title="Notifications used by school/district for parent feedback and surveys"></td>
                                 <td>
