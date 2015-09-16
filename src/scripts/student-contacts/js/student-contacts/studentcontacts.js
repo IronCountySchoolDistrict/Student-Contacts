@@ -1,5 +1,5 @@
 /*global jQuery,psData,confirm,loadingDialogInstance, console, require*/
-require(["jquery", "escl", "jquery.inputmask", "datatables", "parsley", "inputmask.extensions"], function($, escl) {
+require(["jquery", "escl", "fetch", "jquery.inputmask", "datatables", "parsley", "inputmask.extensions"], function($, escl, fetch) {
   'use strict';
 
   /**
@@ -728,32 +728,37 @@ require(["jquery", "escl", "jquery.inputmask", "datatables", "parsley", "inputma
                   saveDataUsingTlc(contactCoreDataTlc).done(function(contactCoreResp) {
                     var contactId = addContactResp.contactnumber.toString();
                     var studentDcid = psData.studentdcid;
-                    $.getJSON('/admin/students/contacts/getContactRecordId.json.html?contactid=' + contactId + '&studentsdcid=' + studentDcid, function(contactRecordResp) {
-                      var contactClient = new escl.Client({
-                        coreTable: 'Students',
-                        extGroup: 'u_student_contacts',
-                        extTable: 'u_student_contacts',
-                        coreTableNumber: '001'
-                      });
+                    var fetch = window.fetch;
+                    fetch('/admin/students/contacts/getContactRecordId.json.html?contactid=' + contactId + '&studentsdcid=' + studentDcid, {
+                      credentials: 'include'
+                      })
+                      .then(function(contactRecordId) {
+                        return contactRecordId.json();
+                      })
+                      .then(function(contactRecordResp) {
+                        var contact = {
+                          id: contactRecordResp.id,
+                          contactdcid: contactRecordResp.id
+                        };
 
-                      var contact = {
-                        id: contactRecordResp.id,
-                        contactdcid: contactRecordResp.id
-                      };
+                        var contactClient = new escl.Client({
+                          coreTable: 'Students',
+                          extGroup: 'u_student_contacts',
+                          extTable: 'u_student_contacts',
+                          coreTableNumber: '001'
+                        });
 
-                      contactClient.displayCols = Object.keys(contact)
-
-                      contactClient.save(contact).then(function() {
-                        if ($('#email').val()) {
-                          var emailDataTlc = getDomEmailDataTlc(contactRecordResp.id);
-                          saveDataUsingTlc(emailDataTlc).done(function() {
+                        contactClient.save(contact).then(function() {
+                          if ($('#email').val()) {
+                            var emailDataTlc = getDomEmailDataTlc(contactRecordResp.id);
+                            saveDataUsingTlc(emailDataTlc).done(function() {
+                              savePhones(contactRecordResp.id);
+                            });
+                          } else {
                             savePhones(contactRecordResp.id);
-                          });
-                        } else {
-                          savePhones(contactRecordResp.id);
-                        }
+                          }
+                        });
                       });
-                    });
                   });
                 });
                 $('.edit_cancel', editrow).click(function() {

@@ -2,7 +2,7 @@
 
 <style type="text/css">
     #btn-student-contacts a {
-        background: url(<!-- @echo IMAGE_SERVER_URL -->/student-contacts/img/iconStudentContacts.png) no-repeat;
+        background: url(/images/student-contacts/iconStudentContacts.png) no-repeat;
         background-size: 35px;
     }
 </style>
@@ -15,8 +15,8 @@
           <a href="student-contacts.html">Student Contacts</a>
       </li>
     [/if#isstudent]
-    
+
     <!-- End Student Contact Link -->
 </script>
 
-<script src="<!-- @echo IMAGE_SERVER_URL -->/student-contacts/js/sc-link.js"></script>
+<script src="/scripts/student-contacts/js/sc-link.js"></script>
