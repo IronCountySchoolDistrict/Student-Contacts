@@ -1,6 +1,6 @@
 /*global define, $j, psData, loadingDialogInstance, jQuery*/
 
-define(['service', 'underscore', 'config', 'parsley', 'jquery.inputmask'], function (service, _, config, parsley) {
+define(['service', 'underscore', 'config', 'parsley', 'jquery.inputmask', 'inputmask.extensions'], function (service, _, config, parsley) {
     'use strict';
     return {
         main: function () {
@@ -142,7 +142,7 @@ define(['service', 'underscore', 'config', 'parsley', 'jquery.inputmask'], funct
                     });
 
                     // If there were no matches, this is a new contact that is still in the staging table
-                    if (stagingHasLive.length === 0) {
+                    if (stagingHasLive.length === 0 && contact.tables[contactsStagingTableName].status === '0') {
                         var contactData = contact.tables[contactsStagingTableName];
                         contactData.contactIsStaging = true;
                         _this.renderContact(contactData, null, true, true);

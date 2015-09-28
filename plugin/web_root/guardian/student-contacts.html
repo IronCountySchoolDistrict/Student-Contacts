@@ -123,12 +123,25 @@
         <script>
           require.config({
             paths: {
-              'student-contacts-update': '/scripts/student-contacts/js/student-contacts-update/main'
-            }
+              'main': '/scripts/student-contacts/js/student-contacts-update/main',
+              'tableModule': '/scripts/student-contacts/js/student-contacts-update/table-module',
+              'service': '/scripts/student-contacts/js/student-contacts-update/service',
+              'actions': '/scripts/student-contacts/js/student-contacts-update/actions',
+              'config': '/scripts/student-contacts/js/student-contacts-update/config',
+              'tooltip': '/scripts/student-contacts/js/student-contacts-update/tooltip',
+              'jquery.inputmask': '/scripts/student-contacts/lib/jquery.inputmask',
+              'inputmask': '/scripts/student-contacts/lib/inputmask',
+              'dependencyLib': '/scripts/student-contacts/lib/dependencyLib',
+              'inputmask.extensions': '/scripts/student-contacts/lib/inputmask.extensions',
+
+              'parsley': '//cdnjs.cloudflare.com/ajax/libs/parsley.js/2.0.5/parsley',
+              'underscore': 'underscore/underscore'
+            },
+            urlArgs: '234lkjwdlkfj'
           });
 
-          require(['student-contacts-update'], function(scu) {
-            scu.main();
+          require(['main'], function(main) {
+            main();
           });
         </script>
 
