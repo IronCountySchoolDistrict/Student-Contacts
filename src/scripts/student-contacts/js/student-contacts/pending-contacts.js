@@ -1,16 +1,19 @@
-
-require(['underscore'], function(_) {
-    $j.getJSON('/admin/students/contacts/pending-contacts/getAllStudentStagingContacts.json.html?studentsdcid=' + psData.studentdcid, function(stagingContacts) {
-        if (stagingContacts.length > 0) {
-            stagingContacts.pop();
-            $j.each(stagingContacts, function(index, stagingContact) {
-                if (!$j.isEmptyObject(stagingContact)) {
-                    var contactTemplate = $j('#staging-contact-template').html();
-                    var renderedTemplate = _.template(contactTemplate, {contact: stagingContact});
-                    var insertSelector = $j('#staging-contacts-list');
-                    insertSelector.append(renderedTemplate);
-                }
+define(['underscore', 'jquery'], function(_, $) {
+  return function main() {
+    $.getJSON('/admin/students/contacts/pending-contacts/getAllStudentStagingContacts.json.html?studentsdcid=' + psData.studentdcid, function(stagingContacts) {
+      if (stagingContacts.length > 0) {
+        stagingContacts.pop();
+        $.each(stagingContacts, function(index, stagingContact) {
+          if (!$.isEmptyObject(stagingContact)) {
+            var contactTemplate = $('#staging-contact-template').html();
+            var renderedTemplate = _.template(contactTemplate, {
+              contact: stagingContact
             });
-        }
+            var insertSelector = $('#staging-contacts-list');
+            insertSelector.append(renderedTemplate);
+          }
+        });
+      }
     });
+  };
 });
