@@ -1,7 +1,10 @@
 /*global psData,window,loadingDialogInstance, require, document*/
 
 import $ from 'jquery';
-import {Client} from 'escl';
+import _ from 'underscore';
+import {
+  Client
+} from 'escl';
 import * as inputMask from 'jquery.inputmask';
 import * as datatables from 'datatables';
 import * as parsley from 'parsley';
@@ -638,14 +641,12 @@ export function main() {
                 var optionTemplate = $('#option-template').html();
                 var numberOfContacts = Object.keys(contactsCollection).length;
 
-                require(['underscore'], function(_) {
-                  $.each(_.range(1, numberOfContacts + 2), function(index, priority) {
-                    var renderedOptTemplate = _.template(optionTemplate, {
-                      value: priority,
-                      label: priority
-                    });
-                    prioritySelect.append(renderedOptTemplate);
+                $.each(_.range(1, numberOfContacts + 2), function(index, priority) {
+                  var renderedOptTemplate = _.template(optionTemplate, {
+                    value: priority,
+                    label: priority
                   });
+                  prioritySelect.append(renderedOptTemplate);
                 });
 
                 $('form', editrow).one('submit', function(event) {
@@ -786,25 +787,25 @@ export function main() {
               copyPhone($phoneField, $target.siblings('.data').text());
             });
 
-            require(['underscore'], function(_) {
-              var prioritySelect = $editRow.find('#priority');
+            var numberOfContacts = Object.keys(contactsCollection).length;
 
-              $.each(_.range(1, numberOfContacts + 1), function(index, priority) {
-                var renderedOptTemplate = _.template(optionTemplate, {
-                  value: priority,
-                  label: priority
-                });
-                prioritySelect.append(renderedOptTemplate);
-              });
+            var prioritySelect = $editRow.find('#priority');
 
-              // Set the right option of the priority dropdown
-              var priority = prioritySelect.data().value;
-              var priorityOptions = prioritySelect.find('option');
-              $.each(priorityOptions, function(index, option) {
-                if (parseInt($(option).val()) === priority) {
-                  $(option).attr('selected', 'selected');
-                }
+            $.each(_.range(1, numberOfContacts + 1), function(index, priority) {
+              var renderedOptTemplate = _.template(optionTemplate, {
+                value: priority,
+                label: priority
               });
+              prioritySelect.append(renderedOptTemplate);
+            });
+
+            // Set the right option of the priority dropdown
+            var priority = prioritySelect.data().value;
+            var priorityOptions = prioritySelect.find('option');
+            $.each(priorityOptions, function(index, option) {
+              if (parseInt($(option).val()) === priority) {
+                $(option).attr('selected', 'selected');
+              }
             });
 
             // Set the right option of the relationship dropdown
@@ -855,7 +856,7 @@ export function main() {
 
             // Add options to the priority select dropdown menu
             var optionTemplate = $('#option-template').html();
-            var numberOfContacts = Object.keys(contactsCollection).length;
+
 
             // Set email contact options checkboxes to checked
             if ($('#email-opts-emergency').attr('value') === '1') {
