@@ -8,7 +8,8 @@ export function main() {
       $.each(stagingContacts, function(index, stagingContact) {
         if (!$.isEmptyObject(stagingContact)) {
           var contactTemplate = $('#staging-contact-template').html();
-          var renderedTemplate = _.template(contactTemplate, {
+          var compiledTemplate = _.template(contactTemplate);
+          var renderedTemplate = compiledTemplate({
             contact: stagingContact
           });
           var insertSelector = $('#staging-contacts-list');

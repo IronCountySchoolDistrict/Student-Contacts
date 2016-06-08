@@ -18,8 +18,16 @@
         psData.enableDemoUpdate = "~([Students]enabledemoupdate)";
         psData.stagingContactDcid = "~[gpv:stagingcontactdcid]";
 
+        require.config({
+          paths: {
+            scchange: '/scripts/student-contacts/js/student-contacts/scchange'
+          }
+        });
+
+        require(['scchange'], scchange => {
+          scchange.main();
+        });
     </script>
-    <script src="/scripts/student-contacts/js/student-contacts/scchange.js"></script>
 </head>
 <body data-validation="exclude">
 

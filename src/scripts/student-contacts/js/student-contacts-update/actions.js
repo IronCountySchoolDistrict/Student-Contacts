@@ -231,7 +231,8 @@ export const actions = {
     if (contactData.phone3type) {
       contactData.phone3type = contactData.phone3type.charAt(0).toUpperCase() + contactData.phone3type.slice(1);
     }
-    var renderedTemplate = _.template(contactTemplate, {
+    var compiledTemplate = _.template(contactTemplate);
+    var renderedTemplate = compiledTemplate({
       'contact': contactData
     });
 
@@ -574,7 +575,8 @@ export const actions = {
           'email': email,
           'phone': phone
         };
-        var renderedTemplate = _.template(editContactTemplate, context);
+        var compiledTemplate = _.template(editContactTemplate);
+        var renderedTemplate = compiledTemplate(context)
         $j(row).html('').html(renderedTemplate);
 
         $j(row).data({
@@ -794,7 +796,8 @@ export const actions = {
     var numRange = _.range(1, numOfContacts + 1);
     var unusedPriorities = _.difference(numRange, allPriorities);
     var newContactTemplate = $j('#new-contact-template').html();
-    var renderedTemplate = _.template(newContactTemplate, {
+    var compiledTemplate = _.template(newContactTemplate);
+    var renderedTemplate = compiledTemplate({
       unusedPriorities: unusedPriorities
     });
     $j(row).html('').html(renderedTemplate);
