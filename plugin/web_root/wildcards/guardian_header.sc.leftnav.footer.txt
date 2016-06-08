@@ -1,6 +1,5 @@
-
-
 <style type="text/css">
+
     #btn-student-contacts a {
         background: url(/images/student-contacts/iconStudentContacts.png) no-repeat;
         background-size: 35px;
@@ -9,14 +8,23 @@
 
 <script type="text/template" id="sc-link-template">
     <!-- Start Student Contact Link -->
-    ~[if#isstudent.isstudent]
-      [else#isstudent]
-      <li id="btn-student-contacts">
-          <a href="student-contacts.html">Student Contacts</a>
-      </li>
+    ~[if#isstudent.isstudent] [else#isstudent]
+    <li id="btn-student-contacts">
+        <a href="student-contacts.html">Student Contacts</a>
+    </li>
     [/if#isstudent]
 
     <!-- End Student Contact Link -->
 </script>
 
-<script src="/scripts/student-contacts/js/sc-link.js"></script>
+<script>
+    require.config({
+        paths: {
+            scLink: '/scripts/student-contacts/js/sc-link'
+        }
+    });
+
+    require(['scLink'], scLink => {
+        scLink.main();
+    })
+</script>
