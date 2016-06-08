@@ -642,7 +642,8 @@ export function main() {
                 var numberOfContacts = Object.keys(contactsCollection).length;
 
                 $.each(_.range(1, numberOfContacts + 2), function(index, priority) {
-                  var renderedOptTemplate = _.template(optionTemplate, {
+                  var compiledOptTemplate = _.template(optionTemplate);
+                  var renderedOptTemplate = compiledOptTemplate({
                     value: priority,
                     label: priority
                   });
@@ -791,8 +792,12 @@ export function main() {
 
             var prioritySelect = $editRow.find('#priority');
 
+            // Add options to the priority select dropdown menu
+            var optionTemplate = $('#option-template').html();
+
             $.each(_.range(1, numberOfContacts + 1), function(index, priority) {
-              var renderedOptTemplate = _.template(optionTemplate, {
+              var compiledOptTemplate = _.template(optionTemplate);
+              var renderedOptTemplate = compiledOptTemplate({
                 value: priority,
                 label: priority
               });
@@ -854,8 +859,7 @@ export function main() {
               'selected': 'selected'
             });
 
-            // Add options to the priority select dropdown menu
-            var optionTemplate = $('#option-template').html();
+
 
 
             // Set email contact options checkboxes to checked
