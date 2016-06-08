@@ -1,13 +1,9 @@
-/*global define*/
-define(function () {
-    'use strict';
-    return {
-        main: function () {
-            this.bindToolTip();
-        },
+export const tooltip = {
+  main: function() {
+    this.bindToolTip();
+  },
 
-        bindToolTip: function () {
-            $j(document).tooltip();
-        }
-    };
-});
+  bindToolTip: function() {
+    $j(document).tooltip();
+  }
+};
