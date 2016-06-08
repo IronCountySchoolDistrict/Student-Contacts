@@ -4,16 +4,16 @@
     "description": "Student Contacts Manager for PowerSchool.",
     "main": "",
     "scripts": {
-    "test": "mocha-casperjs"
+        "test": "mocha-casperjs"
     },
     "repository": {
-    "type": "git",
-    "url": "git+https://github.com/IronCountySchoolDistrict/student-contacts.git"
+        "type": "git",
+        "url": "git+https://github.com/IronCountySchoolDistrict/student-contacts.git"
     },
     "author": "IronCountySchoolDistrict",
     "license": "Apache-2.0",
     "bugs": {
-    "url": "https://github.com/IronCountySchoolDistrict/student-contacts/issues"
+        "url": "https://github.com/IronCountySchoolDistrict/student-contacts/issues"
     },
     "homepage": "https://github.com/IronCountySchoolDistrict/student-contacts#readme",
     "dependencies": {
@@ -22,8 +22,8 @@
         "babel-register": "^6.7.2",
         "gulp": "^3.9.1",
         "gulp-ps-tasks": "^0.3.4"
-      },
-        "devDependencies": {
-            "babel-plugin-transform-es2015-modules-amd": "^6.7.0"
-          }
+    },
+    "devDependencies": {
+        "babel-plugin-transform-es2015-modules-amd": "^6.7.0"
+    }
 }

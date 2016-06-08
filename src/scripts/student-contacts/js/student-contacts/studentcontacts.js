@@ -1,11 +1,13 @@
 /*global psData,window,loadingDialogInstance, require, document*/
 
-require(['jquery', 'escl', 'jquery.inputmask', 'datatables', 'parsley', 'inputmask.extensions'], function($, Client) {
-  'use strict';
-  /**
-   *
-   * @type {Object}
-   */
+import $ from 'jquery';
+import {Client} from 'escl';
+import * as inputMask from 'jquery.inputmask';
+import * as datatables from 'datatables';
+import * as parsley from 'parsley';
+import * as inputmaskExtensions from 'inputmask.extensions';
+
+export function main() {
   var config = {
     contactsTable: 'u_student_contacts',
     contactsEmailTable: 'u_sc_email',
@@ -1186,7 +1188,7 @@ require(['jquery', 'escl', 'jquery.inputmask', 'datatables', 'parsley', 'inputma
               row.remove();
               var index = contactsCollection.indexOf(contactId);
               if (index > -1) {
-                  contactsCollection.splice(index, 1);
+                contactsCollection.splice(index, 1);
               }
             });
           });
@@ -1494,4 +1496,4 @@ require(['jquery', 'escl', 'jquery.inputmask', 'datatables', 'parsley', 'inputma
   function displayError(msg) {
     $('#error_container').html('<div id="alertmsg" style="padding: 0 0.7em;" class="ui-state-error ui-corner-all"><p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-alert"></span><strong>Alert: </strong>' + msg + '</p></div>').show();
   }
-});
+}
