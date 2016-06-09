@@ -418,7 +418,7 @@ export const actions = {
 
     var _this = this;
 
-    parsleyForm.subscribe('parsley:form:validated', function(ParsleyForm) {
+    parsleyForm.on('parsley:form:validated', function(ParsleyForm) {
       loadingDialogInstance.open();
       var $eventTarget = $j(ParsleyForm.$element);
       // Check for closest row to avoid the bug where this event would fire when the edit/add contact form is rendered
