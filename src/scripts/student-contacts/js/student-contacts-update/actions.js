@@ -1,5 +1,6 @@
 /*global define, $j, psData, loadingDialogInstance, jQuery*/
 
+import $ from 'jquery';
 import _ from 'underscore';
 import parsley from 'parsley';
 import inputMask from 'jquery.inputmask';
@@ -275,144 +276,137 @@ export const actions = {
    * @param row {jQuery}
    */
   setupParsley: function(row) {
-    window.ParsleyValidator
-      .addValidator('resaddress', function(value) {
-        /**
-         *
-         * @type {boolean}
-         */
-        var resFieldsEmpty = row.find('#residence-street').val() === "" &&
-          row.find('#residence-city').val() === "" &&
-          row.find('#residence-state').val() === "" &&
-          row.find('#residence-zip').val() === "";
-        if (resFieldsEmpty) {
-          return true;
-        } else {
-          return !!value;
+    var validators = window.Parsley._validatorRegistry.validators;
+    if (!validators.hasOwnProperty('resaddress')) {
+      window.Parsley.addValidator('resaddress', {
+        messages: {
+          'en': 'All address fields must be filled in'
+        },
+        requirementType: 'string',
+        validate: function(_value, requirement, instance) {
+          var instanceElem = $(instance.$element);
+          var resFields = instanceElem.add(instanceElem.siblings(':input'));
+          var emptyResFields = $.makeArray(resFields).filter(field => !$(field).val());
+
+          // If all address fields are empty (emptyResFields.length === 4), consider it valid
+          // Or, if no address fields are empty (emptyResFields.length === 0),
+          // user has completely filled in resFields so consider it valid
+          if (emptyResFields.length === 4 || emptyResFields.length === 0) {
+            return true;
+          }
+
+          // If the res address incomplete AND the value of this element is blank,
+          // consider it invalid. Checking the value will cause the message to
+          // just be shown under the blank element.
+          if (emptyResFields.length >= 1 && emptyResFields.length < 4) {
+            return !!_value;
+          }
         }
+      });
+    }
 
-      }, 100)
-      .addMessage('en', 'resaddress', 'Partial address not allowed, please complete residence address.');
+    if (!validators.hasOwnProperty('mailaddress')) {
+      window.Parsley.addValidator('mailaddress', {
+        messages: {
+          'en': 'All address fields must be filled in'
+        },
+        requirementType: 'string',
+        validateString: function(_value, requirement, instance) {
+          var instanceElem = $(instance.$element);
+          var resFields = instanceElem.add(instanceElem.siblings(':input'));
+          var emptyResFields = $.makeArray(resFields).filter(field => !$(field).val());
 
-    window.ParsleyValidator
-      .addValidator('mailaddress', function(value) {
-        /**
-         *
-         * @type {boolean}
-         */
-        var mailFieldsEmpty = row.find('#mailing-street').val() === "" &&
-          row.find('#mailing-city').val() === "" &&
-          row.find('#mailing-state').val() === "" &&
-          row.find('#mailing-zip').val() === "";
-        if (mailFieldsEmpty) {
-          return true;
-        } else {
-          return !!value;
+          // If all address fields are empty (emptyResFields.length === 4), consider it valid
+          // Or, if no address fields are empty (emptyResFields.length === 0),
+          // user has completely filled in resFields so consider it valid
+          if (emptyResFields.length === 4 || emptyResFields.length === 0) {
+            return true;
+          }
+
+          // If there is an incomplete res address, consider it invalid
+          if (emptyResFields.length >= 1 && emptyResFields.length < 4) {
+            return !!_value;
+          }
         }
+      });
+    }
 
-      }, 100)
-      .addMessage('en', 'mailaddress', 'Partial address not allowed, please complete mailing address.');
+    if (!validators.hasOwnProperty('onephonereq')) {
+      window.Parsley.addValidator('onephonereq', {
+        messages: {
+          'en': 'At least one phone number is required.'
+        },
+        requirementType: 'string',
+        validateString: function(_value, requirement, instance) {
+          /**
+           *
+           * @type {boolean}
+           */
 
-    window.ParsleyValidator
-      .addValidator('onephonereq', function(value) {
-        /**
-         *
-         * @type {boolean}
-         */
-        var allPhonesEmpty = row.find('#phone1type').val() === "" &&
-          row.find('#phone1').val() === "" &&
-          row.find('#phone2type').val() === "" &&
-          row.find('#phone2').val() === "" &&
-          row.find('#phone3type').val() === "" &&
-          row.find('#phone3').val() === "";
+          var phoneElems = $(instance.$element).parents('form').find('[id$=type], [placeholder="Phone Number"]');
+          var elemsAreEmpty = $.makeArray(phoneElems).reduce((prev, curr) => prev && $(curr).val() === '', true);
 
-        if (allPhonesEmpty) {
-          return false;
-        } else {
-          return true;
+          return !elemsAreEmpty;
         }
+      });
+    }
 
-      }, 100)
-      .addMessage('en', 'onephonereq', 'At least one phone number is required.');
+    if (!validators.hasOwnProperty('phonenum')) {
+      window.Parsley.addValidator('phonenum', {
+        messages: {
+          'en': 'Phone type was given, number is required.'
+        },
+        requirementType: 'string',
+        validateString: function(_value, requirement, instance) {
+          var phoneNum = $(instance.$element);
+          var phoneType = phoneNum.parent().parent().find('[id$=type]');
 
-    window.ParsleyValidator
-      .addValidator('phone1num', function(value) {
-        if (row.find('#phone1type').val() === "" && row.find('#phone1').val() === "") {
-          return true;
-        } else if (row.find('#phone1type').val() !== "" && row.find('#phone1').val() === "") {
-          return false;
-        } else {
-          return true;
+          // both fields are blank, consider it valid
+          if (phoneType.val() === "" && phoneNum.val() === "") {
+            return true;
+            // if type is given without a number, consider it invalid
+          } else if (phoneType.val() !== "" && phoneNum.val() === "") {
+            return false;
+          } else {
+            return true;
+          }
         }
-      }, 100)
-      .addMessage('en', 'phone1num', 'Phone type was given, number is required.');
+      });
+    }
 
-    window.ParsleyValidator
-      .addValidator('phone1type', function(value) {
-        if (row.find('#phone1type').val() === "" && row.find('#phone1').val() === "") {
-          return true;
-        } else if (row.find('#phone1').val() !== "" && row.find('#phone1type').val() === "") {
-          return false;
-        } else {
-          return true;
+    if (!validators.hasOwnProperty('phonetype')) {
+      window.Parsley.addValidator('phonetype', {
+        messages: {
+          'en': 'Phone number was given, type is required.'
+        },
+        requirementType: 'string',
+        validateString: function(_value, requirement, instance) {
+          var phoneType = $(instance.$element);
+          var phoneNum = phoneType.parent().parent().find('[placeholder="Phone Number"]');
+
+          if (phoneType.val() === "" && phoneNum.val() === "") {
+            return true;
+          } else if (phoneNum.val() !== "" && phoneType.val() === "") {
+            return false;
+          } else {
+            return true;
+          }
         }
-      }, 100)
-      .addMessage('en', 'phone1type', 'Phone number was given, type is required.');
+      });
+    }
 
-    window.ParsleyValidator
-      .addValidator('phone2num', function(value) {
-        if (row.find('#phone2type').val() === "" && row.find('#phone2').val() === "") {
-          return true;
-        } else if (row.find('#phone2type').val() !== "" && row.find('#phone2').val() === "") {
-          return false;
-        } else {
-          return true;
+    if (!validators.hasOwnProperty('phonetype')) {
+      window.Parsley.addValidator('phonetype', {
+        messages: {
+          'en': 'Please completely fill in this phone number.'
+        },
+        requirementType: 'string',
+        validateString: function(_value, requirement, instance) {
+          var valLength = _value.split("_").join("").length;
+          return valLength === 12 || valLength === 0;
         }
-      }, 100)
-      .addMessage('en', 'phone2num', 'Phone type was given, number is required.');
-
-    window.ParsleyValidator
-      .addValidator('phone2type', function(value) {
-        if (row.find('#phone2type').val() === "" && row.find('#phone2').val() === "") {
-          return true;
-        } else if (row.find('#phone2').val() !== "" && row.find('#phone2type').val() === "") {
-          return false;
-        } else {
-          return true;
-        }
-      }, 100)
-      .addMessage('en', 'phone2type', 'Phone number was given, type is required.');
-
-    window.ParsleyValidator
-      .addValidator('phone3num', function(value) {
-        if (row.find('#phone3type').val() === "" && row.find('#phone3').val() === "") {
-          return true;
-        } else if (row.find('#phone3type').val() !== "" && row.find('#phone3').val() === "") {
-          return false;
-        } else {
-          return true;
-        }
-      }, 100)
-      .addMessage('en', 'phone3num', 'Phone type was given, number is required.');
-
-    window.ParsleyValidator
-      .addValidator('phone3type', function(value) {
-        if (row.find('#phone3type').val() === "" && row.find('#phone3').val() === "") {
-          return true;
-        } else if (row.find('#phone3').val() !== "" && row.find('#phone3type').val() === "") {
-          return false;
-        } else {
-          return true;
-        }
-      }, 100)
-      .addMessage('en', 'phone3type', 'Phone number was given, type is required.');
-
-    window.ParsleyValidator
-      .addValidator('phonelength', function(value) {
-        var valLength = value.split("_").join("").length;
-        return valLength === 12 || valLength === 0;
-      }, 100)
-      .addMessage('en', 'phonelength', 'Please completely fill in this phone number.');
+      });
+    }
 
     var contactForm = row.parents('.contact-form');
     var parsleyForm = $j(contactForm).parsley({
