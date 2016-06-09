@@ -272,7 +272,7 @@ export function main() {
       });
     }
 
-    function setupParsley() {
+    function setupParsley(bindClass) {
       var validators = window.Parsley._validatorRegistry.validators;
       if (!validators.hasOwnProperty('resaddress')) {
         window.Parsley.addValidator('resaddress', {
@@ -292,9 +292,11 @@ export function main() {
               return true;
             }
 
-            // If there is an incomplete res address, consider it invalid
+            // If the res address incomplete AND the value of this element is blank,
+            // consider it invalid. Checking the value will cause the message to
+            // just be shown under the blank element.
             if (emptyResFields.length >= 1 && emptyResFields.length < 4) {
-              return false;
+              return !!_value;
             }
           }
         });
@@ -320,7 +322,7 @@ export function main() {
 
             // If there is an incomplete res address, consider it invalid
             if (emptyResFields.length >= 1 && emptyResFields.length < 4) {
-              return false;
+              return !!_value;
             }
           }
         });
@@ -332,7 +334,7 @@ export function main() {
             'en': 'At least one phone number is required.'
           },
           requirementType: 'string',
-          validateString: function(value, requirement) {
+          validateString: function(_value, requirement, instance) {
             /**
              *
              * @type {boolean}
@@ -349,16 +351,20 @@ export function main() {
         });
       }
 
-      if (!validators.hasOwnProperty('phone1num')) {
-        window.Parsley.addValidator('phone1num', {
+      if (!validators.hasOwnProperty('phonenum')) {
+        window.Parsley.addValidator('phonenum', {
           messages: {
             'en': 'Phone type was given, number is required.'
           },
           requirementType: 'string',
           validateString: function(_value, requirement, instance) {
-            if ($('#phone1type').val() === "" && $('#phone1').val() === "") {
+            var phoneNum = $(instance.$element);
+            var phoneType = phoneNum.siblings(':input[id$=type]');
+            // both fields are blank, consider it valid
+            if (phoneType.val() === "" && phoneNum.val() === "") {
               return true;
-            } else if ($('#phone1type').val() !== "" && $('#phone1').val() === "") {
+              // if type is given without a number, consider it invalid
+            } else if (phoneType.val() !== "" && phoneNum.val() === "") {
               return false;
             } else {
               return true;
@@ -367,16 +373,19 @@ export function main() {
         });
       }
 
-      if (!validators.hasOwnProperty('phone1type')) {
-        window.Parsley.addValidator('phone1type', {
+      if (!validators.hasOwnProperty('phonetype')) {
+        window.Parsley.addValidator('phonetype', {
           messages: {
             'en': 'Phone number was given, type is required.'
           },
           requirementType: 'string',
-          validateString: function(value) {
-            if ($('#phone1type').val() === "" && $('#phone1').val() === "") {
+          validateString: function(_value, requirement, instance) {
+            var phoneType = $(instance.$element);
+            var phoneNum = phoneType.siblings(':input.phone');
+
+            if (phoneType.val() === "" && phoneNum.val() === "") {
               return true;
-            } else if ($('#phone1').val() !== "" && $('#phone1type').val() === "") {
+            } else if (phoneNum.val() !== "" && phoneType.val() === "") {
               return false;
             } else {
               return true;
@@ -385,79 +394,7 @@ export function main() {
         });
       }
 
-      if (!validators.hasOwnProperty('phone2num')) {
-        window.Parsley.addValidator('phone2num', {
-          messages: {
-            'en': 'Phone number was given, type is required.'
-          },
-          requirementType: 'string',
-          validateString: function(value) {
-            if ($('#phone2num').val() === "" && $('#phone2').val() === "") {
-              return true;
-            } else if ($('#phone2').val() !== "" && $('#phone2num').val() === "") {
-              return false;
-            } else {
-              return true;
-            }
-          }
-        });
-      }
-
-      if (!validators.hasOwnProperty('phone2type')) {
-        window.Parsley.addValidator('phone2type', {
-          messages: {
-            'en': 'Phone number was given, type is required.'
-          },
-          requirementType: 'string',
-          validateString: function(value) {
-            if ($('#phone2type').val() === "" && $('#phone2').val() === "") {
-              return true;
-            } else if ($('#phone2').val() !== "" && $('#phone2type').val() === "") {
-              return false;
-            } else {
-              return true;
-            }
-          }
-        });
-      }
-
-      if (!validators.hasOwnProperty('phone3num')) {
-        window.Parsley.addValidator('phone3num', {
-          messages: {
-            'en': 'Phone number was given, type is required.'
-          },
-          requirementType: 'string',
-          validateString: function(value) {
-            if ($('#phone3num').val() === "" && $('#phone3').val() === "") {
-              return true;
-            } else if ($('#phone3').val() !== "" && $('#phone3num').val() === "") {
-              return false;
-            } else {
-              return true;
-            }
-          }
-        });
-      }
-
-      if (!validators.hasOwnProperty('phone3type')) {
-        window.Parsley.addValidator('phone3type', {
-          messages: {
-            'en': 'Phone number was given, type is required.'
-          },
-          requirementType: 'string',
-          validateString: function(value) {
-            if ($('#phone3type').val() === "" && $('#phone3').val() === "") {
-              return true;
-            } else if ($('#phone3').val() !== "" && $('#phone3type').val() === "") {
-              return false;
-            } else {
-              return true;
-            }
-          }
-        });
-      }
-
-      $('[id^=ceditform]').parsley({
+      $(bindClass).parsley({
         // bootstrap form classes
         errorsWrapper: '<span class=\"help-block\" style="display: block;white-space: normal;word-wrap: break-word;"></span>',
         errorTemplate: '<span class="error-message"></span>',
@@ -658,7 +595,7 @@ export function main() {
                 var editrow = m_table.fnOpen(sourcerow, editform, "edit_row");
                 var $editRow = $(editrow);
 
-                setupParsley();
+                setupParsley('#createform');
 
                 // Set up input masks
                 $editRow.find('.phone').inputmask('999-999-9999');
@@ -811,7 +748,7 @@ export function main() {
             var editrow = m_table.fnOpen(row, editform, 'edit_row');
             var $editRow = $(editrow);
 
-            setupParsley();
+            setupParsley('[id^=ceditform]');
 
             // Set up input masks
             $editRow.find('.phone').inputmask('999-999-9999');

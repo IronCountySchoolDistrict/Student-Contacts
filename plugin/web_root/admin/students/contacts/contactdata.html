@@ -690,7 +690,7 @@
                 data-value="~[tlist_sql;select phone_type from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=1]~(phone_type)[/tlist_sql]"
                 style="margin-right:125px;margin-bottom: 40px;"
                 data-parsley-onephonereq
-                data-parsley-phone1type
+                data-parsley-phonetype
                 data-parsley-trigger="change"
                 data-parsley-validate-if-empty>
             <option></option>
@@ -704,7 +704,7 @@
                id="phone1"
                class="phone"
                data-parsley-onephonereq
-               data-parsley-phone1num
+               data-parsley-phonenum
                data-parsley-phonelength
                data-parsley-trigger="change"
                data-parsley-validate-if-empty/>
@@ -883,7 +883,7 @@
                 style="margin-right:125px;margin-bottom: 40px;"
                 data-parsley-trigger="change"
                 data-parsley-validate-if-empty
-                data-parsley-phone2type>
+                data-parsley-phonetype>
             <option></option>
             <option value="Home">Home</option>
             <option value="Cell">Cell</option>
@@ -897,7 +897,7 @@
                style="margin-right:125px;margin-bottom: 20px;"
                data-parsley-trigger="change"
                data-parsley-validate-if-empty
-               data-parsley-phone2num
+               data-parsley-phonenum
                data-parsley-phonelength/>
         <br/>
         <input type="text"
@@ -906,7 +906,7 @@
                value="~[tlist_sql; select phone_extension from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=2]~(phone_extension)[/tlist_sql]"
                id="phone2ext"
                data-parsley-onephonereq
-               data-parsley-phone2ext
+               data-parsley-phoneext
                data-parsley-trigger="change"
                data-parsley-validate-if-empty/>
         ~[if.~([01]home_phone)=]
@@ -1066,7 +1066,7 @@
                 id="phone3type"
                 data-value="~[tlist_sql;select phone_type from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]~(phone_type)[/tlist_sql]"
                 style="margin-right:125px;margin-bottom: 40px;"
-                data-parsley-phone3type
+                data-parsley-phonetype
                 data-parsley-trigger="change"
                 data-parsley-validate-if-empty>
             <option></option>
@@ -1079,7 +1079,7 @@
                id="phone3"
                class="phone"
                style="margin-right:125px;margin-bottom: 20px;"
-               data-parsley-phone3num
+               data-parsley-phonenum
                data-parsley-phonelength
                data-parsley-trigger="change"
                data-parsley-validate-if-empty/>
@@ -1090,7 +1090,7 @@
                value="~[tlist_sql; select phone_extension from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]~(phone_extension)[/tlist_sql]"
                id="phone3ext"
                data-parsley-onephonereq
-               data-parsley-phone3ext
+               data-parsley-phoneext
                data-parsley-trigger="change"
                data-parsley-validate-if-empty/>
 
@@ -1250,7 +1250,7 @@
 <!-- END PARENT CONTENT TABLE -->
 [/if#req]
 ~[if#req.~[gpv:action]=getcreateform]
-<form method="post" action="studentcontacts.html">
+<form method="post" action="studentcontacts.html" id="createform">
 
     <input type="hidden"
            name="CF-[STUDENTS:~(rn;t).u_student_contacts.u_student_contacts:-1]status"
@@ -1656,7 +1656,7 @@
                 id="phone1type"
                 style="margin-right:125px;margin-bottom: 40px;"
                 data-parsley-onephonereq
-                data-parsley-phone1type
+                data-parsley-phonetype
                 data-parsley-trigger="change"
                 data-parsley-validate-if-empty>
             <option></option>
@@ -1670,7 +1670,7 @@
                class="phone"
                value=""
                data-parsley-onephonereq
-               data-parsley-phone1num
+               data-parsley-phonenum
                data-parsley-phonelength
                data-parsley-trigger="change"
                data-parsley-validate-if-empty>
@@ -1813,7 +1813,7 @@
                 style="margin-right:125px;margin-bottom: 40px;"
                 data-parsley-trigger="change"
                 data-parsley-validate-if-empty
-                data-parsley-phone2type>
+                data-parsley-phonetype>
             <option></option>
             <option value="Home">Home</option>
             <option value="Cell">Cell</option>
@@ -1825,7 +1825,7 @@
                class="phone"
                data-parsley-trigger="change"
                data-parsley-validate-if-empty
-               data-parsley-phone2num
+               data-parsley-phonenum
                data-parsley-phonelength/>
         ~[if.~([01]home_phone)=]
         [else]
@@ -1953,7 +1953,7 @@
                 id="phone3type"
                 data-value="~[tlist_sql;select phone_type from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]~(phone_type)[/tlist_sql]"
                 style="margin-right:125px;margin-bottom: 40px;"
-                data-parsley-phone3type
+                data-parsley-phonetype
                 data-parsley-trigger="change"
                 data-parsley-validate-if-empty>
             <option></option>
@@ -1966,7 +1966,7 @@
                value="~[tlist_sql; select phone_number from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]~(phone_number)[/tlist_sql]"
                id="phone3"
                class="phone"
-               data-parsley-phone3num
+               data-parsley-phonenum
                data-parsley-phonelength
                data-parsley-trigger="change"
                data-parsley-validate-if-empty/>
