@@ -181,6 +181,15 @@
 <!-- start of content and bounding box -->
 
 <div id="maincontent" align="center">
+  <form method="POST" action="/admin/changesrecorded.white.html" >
+    Student Contact Guardian Access:
+    <select id="enable-demo-update" name="[Students]enabledemoupdate">
+      <option value="0">Enabled</option>
+      <option value="1">Disabled</option>
+    </select>
+    <input type="hidden" name="ac" value="prim">
+    <button type="submit" id="btnSubmit" name="btnSubmit">Submit</button>
+  </form>
     <div id="error_container"></div>
     <!--CUSTOM Student Contacts list -->
 
