@@ -823,11 +823,11 @@ export function main() {
             }
 
             // Set the right option for the residence state dropdown
-            var residenceStateSelect = $('#residence-state');
+            var residenceStateSelect = $editRow.find('#residence-state');
             residenceStateSelect.find('option[value="' + residenceStateSelect.data().value + '"]').attr('selected', 'selected');
 
             // Set the right option for the mailing state dropdown
-            var mailingStateSelect = $('#mailing-state');
+            var mailingStateSelect = $editRow.find('#mailing-state');
             mailingStateSelect.find('option[value="' + mailingStateSelect.data().value + '"]').attr('selected', 'selected');
 
             var phone1TypeSelect = $editRow.find('#phone1type');
@@ -845,31 +845,29 @@ export function main() {
               'selected': 'selected'
             });
 
-
-
-
             // Set email contact options checkboxes to checked
-            if ($('#email-opts-emergency').attr('value') === '1') {
-              $('#email-opts-emergency').attr('checked', 'checked');
+            if ($editRow.find('#email-opts-emergency').attr('value') === '1') {
+              $editRow.find('#email-opts-emergency').attr('checked', 'checked');
             }
-            if ($('#email-opts-high-priority').attr('value') === '1') {
-              $('#email-opts-high-priority').attr('checked', 'checked');
+            if ($editRow.find('#email-opts-high-priority').attr('value') === '1') {
+              $editRow.find('#email-opts-high-priority').attr('checked', 'checked');
             }
-            if ($('#email-opts-general').attr('value') === '1') {
-              $('#email-opts-general').attr('checked', 'checked');
+            if ($editRow.find('#email-opts-general').attr('value') === '1') {
+              $editRow.find('#email-opts-general').attr('checked', 'checked');
             }
-            if ($('#email-opts-attendance').attr('value') === '1') {
-              $('#email-opts-attendance').attr('checked', 'checked');
+            if ($editRow.find('#email-opts-attendance').attr('value') === '1') {
+              $editRow.find('#email-opts-attendance').attr('checked', 'checked');
             }
-            if ($('#email-opts-survey').attr('value') === '1') {
-              $('#email-opts-survey').attr('checked', 'checked');
+            if ($editRow.find('#email-opts-survey').attr('value') === '1') {
+              $editRow.find('#email-opts-survey').attr('checked', 'checked');
             }
 
             $('form', editrow).submit(function(event) {
               $(this).find('[type=submit]').attr('disabled', 'disabled');
+              var editRow = $(event.target);
               event.preventDefault();
               loadingDialogInstance.open();
-              var newPriority = parseInt($('#priority').val());
+              var newPriority = parseInt($editRow.find('#priority').val());
               var oldPriority = parseInt(contactsCollection[contactId][1].priority);
               if (newPriority !== oldPriority) {
                 // First priority contact is getting changed.
@@ -940,22 +938,22 @@ export function main() {
               };
 
               contactCoreData.tables[config.contactsTable] = {
-                first_name: $('#first-name').val(),
-                last_name: $('#last-name').val(),
-                priority: $('#priority').val(),
-                legal_guardian: $('#legal-guardian').val(),
-                relationship: $('#relationship').val(),
-                residence_street: $('#residence-street').val(),
-                residence_city: $('#residence-city').val(),
-                residence_state: $('#residence-state').val(),
-                residence_zip: $('#residence-zip').val(),
-                mailing_street: $('#mailing-street').val(),
-                mailing_city: $('#mailing-city').val(),
-                mailing_state: $('#mailing-state').val(),
-                mailing_zip: $('#mailing-zip').val(),
-                employer: $('#employer').val(),
-                notes: $('#notes').val(),
-                corres_lang: $('#corres-lang').val()
+                first_name: editRow.find('#first-name').val(),
+                last_name: editRow.find('#last-name').val(),
+                priority: editRow.find('#priority').val(),
+                legal_guardian: editRow.find('#legal-guardian').val(),
+                relationship: editRow.find('#relationship').val(),
+                residence_street: editRow.find('#residence-street').val(),
+                residence_city: editRow.find('#residence-city').val(),
+                residence_state: editRow.find('#residence-state').val(),
+                residence_zip: editRow.find('#residence-zip').val(),
+                mailing_street: editRow.find('#mailing-street').val(),
+                mailing_city: editRow.find('#mailing-city').val(),
+                mailing_state: editRow.find('#mailing-state').val(),
+                mailing_zip: editRow.find('#mailing-zip').val(),
+                employer: editRow.find('#employer').val(),
+                notes: editRow.find('#notes').val(),
+                corres_lang: editRow.find('#corres-lang').val()
               };
 
               var contactEmailData = {
@@ -964,13 +962,13 @@ export function main() {
               };
 
               contactEmailData.tables[config.contactsEmailTable] = {
-                email_address: $('#email').val(),
+                email_address: editRow.find('#email').val(),
                 contactdcid: contactsCollection[contactId][1].record_id.toString(),
-                opts_emergency: $('#email-opts-emergency').is(':checked') ? "1" : "",
-                opts_high_priority: $('#email-opts-high-priority').is(':checked') ? "1" : "",
-                opts_general: $('#email-opts-general').is(':checked') ? "1" : "",
-                opts_attendance: $('#email-opts-attendance').is(':checked') ? "1" : "",
-                opts_survey: $('#email-opts-survey').is(':checked') ? "1" : ""
+                opts_emergency: editRow.find('#email-opts-emergency').is(':checked') ? "1" : "",
+                opts_high_priority: editRow.find('#email-opts-high-priority').is(':checked') ? "1" : "",
+                opts_general: editRow.find('#email-opts-general').is(':checked') ? "1" : "",
+                opts_attendance: editRow.find('#email-opts-attendance').is(':checked') ? "1" : "",
+                opts_survey: editRow.find('#email-opts-survey').is(':checked') ? "1" : ""
               };
 
               // If this email corresponds to an existing contact, the contactdcid was inserted into the contactsCollection
@@ -999,8 +997,8 @@ export function main() {
                       var phoneTypeNameId = 'phone' + i + 'type';
                       var phoneNumberId = 'phone' + i;
 
-                      var phoneTypeElem = $('#' + phoneTypeNameId);
-                      var phoneNumberElem = $('#' + phoneNumberId);
+                      var phoneTypeElem = $editRow.find('#' + phoneTypeNameId);
+                      var phoneNumberElem = $editRow.find('#' + phoneNumberId);
 
 
                       // A contact with a matching priority to "i" exists, so this phone record must already exist
@@ -1016,14 +1014,14 @@ export function main() {
                           "phone_number": phoneNumberElem.val(),
                           "phone_type": phoneTypeElem.val(),
                           "phone_priority": i.toString(),
-                          "opts_voice_high_priority": $('#phone' + i + '-opts-voice-high-priority').is(':checked') ? "1" : "",
-                          "opts_voice_general": $('#phone' + i + '-opts-voice-general').is(':checked') ? "1" : "",
-                          "opts_voice_attendance": $('#phone' + i + '-opts-voice-attendance').is(':checked') ? "1" : "",
-                          "opts_voice_survey": $('#phone' + i + '-opts-voice-survey').is(':checked') ? "1" : "",
-                          "opts_text_high_priority": $('#phone' + i + '-opts-text-high-priority').is(':checked') ? "1" : "",
-                          "opts_text_general": $('#phone' + i + '-opts-text-general').is(':checked') ? "1" : "",
-                          "opts_text_attendance": $('#phone' + i + '-opts-text-attendance').is(':checked') ? "1" : "",
-                          "opts_text_survey": $('#phone' + i + '-opts-text-survey').is(':checked') ? "1" : ""
+                          "opts_voice_high_priority": editRow.find('#phone' + i + '-opts-voice-high-priority').is(':checked') ? "1" : "",
+                          "opts_voice_general": editRow.find('#phone' + i + '-opts-voice-general').is(':checked') ? "1" : "",
+                          "opts_voice_attendance": editRow.find('#phone' + i + '-opts-voice-attendance').is(':checked') ? "1" : "",
+                          "opts_voice_survey": editRow.find('#phone' + i + '-opts-voice-survey').is(':checked') ? "1" : "",
+                          "opts_text_high_priority": editRow.find('#phone' + i + '-opts-text-high-priority').is(':checked') ? "1" : "",
+                          "opts_text_general": editRow.find('#phone' + i + '-opts-text-general').is(':checked') ? "1" : "",
+                          "opts_text_attendance": editRow.find('#phone' + i + '-opts-text-attendance').is(':checked') ? "1" : "",
+                          "opts_text_survey": editRow.find('#phone' + i + '-opts-text-survey').is(':checked') ? "1" : ""
                         };
 
                         saveContactPhoneArgs.push(contactPhoneData);
@@ -1090,7 +1088,7 @@ export function main() {
                     // User didn't have email when page was loaded
                   } else {
                     // If contact is creating new email
-                    if ($('#email').val() !== "") {
+                    if ($editRow.find('#email').val() !== "") {
                       var emailDataTlc = getDomEmailDataTlc(contactsCollection[contactId][1].record_id);
                       emailAjaxCall.push(saveDataUsingTlc(emailDataTlc));
                     }
