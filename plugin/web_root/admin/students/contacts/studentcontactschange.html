@@ -15,7 +15,7 @@
         psData.studentFrn = "~(studentfrn)";
         psData.studentDcid = psData.studentFrn.slice(3);
         psData.parent_verify = "~([Students.U_Students_Extension]parent_verify)";
-        psData.enableDemoUpdate = "~([Students]enabledemoupdate)";
+        psData.enableDemoUpdate = "~([STUDENTS.U_STUDENTS_EXTENSION]enabledemoupdate)";
         psData.stagingContactDcid = "~[gpv:stagingcontactdcid]";
 
         require.config({
@@ -57,7 +57,7 @@
             <tr>
                 <td class="bold">
                     Guardian Student Info Modify Access:
-                    <select id="enable-demo-update" data-value="~([Students]enabledemoupdate)">
+                    <select id="enable-demo-update" data-value="~([STUDENTS.U_STUDENTS_EXTENSION]enabledemoupdate)">
                         <option value="0">Enabled</option>
                         <option value="1">Disabled</option>
                     </select>
