@@ -1951,7 +1951,6 @@
         <select
                 name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_sc_phone:-1]phone_type"
                 id="phone3type"
-                data-value="~[tlist_sql;select phone_type from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]~(phone_type)[/tlist_sql]"
                 style="margin-right:125px;margin-bottom: 40px;"
                 data-parsley-phonetype
                 data-parsley-trigger="change"
@@ -1963,7 +1962,6 @@
         </select>
         <input type="text" size="17"
                name="CF-[STUDENTS:~(rn;t).U_STUDENT_CONTACTS.u_sc_phone:-1]phone_number"
-               value="~[tlist_sql; select phone_number from u_sc_phone where contactdcid=~[gpv:contactdcid] and phone_priority=3]~(phone_number)[/tlist_sql]"
                id="phone3"
                class="phone"
                data-parsley-phonenum
