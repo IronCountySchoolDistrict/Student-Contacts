@@ -2,9 +2,7 @@
 
 import $ from 'jquery';
 import _ from 'underscore';
-import {
-  Client
-} from 'escl';
+import {Client} from 'escl';
 import * as inputMask from 'jquery.inputmask';
 import * as datatables from 'datatables';
 import * as parsley from 'parsley';
@@ -577,20 +575,20 @@ export function main() {
       var _this = this;
       $('.addcontact').hide();
       $.getJSON(m_requestURL, {
-          "frn": psData.frn,
-          "action": "addcontact",
-          "sdcid": psData.studentdcid
-        })
+        "frn": psData.frn,
+        "action": "addcontact",
+        "sdcid": psData.studentdcid
+      })
         .success(function(addContactResp) {
           if (addContactResp.contactnumber > 0) {
             var n = addContactResp.contactnumber;
             var ridx = m_table.fnAddData([n, "", "", "", "", "", "", "", ""]);
             var sourcerow = m_table.fnSettings().aoData[ridx].nTr;
             $.get(m_requestURL, {
-                "frn": psData.frn,
-                "gidx": n,
-                "action": "getcreateform"
-              })
+              "frn": psData.frn,
+              "gidx": n,
+              "action": "getcreateform"
+            })
               .success(function(editform) {
                 var editrow = m_table.fnOpen(sourcerow, editform, "edit_row");
                 var $editRow = $(editrow);
@@ -694,14 +692,15 @@ export function main() {
                     var contactId = addContactResp.contactnumber.toString();
                     var studentDcid = psData.studentdcid;
                     fetch('/admin/students/contacts/getContactRecordId.json.html?contactid=' + contactId + '&studentsdcid=' + studentDcid, {
-                        credentials: 'include'
-                      })
+                      credentials: 'include'
+                    })
                       .then(function(contactRecordId) {
                         return contactRecordId.json();
                       })
                       .then(function(contactRecordResp) {
                         var contact = {
                           id: contactRecordResp.id,
+                          foreignKey: studentDcid,
                           contactdcid: contactRecordResp.id
                         };
 
@@ -738,11 +737,11 @@ export function main() {
         var contactId = m_table.fnGetData(row)[m_keyindex];
         var contactDcid = contactsCollection[contactId][1].record_id;
         $.get(m_requestURL, {
-            "frn": psData.frn,
-            "contactdcid": contactDcid,
-            "gidx": contactId,
-            "action": "geteditform"
-          })
+          "frn": psData.frn,
+          "contactdcid": contactDcid,
+          "gidx": contactId,
+          "action": "geteditform"
+        })
           .success(function(editform) {
 
             var editrow = m_table.fnOpen(row, editform, 'edit_row');
@@ -1148,12 +1147,12 @@ export function main() {
             }
           };
           $.ajax({
-              url: "/ws/schema/table/u_student_contacts/" + contactsCollection[contactId][1].record_id,
-              data: JSON.stringify(postData),
-              type: "PUT",
-              dataType: "json",
-              contentType: 'application/json; charset=utf-8'
-            })
+            url: "/ws/schema/table/u_student_contacts/" + contactsCollection[contactId][1].record_id,
+            data: JSON.stringify(postData),
+            type: "PUT",
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8'
+          })
             .success(function() {
               refreshContact(contactId, row);
             })
@@ -1175,9 +1174,8 @@ export function main() {
             $("body").append(resp);
             $.post($("#delete-form").attr("action"), $("#delete-form").serialize(), function(resp) {
               row.remove();
-              var index = contactsCollection.indexOf(contactId);
-              if (index > -1) {
-                contactsCollection.splice(index, 1);
+              if (contactsCollection.hasOwnProperty(contactId)) {
+                contactsCollection[contactId] = undefined;
               }
             });
           });
@@ -1201,12 +1199,12 @@ export function main() {
             }
           };
           $.ajax({
-              url: "/ws/schema/table/u_student_contacts/" + contactsCollection[contactId][1].record_id,
-              data: JSON.stringify(postData),
-              type: "PUT",
-              dataType: "json",
-              contentType: 'application/json; charset=utf-8'
-            })
+            url: "/ws/schema/table/u_student_contacts/" + contactsCollection[contactId][1].record_id,
+            data: JSON.stringify(postData),
+            type: "PUT",
+            dataType: "json",
+            contentType: 'application/json; charset=utf-8'
+          })
             .success(function() {
               refreshContact(contactId, row);
             })
@@ -1298,8 +1296,8 @@ export function main() {
             elem = target.parents('.mini').siblings('.copied');
           }
           elem.css({
-              display: "block"
-            })
+            display: "block"
+          })
             .fadeIn('slow')
             .animate({
               opacity: 1.0
@@ -1362,9 +1360,10 @@ export function main() {
 
     //Fetch contact listing
     $.get(m_requestURL, {
-        "sdcid": psData.studentdcid,
-        "action": "newfetchcontacts"
-      }, function() {}, "json")
+      "sdcid": psData.studentdcid,
+      "action": "newfetchcontacts"
+    }, function() {
+    }, "json")
       .done(function(data) {
 
         // In order to be valid JSON, an empty element has to be added to the array after the tlist_sql.
