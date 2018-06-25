@@ -6,11 +6,13 @@
 </script>
 
 <script>
-    var template = $j($j('#stu-contacts-template').html());
+    $j(function() {
+        var template = $j($j('#stu-contacts-template').html());
 
-    // Select the link right before where Student Contacts will be inserted.
-    // Then get the next element in the DOM, which is a <br /> tag. Insert after the br,
-    // not after the link.
-    var select = $j('a:contains(Student Email)').parent();
-    template.insertAfter(select);
+        // Select the link right before where Student Contacts will be inserted.
+        // Then get the next element in the DOM, which is a <br /> tag. Insert after the br,
+        // not after the link.
+        var select = $j('#std_information');
+        template.prependTo(select);
+    });
 </script>
